@@ -1,0 +1,27 @@
+# .gitignore
+
+Objs/
+lib/
+
+*.aps
+*.bsc
+*.clw
+*.exp
+*.plg
+*.opt
+*.ncb
+*.dep
+.vs
+
+
+MFCXTest/Release
+MFCXTest/Debug
+
+doc/doxygen/html
+changes.txt
+*.log
+/MFCXTest/EncryptText-plain.cpp
+/MFCXTest/EncryptText-plain.cpp.encrypted
+/MFCXTest/EncryptText-plain.txt
+/MFCXTest/EncryptText-plain.txt.encrypted
+*.ini

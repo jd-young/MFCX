@@ -1,0 +1,39 @@
+body { 
+     margin-left: 5%; 
+     margin-right: 5%;
+     font-family: "Verdana", "Arial", sans-serif;
+     background: #fffcf0;
+     font-size: 80%
+     }
+h1 { m argin-left: -8%; font-size: 140%}
+h2,h3,h4,h5,h6 { m argin-left: -4% }
+h1,h2,h3,h4,h5,h6 { color: #0080ff; }
+h2 { font-size: 130% }
+h3 { font-size: 120% }
+h4 { font-size: 110% }
+
+table {
+          font-family: "Verdana", "Arial", sans-serif;
+          font-size: 100%
+     }
+
+H1 { text-align: center; }
+A.qindex {}
+A.qindexRef {}
+A.el { text-decoration: none; font-weight: bold }
+A.elRef { font-weight: bold }
+A.code { text-decoration: none; font-weight: normal; color: #4444ee }
+A.codeRef { font-weight: normal; color: #4444ee }
+DL.el { margin-left: -1cm }
+DIV.fragment { width: 100%; border: none; background-color: #eeeeee }
+DIV.ah { background-color: black; margin-bottom: 3; margin-top: 3 }
+TD.md { background-color: #f2f2ff }
+DIV.groupHeader { margin-left: 16; margin-top: 12; margin-bottom: 6; font-weight: bold }
+DIV.groupText { margin-left: 16; font-style: italic; font-size: smaller }
+FONT.keyword       { color: #008000 }
+FONT.keywordtype   { color: #604020 }
+FONT.keywordflow   { color: #e08000 }
+FONT.comment       { color: #800000 }
+FONT.preprocessor  { color: #806020 }
+FONT.stringliteral { color: #002080 }
+FONT.charliteral   { color: #008080 }

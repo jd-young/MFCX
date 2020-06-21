@@ -1,0 +1,486 @@
+<!doctype html public "-//IETF//DTD HTML//EN">
+<html>
+<head>
+     <meta http-equiv="Content-Type"
+     content="text/html; charset=iso-8859-1">
+     <meta name="GENERATOR" content="Docco">
+
+     <title>CDragMultiTree</title>
+	<link rel="stylesheet" href="stylesheets/Docco.css" type="text/css">
+
+<script language="JavaScript">
+<!--
+function LastModified()
+{
+     if( Date.parse( document.lastModified ) != 0 )
+     {
+          var LastModified = new Date( document.lastModified )
+
+          var arrMonths = new Array ("January", "February", "March", "April",
+                                     "May", "June", "July", "August",
+                                     "September", "October", "November",
+                                     "December" )
+
+          var strDaySuffix
+          switch( LastModified.getDate() )
+          {
+               case 1:
+               case 21:
+               case 31:
+                    strDaySuffix = "st"
+                    break
+               case 2:
+               case 22:
+                    strDaySuffix = "nd"
+                    break
+               case 3:
+               case 23:
+                    strDaySuffix = "rd"
+                    break
+               default:
+                    strDaySuffix = "th"
+          }
+
+          var strDate = LastModified.getDate() + strDaySuffix + " " +
+                              arrMonths[LastModified.getMonth()] + " " +
+                              LastModified.getFullYear()
+          document.write ('Last modified on ' + strDate + '.')
+     }
+}
+//-->
+</script>
+</head>
+
+<body>
+
+<a name="overview"/a>
+<h1>CDragMultiTree</h1>
+
+<!-- class hierarchy -->
+<ul>
+     <li>CTreeCtrl
+     <ul>
+          <li><a href="CMultiTree.html">CMultiTree</a>
+          <ul>
+               <li><b>CDragMultiTree</b>
+          </ul>
+     </ul>
+</ul>
+
+<p><b>CDragMultiTree</b> is a drag 'n' drop supporting, multi-selection tree 
+control.
+
+<p>Derive your tree class from CDragMultiTree. You may want to override the
+CopyBranch and DeleteBranch, and set the move, copy, and no-drop cursors by
+calling SetMoveCursor, SetCopyCursor, SetNoDropCursor (or SetCursors to do the
+lot).
+
+
+
+<!-- 
+<b>See Also</b> <a href="something.html">Something</a>
+--> 
+
+<hr>
+<a name="members"/a>
+<h2>Class members</h2>
+<em>Construction</em>
+<table>
+     <tr><td><b><a href="#CDragMultiTree">CDragMultiTree</a></b>
+         <td>Constructor
+     <tr><td><b><a href="#_CDragMultiTree">~CDragMultiTree</a></b>
+         <td>Destructor
+</table>
+<em>Operations</em>
+<table>
+     <tr><td><b><a href="#CancelDrag">CancelDrag</a></b>
+         <td>Description goes here
+     <tr><td><b><a href="#CopyBranch">CopyBranch</a></b>
+         <td>Description goes here
+     <tr><td><b><a href="#DeleteBranch">DeleteBranch</a></b>
+         <td>Description goes here
+     <tr><td><b><a href="#GetDropTarget">GetDropTarget</a></b>
+         <td>Description goes here
+     <tr><td><b><a href="#IsDragItem">IsDragItem</a></b>
+         <td>Description goes here
+     <tr><td><b><a href="#IsDragging">IsDragging</a></b>
+         <td>Description goes here
+     <tr><td><b><a href="#IsDropSource">IsDropSource</a></b>
+         <td>Description goes here
+     <tr><td><b><a href="#IsExpanded">IsExpanded</a></b>
+         <td>Description goes here
+     <tr><td><b><a href="#Select">Select</a></b>
+         <td>Description goes here
+     <tr><td><b><a href="#SelectDropTarget">SelectDropTarget</a></b>
+         <td>Description goes here
+     <tr><td><b><a href="#SelectItem">SelectItem</a></b>
+         <td>Description goes here
+     <tr><td><b><a href="#SetCopyCursor">SetCopyCursor</a></b>
+         <td>Description goes here
+     <tr><td><b><a href="#SetCursors">SetCursors</a></b>
+         <td>Description goes here
+     <tr><td><b><a href="#SetMoveCursor">SetMoveCursor</a></b>
+         <td>Description goes here
+     <tr><td><b><a href="#SetNoDropCursor">SetNoDropCursor</a></b>
+         <td>Description goes here
+</table>
+
+<hr><!--**************************************************-->
+<a name="CDragMultiTree"/a>
+<h2>CDragMultiTree::CDragMultiTree</h2>
+
+<p class="synopsis"><b>  CDragMultiTree</b><b>()</b><br>
+
+
+<p><b>Remarks</b>
+<p>Description goes here...
+
+<p><a href="#overview">CDragMultiTree overview</a> | 
+<a href="#members">class members</a> | 
+<a href="ClassHierarchy.html">hierarchy chart</a>
+
+<hr><!--**************************************************-->
+<a name="CancelDrag"/a>
+<h2>CDragMultiTree::CancelDrag</h2>
+
+<p class="synopsis"><b> void CancelDrag</b><b>()</b><br>
+
+
+<p><b>Remarks</b>
+<p>Description goes here...
+
+<p><a href="#overview">CDragMultiTree overview</a> | 
+<a href="#members">class members</a> | 
+<a href="ClassHierarchy.html">hierarchy chart</a>
+
+<hr><!--**************************************************-->
+<a name="CopyBranch"/a>
+<h2>CDragMultiTree::CopyBranch</h2>
+
+<p class="synopsis"><b>virtual void CopyBranch</b> <b>(</b><b>HTREEITEM</b> <i>hParent</i>,<b>HTREEITEM</b> <i>hFrom</i><b>);</b><br>
+
+<p><em>Parameters</em>
+<table>
+   <tr><td><i>hFrom</i>
+       <td>Description goes here
+   <tr><td><i>hParent</i>
+       <td>Description goes here
+</table>
+
+<p><b>Remarks</b>
+<p>Description goes here...
+
+<p><a href="#overview">CDragMultiTree overview</a> | 
+<a href="#members">class members</a> | 
+<a href="ClassHierarchy.html">hierarchy chart</a>
+
+<hr><!--**************************************************-->
+<a name="DeleteBranch"/a>
+<h2>CDragMultiTree::DeleteBranch</h2>
+
+<p class="synopsis"><b>virtual void DeleteBranch</b> <b>(</b><b>HTREEITEM</b> <i>hItem</i><b>);</b><br>
+
+<p><em>Parameters</em>
+<table>
+   <tr><td><i>hItem</i>
+       <td>Description goes here
+</table>
+
+<p><b>Remarks</b>
+<p>Description goes here...
+
+<p><a href="#overview">CDragMultiTree overview</a> | 
+<a href="#members">class members</a> | 
+<a href="ClassHierarchy.html">hierarchy chart</a>
+
+<hr><!--**************************************************-->
+<a name="GetDropTarget"/a>
+<h2>CDragMultiTree::GetDropTarget</h2>
+
+<p class="synopsis"><b>virtual HTREEITEM GetDropTarget</b> <b>(</b><b>HTREEITEM</b> <i>hItem</i><b>);</b><br>
+
+<p><em>Return value</em><br>
+Return value description(s) goes here...
+<p><em>Parameters</em>
+<table>
+   <tr><td><i>hItem</i>
+       <td>Description goes here
+</table>
+
+<p><b>Remarks</b>
+<p>Description goes here...
+
+<p><a href="#overview">CDragMultiTree overview</a> | 
+<a href="#members">class members</a> | 
+<a href="ClassHierarchy.html">hierarchy chart</a>
+
+<hr><!--**************************************************-->
+<a name="IsDragItem"/a>
+<h2>CDragMultiTree::IsDragItem</h2>
+
+<p class="synopsis"><b> BOOL IsDragItem</b> <b>(</b><b>HTREEITEM</b> <i>hItem</i><b>);</b><br>
+
+<p><em>Return value</em><br>
+Return value description(s) goes here...
+<p><em>Parameters</em>
+<table>
+   <tr><td><i>hItem</i>
+       <td>Description goes here
+</table>
+
+<p><b>Remarks</b>
+<p>Description goes here...
+
+<p><a href="#overview">CDragMultiTree overview</a> | 
+<a href="#members">class members</a> | 
+<a href="ClassHierarchy.html">hierarchy chart</a>
+
+<hr><!--**************************************************-->
+<a name="IsDragging"/a>
+<h2>CDragMultiTree::IsDragging</h2>
+
+<p class="synopsis"><b> BOOL IsDragging</b><b>()</b><br>
+
+<p><em>Return value</em><br>
+Return value description(s) goes here...
+
+<p><b>Remarks</b>
+<p>Description goes here...
+
+<p><a href="#overview">CDragMultiTree overview</a> | 
+<a href="#members">class members</a> | 
+<a href="ClassHierarchy.html">hierarchy chart</a>
+
+<hr><!--**************************************************-->
+<a name="IsDropSource"/a>
+<h2>CDragMultiTree::IsDropSource</h2>
+
+<p class="synopsis"><b>virtual BOOL IsDropSource</b> <b>(</b><b>HTREEITEM</b> <i>hItem</i><b>);</b><br>
+
+<p><em>Return value</em><br>
+Return value description(s) goes here...
+<p><em>Parameters</em>
+<table>
+   <tr><td><i>hItem</i>
+       <td>Description goes here
+</table>
+
+<p><b>Remarks</b>
+<p>Description goes here...
+
+<p><a href="#overview">CDragMultiTree overview</a> | 
+<a href="#members">class members</a> | 
+<a href="ClassHierarchy.html">hierarchy chart</a>
+
+<hr><!--**************************************************-->
+<a name="IsExpanded"/a>
+<h2>CDragMultiTree::IsExpanded</h2>
+
+<p class="synopsis"><b> BOOL IsExpanded</b> <b>(</b><b>HTREEITEM</b> <i>hItem</i><b>);</b><br>
+
+<p><em>Return value</em><br>
+Return value description(s) goes here...
+<p><em>Parameters</em>
+<table>
+   <tr><td><i>hItem</i>
+       <td>Description goes here
+</table>
+
+<p><b>Remarks</b>
+<p>Description goes here...
+
+<p><a href="#overview">CDragMultiTree overview</a> | 
+<a href="#members">class members</a> | 
+<a href="ClassHierarchy.html">hierarchy chart</a>
+
+<hr><!--**************************************************-->
+<a name="Select"/a>
+<h2>CDragMultiTree::Select</h2>
+
+<p class="synopsis"><b> BOOL Select</b> <b>(</b><b>HTREEITEM</b> <i>hItem</i>,<b>UINT</b> <i>nCode</i><b>);</b><br>
+
+<p><em>Return value</em><br>
+Return value description(s) goes here...
+<p><em>Parameters</em>
+<table>
+   <tr><td><i>hItem</i>
+       <td>Description goes here
+   <tr><td><i>nCode</i>
+       <td>Description goes here
+</table>
+
+<p><b>Remarks</b>
+<p>Description goes here...
+
+<p><a href="#overview">CDragMultiTree overview</a> | 
+<a href="#members">class members</a> | 
+<a href="ClassHierarchy.html">hierarchy chart</a>
+
+<hr><!--**************************************************-->
+<a name="SelectDropTarget"/a>
+<h2>CDragMultiTree::SelectDropTarget</h2>
+
+<p class="synopsis"><b> BOOL SelectDropTarget</b> <b>(</b><b>HTREEITEM</b> <i>hItem</i><b>);</b><br>
+
+<p><em>Return value</em><br>
+Return value description(s) goes here...
+<p><em>Parameters</em>
+<table>
+   <tr><td><i>hItem</i>
+       <td>Description goes here
+</table>
+
+<p><b>Remarks</b>
+<p>Description goes here...
+
+<p><a href="#overview">CDragMultiTree overview</a> | 
+<a href="#members">class members</a> | 
+<a href="ClassHierarchy.html">hierarchy chart</a>
+
+<hr><!--**************************************************-->
+<a name="SelectItem"/a>
+<h2>CDragMultiTree::SelectItem</h2>
+
+<p class="synopsis"><b> BOOL SelectItem</b> <b>(</b><b>HTREEITEM</b> <i>hItem</i>,<b>BOOL</b> <i>bOnly</i><b>);</b><br>
+
+<p><em>Return value</em><br>
+Return value description(s) goes here...
+<p><em>Parameters</em>
+<table>
+   <tr><td><i>bOnly</i>
+       <td>Description goes here
+   <tr><td><i>hItem</i>
+       <td>Description goes here
+</table>
+
+<p><b>Remarks</b>
+<p>Description goes here...
+
+<p><a href="#overview">CDragMultiTree overview</a> | 
+<a href="#members">class members</a> | 
+<a href="ClassHierarchy.html">hierarchy chart</a>
+
+<hr><!--**************************************************-->
+<a name="SetCopyCursor"/a>
+<h2>CDragMultiTree::SetCopyCursor</h2>
+
+<p class="synopsis"><b> void SetCopyCursor</b> <b>(</b><b>HCURSOR</b> <i>hCopy</i><b>);</b><br>
+<b> void SetCopyCursor</b> <b>(</b><b>UINT</b> <i>nCopy</i><b>);</b><br>
+
+<p><em>Parameters</em>
+<table>
+   <tr><td><i>hCopy</i>
+       <td>Description goes here
+   <tr><td><i>nCopy</i>
+       <td>Description goes here
+</table>
+
+<p><b>Remarks</b>
+<p>Description goes here...
+
+<p><a href="#overview">CDragMultiTree overview</a> | 
+<a href="#members">class members</a> | 
+<a href="ClassHierarchy.html">hierarchy chart</a>
+
+<hr><!--**************************************************-->
+<a name="SetCursors"/a>
+<h2>CDragMultiTree::SetCursors</h2>
+
+<p class="synopsis"><b> void SetCursors</b> <b>(</b><b>HCURSOR</b> <i>hMove</i>,<b>HCURSOR</b> <i>hCopy</i>,<b>HCURSOR</b> <i>hNoDrop</i><b>);</b><br>
+<b> void SetCursors</b> <b>(</b><b>UINT</b> <i>nMove</i>,<b>UINT</b> <i>nCopy</i>,<b>UINT</b> <i>nNoDrop</i><b>);</b><br>
+
+<p><em>Parameters</em>
+<table>
+   <tr><td><i>hCopy</i>
+       <td>Description goes here
+   <tr><td><i>hMove</i>
+       <td>Description goes here
+   <tr><td><i>hNoDrop</i>
+       <td>Description goes here
+   <tr><td><i>nCopy</i>
+       <td>Description goes here
+   <tr><td><i>nMove</i>
+       <td>Description goes here
+   <tr><td><i>nNoDrop</i>
+       <td>Description goes here
+</table>
+
+<p><b>Remarks</b>
+<p>Description goes here...
+
+<p><a href="#overview">CDragMultiTree overview</a> | 
+<a href="#members">class members</a> | 
+<a href="ClassHierarchy.html">hierarchy chart</a>
+
+<hr><!--**************************************************-->
+<a name="SetMoveCursor"/a>
+<h2>CDragMultiTree::SetMoveCursor</h2>
+
+<p class="synopsis"><b> void SetMoveCursor</b> <b>(</b><b>HCURSOR</b> <i>hMove</i><b>);</b><br>
+<b> void SetMoveCursor</b> <b>(</b><b>UINT</b> <i>nMove</i><b>);</b><br>
+
+<p><em>Parameters</em>
+<table>
+   <tr><td><i>hMove</i>
+       <td>Description goes here
+   <tr><td><i>nMove</i>
+       <td>Description goes here
+</table>
+
+<p><b>Remarks</b>
+<p>Description goes here...
+
+<p><a href="#overview">CDragMultiTree overview</a> | 
+<a href="#members">class members</a> | 
+<a href="ClassHierarchy.html">hierarchy chart</a>
+
+<hr><!--**************************************************-->
+<a name="SetNoDropCursor"/a>
+<h2>CDragMultiTree::SetNoDropCursor</h2>
+
+<p class="synopsis"><b> void SetNoDropCursor</b> <b>(</b><b>HCURSOR</b> <i>hNoDrop</i><b>);</b><br>
+<b> void SetNoDropCursor</b> <b>(</b><b>UINT</b> <i>nNoDrop</i><b>);</b><br>
+
+<p><em>Parameters</em>
+<table>
+   <tr><td><i>hNoDrop</i>
+       <td>Description goes here
+   <tr><td><i>nNoDrop</i>
+       <td>Description goes here
+</table>
+
+<p><b>Remarks</b>
+<p>Description goes here...
+
+<p><a href="#overview">CDragMultiTree overview</a> | 
+<a href="#members">class members</a> | 
+<a href="ClassHierarchy.html">hierarchy chart</a>
+
+<hr><!--**************************************************-->
+<a name="~CDragMultiTree"/a>
+<h2>CDragMultiTree::~CDragMultiTree</h2>
+
+<p class="synopsis"><b>virtual  ~CDragMultiTree</b><b>()</b><br>
+
+
+<p><b>Remarks</b>
+<p>Description goes here...
+
+<p><a href="#overview">CDragMultiTree overview</a> | 
+<a href="#members">class members</a> | 
+<a href="ClassHierarchy.html">hierarchy chart</a>
+
+<br><hr>
+<p><span class=copyright>
+Compiled by John Young (<a href="mailto:jyoung@gol.com">jyoung@gol.com</a>)<br>
+<b>Young Associates</b><br>
+<script language="JavaScript">
+  <!--
+    LastModified()
+  //-->
+  </script>
+<br>Generated by Docco - automatic documentation
+</span>
+
+</body>
+</html>

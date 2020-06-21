@@ -1,0 +1,23 @@
+class CDragMultiTree
+CDragMultiTree();
+virtual ~CDragMultiTree();
+void SetMoveCursor (HCURSOR hMove) { m_curMove = hMove; }
+void SetCopyCursor (HCURSOR hCopy) { m_curCopy = hCopy; }
+void SetNoDropCursor (HCURSOR hNoDrop) { m_curNoDrop = hNoDrop; }
+void SetCursors (HCURSOR hMove, HCURSOR hCopy, HCURSOR hNoDrop)
+void SetMoveCursor (UINT nMove) 
+void SetCopyCursor (UINT nCopy) 
+void SetNoDropCursor (UINT nNoDrop) 
+void SetCursors (UINT nMove, UINT nCopy, UINT nNoDrop)
+BOOL IsDragging() const { return m_bDragging; }
+BOOL IsDragItem (HTREEITEM hItem) const;
+virtual BOOL IsDropSource (HTREEITEM hItem);
+virtual HTREEITEM GetDropTarget (HTREEITEM hItem);
+BOOL Select (HTREEITEM hItem, UINT nCode);
+BOOL SelectItem (HTREEITEM hItem, BOOL bOnly = FALSE);
+BOOL SelectDropTarget (HTREEITEM hItem);
+BOOL IsExpanded (HTREEITEM hItem)
+void	CancelDrag();
+virtual void CopyBranch (HTREEITEM hParent, HTREEITEM hFrom); 
+virtual void DeleteBranch (HTREEITEM hItem);
+	

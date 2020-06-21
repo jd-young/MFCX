@@ -1,0 +1,23 @@
+* Use namespace MFCX.
+* Start all classes with CX....
+* Create a doxygen project for it.
+* Replace TList etc templates with the STL ones.
+
+
+
+* Open BCGControlBarStatic.dsp workspace and build the static library. 
+* In the Visual C++® open "Resource Includes" dialog (View | Resource Includes) 
+* Add #include "bcgbarres.h" to "Read-only symbol directives". 
+* Add #include "bcgcontrolbar.rc" to "compile-time directives".
+  (if your project requires localization, type 
+  
+  	#include "L.***\bcgcontrolbar.rc" 
+
+  where *** is a language name prefix. See Localization page for more details) 
+
+* Remove _AFX_NO_SPLITTER_RESOURCES. Otherwise, you'll not be able to see 
+  splitter cursors required by the library. 
+* If you are using static library version with MFC shared DLL, add 
+  "#define _BCGCONTROLBAR_STATIC_" to "compile-time directives". 
+ 
+ 

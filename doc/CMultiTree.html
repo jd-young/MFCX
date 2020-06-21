@@ -1,0 +1,573 @@
+<!doctype html public "-//IETF//DTD HTML//EN">
+<html>
+<head>
+     <meta http-equiv="Content-Type"
+     content="text/html; charset=iso-8859-1">
+     <meta name="GENERATOR" content="Docco">
+
+     <title>CMultiTree</title>
+	<link rel="stylesheet" href="stylesheets/Docco.css" type="text/css">
+
+<script language="JavaScript">
+<!--
+function LastModified()
+{
+     if( Date.parse( document.lastModified ) != 0 )
+     {
+          var LastModified = new Date( document.lastModified )
+
+          var arrMonths = new Array ("January", "February", "March", "April",
+                                     "May", "June", "July", "August",
+                                     "September", "October", "November",
+                                     "December" )
+
+          var strDaySuffix
+          switch( LastModified.getDate() )
+          {
+               case 1:
+               case 21:
+               case 31:
+                    strDaySuffix = "st"
+                    break
+               case 2:
+               case 22:
+                    strDaySuffix = "nd"
+                    break
+               case 3:
+               case 23:
+                    strDaySuffix = "rd"
+                    break
+               default:
+                    strDaySuffix = "th"
+          }
+
+          var strDate = LastModified.getDate() + strDaySuffix + " " +
+                              arrMonths[LastModified.getMonth()] + " " +
+                              LastModified.getFullYear()
+          document.write ('Last modified on ' + strDate + '.')
+     }
+}
+//-->
+</script>
+</head>
+
+<body>
+
+<a name="overview"></a>
+<h1>CMultiTree</h1>
+
+<!-- class hierarchy -->
+<ul>
+     <li>CTreeCtrl
+     <ul>
+          <li><b>CMultiTree</b>
+     </ul>
+</ul>
+
+<p>By Richard Hazlewood
+
+<p><b>CMultiTree</b> is a multi-selection tree control with banding selection.
+
+
+<!-- 
+<b>See Also</b> <a href="something.html">Something</a>
+--> 
+
+<hr>
+<a name="members"></a>
+<h2>Class members</h2>
+<em>Construction</em>
+<table>
+     <tr><td><b><a href="#CMultiTree">CMultiTree</a></b>
+         <td>Constructor
+     <tr><td><b><a href="#_CMultiTree">~CMultiTree</a></b>
+         <td>Destructor
+</table>
+<em>Operations</em>
+<table>
+     <tr><td><b><a href="#FocusItem">FocusItem</a></b></td>
+         <td>Sets the focus.</td>
+     <tr><td><b><a href="#GetFirstSelectedItem">GetFirstSelectedItem</a></b></td>
+         <td>Gets the first selected item.</td>
+     <tr><td><b><a href="#GetFocusedItem">GetFocusedItem</a></b></td>
+         <td>Gets the current focus item.</td>
+     <tr><td><b><a href="#GetItemState">GetItemState</a></b></td>
+         <td>Gets an item's state.</td>
+     <tr><td><b><a href="#GetNextSelectedItem">GetNextSelectedItem</a></b></td>
+         <td>Gets the next selected item.</td>
+     <tr><td><b><a href="#GetSelectedCount">GetSelectedCount</a></b></td>
+         <td>Gets the count of selected items.</td>
+     <tr><td><b><a href="#GetSelectedList">GetSelectedList</a></b></td>
+         <td>Gets a list of all the selected items.</td>
+     <tr><td><b><a href="#IsEmulatedNotify">IsEmulatedNotify</a></b></td>
+         <td>Nae scoobie whit this diz, an' nae idea how to use it.</td>
+     <tr><td><b><a href="#IsMultiSelect">IsMultiSelect</a></b></td>
+         <td>Gets the multi / single select mode.</td>
+     <tr><td><b><a href="#IsSelected">IsSelected</a></b></td>
+         <td>Finds out if an item is selected.</td>
+     <tr><td><b><a href="#Select">Select</a></b></td>
+         <td>Selects an item.</td>
+     <tr><td><b><a href="#SelectAll">SelectAll</a></b></td>
+         <td>Selects all items.</td>
+     <tr><td><b><a href="#SelectChildren">SelectChildren</a></b></td>
+         <td>Selects the children of an item.</td>
+     <tr><td><b><a href="#SelectItem">SelectItem</a></b></td>
+         <td>Selects an item.</td>
+     <tr><td><b><a href="#SelectRange">SelectRange</a></b></td>
+         <td>Selects a range of items.</td>
+     <tr><td><b><a href="#SetBandingHit">SetBandingHit</a></b></td>
+         <td>Errrrm?</td>
+     <tr><td><b><a href="#SetItemState">SetItemState</a></b></td>
+         <td>Sets the state of an item</td>
+     <tr><td><b><a href="#SetMultiSelect">SetMultiSelect</a></b></td>
+         <td>Sets multi-select mode on or off.</td>
+</table>
+
+<hr><!--**************************************************-->
+<a name="CMultiTree"></a>
+<h2>CMultiTree::CMultiTree</h2>
+
+<p class="synopsis"><b>  CMultiTree</b><b>()</b><br>
+
+
+<p><b>Remarks</b>
+<p>Constructs a CMultiTree object.  Use CTreeCtrl::Create to actually create the 
+Windows control and attach it to this object.
+
+<p><a href="#overview">CMultiTree overview</a> | 
+<a href="#members">class members</a> | 
+<a href="ClassHierarchy.html">hierarchy chart</a>
+
+<hr><!--**************************************************-->
+<a name="FocusItem"></a>
+<h2>CMultiTree::FocusItem</h2>
+
+<p class="synopsis"><b> BOOL FocusItem</b> <b>(</b><b>HTREEITEM</b> <i>hItem</i><b>);</b><br>
+
+<p><em>Return value</em><br>
+Returns TRUE if successful, FALSE otherwise.
+
+<p><em>Parameters</em>
+<table>
+     <tr><td><i>hItem</i></td>
+       <td>The item to set the focus to. If NULL, then the currently 
+          selected item is made the focus item.</td>
+</table>
+
+<p><b>Remarks</b>
+<p>Sets the focus item.  
+
+<p><a href="#overview">CMultiTree overview</a> | 
+<a href="#members">class members</a> | 
+<a href="ClassHierarchy.html">hierarchy chart</a>
+
+<hr><!--**************************************************-->
+<a name="GetFirstSelectedItem"></a>
+<h2>CMultiTree::GetFirstSelectedItem</h2>
+
+<p class="synopsis"><b> HTREEITEM GetFirstSelectedItem</b><b>()</b><br>
+
+<p><em>Return value</em><br>
+The handle of the first selected item, or NULL if nothing is selected.
+
+<p><b>Remarks</b>
+<p>Gets the first selected item.
+
+<p><a href="#overview">CMultiTree overview</a> | 
+<a href="#members">class members</a> | 
+<a href="ClassHierarchy.html">hierarchy chart</a>
+
+<hr><!--**************************************************-->
+<a name="GetFocusedItem"></a>
+<h2>CMultiTree::GetFocusedItem</h2>
+
+<p class="synopsis"><b> HTREEITEM GetFocusedItem</b><b>()</b><br>
+
+<p><em>Return value</em><br>
+The handle of the focus item.
+
+<p><b>Remarks</b>
+<p>Gets the focus item.  This should not be used in the single-selection mode 
+(otherwise it will ASSERT).
+
+<p><a href="#overview">CMultiTree overview</a> | 
+<a href="#members">class members</a> | 
+<a href="ClassHierarchy.html">hierarchy chart</a>
+
+<hr><!--**************************************************-->
+<a name="GetItemState"></a>
+<h2>CMultiTree::GetItemState</h2>
+
+<p class="synopsis"><b> UINT GetItemState</b> <b>(</b><b>HTREEITEM</b> <i>hItem</i>,<b>UINT</b> <i>nStateMask</i><b>);</b><br>
+
+<p><em>Return value</em><br>
+The state of the given item.  We list the state bits here for convenience...
+
+<table>
+     <tr><td><b>TVIS_BOLD</b></td>
+          <td>The item is bold. </td>
+     <tr><td><b>TVIS_CUT</b></td>
+          <td>The item is selected as part of a cut-and-paste operation.  </td>
+     <tr><td><b>TVIS_DROPHILITED</b></td>
+          <td>The item is selected as a drag-and-drop target. </td>
+     <tr><td><b>TVIS_EXPANDED</b></td>
+          <td>The item's list of child items is currently expanded; that is, the 
+          child items are visible. This value applies only to parent items. </td>
+     <tr><td><b>TVIS_EXPANDEDONCE</b></td>
+          <td>The item's list of child items has been expanded at least once. 
+          The TVN_ITEMEXPANDING and TVN_ITEMEXPANDED notification messages are 
+          not generated for parent items that have this state set in response to 
+          a TVM_EXPAND message. Using TVE_COLLAPSE and TVE_COLLAPSERESET with 
+          TVM_EXPAND will cause this state to be reset. This value applies only 
+          to parent items.  </td>
+     <tr><td><b>TVIS_EXPANDPARTIAL</b></td>
+          <td>Version 4.70. A partially expanded tree view item. In this state, 
+          some, but not all, of the child items are visible and the parent 
+          item's plus symbol is displayed.  </td>
+     <tr><td><b>TVIS_SELECTED</b></td>
+          <td>The item is selected. Its appearance depends on whether it has the 
+          focus. The item will be drawn using the system colors for selection.</td>  
+</table>     
+
+<p><em>Parameters</em>
+<table>
+   <tr><td><i>hItem</i>
+       <td>The handle of the item to get the state for.
+   <tr><td><i>nStateMask</i>
+       <td>A mask of the states to be got.
+</table>
+
+<p><b>Remarks</b>
+<p>This is almost identical to the CTreeCtrl version, except that it is enhanced 
+for multi-selection.
+
+
+<p><a href="#overview">CMultiTree overview</a> | 
+<a href="#members">class members</a> | 
+<a href="ClassHierarchy.html">hierarchy chart</a>
+
+<hr><!--**************************************************-->
+<a name="GetNextSelectedItem"></a>
+<h2>CMultiTree::GetNextSelectedItem</h2>
+
+<p class="synopsis"><b> HTREEITEM GetNextSelectedItem</b> <b>(</b><b>HTREEITEM</b> <i>hItem</i><b>);</b><br>
+
+<p><em>Return value</em><br>
+The handle of the next selected item, otherwise NULL.
+
+<p><em>Parameters</em>
+<table>
+   <tr><td><i>hItem</i>
+       <td>The handle of an item.
+</table>
+
+<p><b>Remarks</b>
+<p>Use this to get the selected item the is after <i>hItem</i>.
+
+<p><a href="#overview">CMultiTree overview</a> | 
+<a href="#members">class members</a> | 
+<a href="ClassHierarchy.html">hierarchy chart</a>
+
+<hr><!--**************************************************-->
+<a name="GetSelectedCount"></a>
+<h2>CMultiTree::GetSelectedCount</h2>
+
+<p class="synopsis"><b> UINT GetSelectedCount</b><b>()</b><br>
+
+<p><em>Return value</em><br>
+The count of selected items.
+
+<p><b>Remarks</b>
+<p>Use this to get the count of selected items.
+
+<p><a href="#overview">CMultiTree overview</a> | 
+<a href="#members">class members</a> | 
+<a href="ClassHierarchy.html">hierarchy chart</a>
+
+<hr><!--**************************************************-->
+<a name="GetSelectedList"></a>
+<h2>CMultiTree::GetSelectedList</h2>
+
+<p class="synopsis"><b> void GetSelectedList</b> <b>(</b><b>CTreeItemList&amp;</b> <i>list</i><b>);</b><br>
+
+<p><em>Parameters</em>
+<table>
+   <tr><td><i>list</i>
+       <td>This is filled with a list of tree item handles.  A 
+       <b>CTreeItemList</b> is a pointer list...
+<pre>
+     typedef CTypedPtrList&lt;CPtrList, HTREEITEM&gt; CTreeItemList;
+</pre>
+</table>
+
+<p><b>Remarks</b>
+<p>Use this to get a list of all the selected handles in the tree.
+
+<p><a href="#overview">CMultiTree overview</a> | 
+<a href="#members">class members</a> | 
+<a href="ClassHierarchy.html">hierarchy chart</a>
+
+<hr><!--**************************************************-->
+<a name="IsEmulatedNotify"></a>
+<h2>CMultiTree::IsEmulatedNotify</h2>
+
+<p class="synopsis"><b> BOOL IsEmulatedNotify</b><b>()</b><br>
+
+<p><em>Return value</em><br>
+Errrm?
+
+<p><b>Remarks</b>
+<p>Errrm?
+
+<p><a href="#overview">CMultiTree overview</a> | 
+<a href="#members">class members</a> | 
+<a href="ClassHierarchy.html">hierarchy chart</a>
+
+<hr><!--**************************************************-->
+<a name="IsMultiSelect"></a>
+<h2>CMultiTree::IsMultiSelect</h2>
+
+<p class="synopsis"><b> BOOL IsMultiSelect</b><b>()</b><br>
+
+<p><em>Return value</em><br>
+TRUE if the tree is multi-select.
+
+<p><b>Remarks</b>
+<p>Queries the tree to see if it is in multi-select mode.  See <a 
+href="#SetMultiSelect">SetMultiSelect</a>.
+
+<p><a href="#overview">CMultiTree overview</a> | 
+<a href="#members">class members</a> | 
+<a href="ClassHierarchy.html">hierarchy chart</a>
+
+<hr><!--**************************************************-->
+<a name="IsSelected"></a>
+<h2>CMultiTree::IsSelected</h2>
+
+<p class="synopsis"><b> BOOL IsSelected</b> <b>(</b><b>HTREEITEM</b> <i>hItem</i><b>);</b><br>
+
+<p><em>Return value</em><br>
+TRUE if <i>hItem</i> is selected, FALSE if not.
+
+<p><em>Parameters</em>
+<table>
+   <tr><td><i>hItem</i>
+       <td>The handle to an item in the tree.
+</table>
+
+<p><b>Remarks</b>
+<p>Use this to find out if a tree item is selected or not.
+
+<p><a href="#overview">CMultiTree overview</a> | 
+<a href="#members">class members</a> | 
+<a href="ClassHierarchy.html">hierarchy chart</a>
+
+<hr><!--**************************************************-->
+<a name="Select"></a>
+<h2>CMultiTree::Select</h2>
+
+<p class="synopsis"><b> BOOL Select</b> <b>(</b><b>HTREEITEM</b> <i>hItem</i>,<b>UINT</b> <i>code</i><b>);</b><br>
+
+<p><em>Return value</em><br>
+TRUE if successful, FALSE otherwise.
+
+<p><em>Parameters</em>
+<table>
+   <tr><td><i>code</i>
+       <td>Not used.
+   <tr><td><i>hItem</i>
+       <td>The handle of an item.
+</table>
+
+<p><b>Remarks</b>
+<p>This should only be called in single-select mode.  It just calls 
+CTreeCtrl::SelectItem, so I don't know really why it's there.
+
+<p><a href="#overview">CMultiTree overview</a> | 
+<a href="#members">class members</a> | 
+<a href="ClassHierarchy.html">hierarchy chart</a>
+
+<hr><!--**************************************************-->
+<a name="SelectAll"></a>
+<h2>CMultiTree::SelectAll</h2>
+
+<p class="synopsis"><b> void SelectAll</b> <b>(</b><b>BOOL</b> <i>bSelect</i><b>);</b><br>
+
+<p><em>Parameters</em>
+<table>
+   <tr><td><i>bSelect</i>
+       <td>TRUE if everything is to be selected, FALSE if unselected.
+</table>
+
+<p><b>Remarks</b>
+<p>Use this to set the selection state of <i>all</i> the items in the tree on or 
+off.
+
+<p><a href="#overview">CMultiTree overview</a> | 
+<a href="#members">class members</a> | 
+<a href="ClassHierarchy.html">hierarchy chart</a>
+
+<hr><!--**************************************************-->
+<a name="SelectChildren"></a>
+<h2>CMultiTree::SelectChildren</h2>
+
+<p class="synopsis"><b> BOOL SelectChildren</b> <b>(</b><b>HTREEITEM</b> <i>hParent</i>,<b>BOOL</b> <i>bSelect</i>,<b>BOOL</b> <i>bRecurse</i><b>);</b><br>
+
+<p><em>Return value</em><br>
+Return value description(s) goes here...
+<p><em>Parameters</em>
+<table>
+   <tr><td><i>bRecurse</i>
+       <td>Description goes here
+   <tr><td><i>bSelect</i>
+       <td>Description goes here
+   <tr><td><i>hParent</i>
+       <td>Description goes here
+</table>
+
+<p><b>Remarks</b>
+<p>Description goes here...
+
+<p><a href="#overview">CMultiTree overview</a> | 
+<a href="#members">class members</a> | 
+<a href="ClassHierarchy.html">hierarchy chart</a>
+
+<hr><!--**************************************************-->
+<a name="SelectItem"></a>
+<h2>CMultiTree::SelectItem</h2>
+
+<p class="synopsis"><b> BOOL SelectItem</b> <b>(</b><b>HTREEITEM</b> <i>hItem</i><b>);</b><br>
+
+<p><em>Return value</em><br>
+Return value description(s) goes here...
+<p><em>Parameters</em>
+<table>
+   <tr><td><i>hItem</i>
+       <td>Description goes here
+</table>
+
+<p><b>Remarks</b>
+<p>Description goes here...
+
+<p><a href="#overview">CMultiTree overview</a> | 
+<a href="#members">class members</a> | 
+<a href="ClassHierarchy.html">hierarchy chart</a>
+
+<hr><!--**************************************************-->
+<a name="SelectRange"></a>
+<h2>CMultiTree::SelectRange</h2>
+
+<p class="synopsis"><b> void SelectRange</b> <b>(</b><b>HTREEITEM</b> <i>hFirst</i>,<b>HTREEITEM</b> <i>hLast</i>,<b>BOOL</b> <i>bOnly</i><b>);</b><br>
+
+<p><em>Parameters</em>
+<table>
+   <tr><td><i>bOnly</i>
+       <td>Description goes here
+   <tr><td><i>hFirst</i>
+       <td>Description goes here
+   <tr><td><i>hLast</i>
+       <td>Description goes here
+</table>
+
+<p><b>Remarks</b>
+<p>Description goes here...
+
+<p><a href="#overview">CMultiTree overview</a> | 
+<a href="#members">class members</a> | 
+<a href="ClassHierarchy.html">hierarchy chart</a>
+
+<hr><!--**************************************************-->
+<a name="SetBandingHit"></a>
+<h2>CMultiTree::SetBandingHit</h2>
+
+<p class="synopsis"><b> BOOL SetBandingHit</b> <b>(</b><b>BOOL</b> <i>bLabel</i><b>);</b><br>
+
+<p><em>Return value</em><br>
+Return value description(s) goes here...
+<p><em>Parameters</em>
+<table>
+   <tr><td><i>bLabel</i>
+       <td>Description goes here
+</table>
+
+<p><b>Remarks</b>
+<p>Description goes here...
+
+<p><a href="#overview">CMultiTree overview</a> | 
+<a href="#members">class members</a> | 
+<a href="ClassHierarchy.html">hierarchy chart</a>
+
+<hr><!--**************************************************-->
+<a name="SetItemState"></a>
+<h2>CMultiTree::SetItemState</h2>
+
+<p class="synopsis"><b> BOOL SetItemState</b> <b>(</b><b>HTREEITEM</b> <i>hItem</i>,<b>UINT</b> <i>nState</i>,<b>UINT</b> <i>nStateMask</i><b>);</b><br>
+
+<p><em>Return value</em><br>
+Return value description(s) goes here...
+<p><em>Parameters</em>
+<table>
+   <tr><td><i>hItem</i>
+       <td>Description goes here
+   <tr><td><i>nState</i>
+       <td>Description goes here
+   <tr><td><i>nStateMask</i>
+       <td>Description goes here
+</table>
+
+<p><b>Remarks</b>
+<p>Description goes here...
+
+<p><a href="#overview">CMultiTree overview</a> | 
+<a href="#members">class members</a> | 
+<a href="ClassHierarchy.html">hierarchy chart</a>
+
+<hr><!--**************************************************-->
+<a name="SetMultiSelect"></a>
+<h2>CMultiTree::SetMultiSelect</h2>
+
+<p class="synopsis"><b> BOOL SetMultiSelect</b> <b>(</b><b>BOOL</b> <i>bMulti</i><b>);</b><br>
+
+<p><em>Return value</em><br>
+Return value description(s) goes here...
+<p><em>Parameters</em>
+<table>
+   <tr><td><i>bMulti</i>
+       <td>Description goes here
+</table>
+
+<p><b>Remarks</b>
+<p>Description goes here...
+
+<p><a href="#overview">CMultiTree overview</a> | 
+<a href="#members">class members</a> | 
+<a href="ClassHierarchy.html">hierarchy chart</a>
+
+<hr><!--**************************************************-->
+<a name="~CMultiTree"></a>
+<h2>CMultiTree::~CMultiTree</h2>
+
+<p class="synopsis"><b>virtual  ~CMultiTree</b><b>()</b><br>
+
+
+<p><b>Remarks</b>
+<p>Description goes here...
+
+<p><a href="#overview">CMultiTree overview</a> | 
+<a href="#members">class members</a> | 
+<a href="ClassHierarchy.html">hierarchy chart</a>
+
+<br><hr>
+<p><span class=copyright>
+Compiled by John Young (<a href="mailto:jyoung@gol.com">jyoung@gol.com</a>)<br>
+<b>Young Associates</b><br>
+<script language="JavaScript">
+  <!--
+    LastModified()
+  //-->
+  </script>
+<br>Generated by Docco - automatic documentation
+</span>
+
+</body>
+</html>

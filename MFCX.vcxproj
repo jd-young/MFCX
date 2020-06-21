@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Template|Win32">
+      <Configuration>Template</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <SccProjectName>"$/PrEditor2/Tools/predsec", XGFAAAAA</SccProjectName>
+    <SccLocalPath>..\..\projects\preditor\tools\predsec</SccLocalPath>
+    <Keyword>MFCProj</Keyword>
+    <ProjectGuid>{08E0E919-BE86-44F5-95B0-BBF15EE8E89A}</ProjectGuid>
+    <WindowsTargetPlatformVersion>10.0.19041.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Template|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v141</PlatformToolset>
+    <UseOfMfc>Dynamic</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v141</PlatformToolset>
+    <UseOfMfc>Dynamic</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Template|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.Cpp.UpgradeFromVC60.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.Cpp.UpgradeFromVC60.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>.\lib\</OutDir>
+    <IntDir>.\Objs\Release\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>.\lib\</OutDir>
+    <IntDir>.\Objs\Debug\</IntDir>
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
+      <StringPooling>true</StringPooling>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <Optimization>MaxSpeed</Optimization>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <WarningLevel>Level3</WarningLevel>
+      <AdditionalIncludeDirectories>..\expat\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;MFCX_LOG_USELOG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AssemblerListingLocation>.\Objs\Release\</AssemblerListingLocation>
+      <PrecompiledHeaderOutputFile>.\Objs\Release\MFCX.pch</PrecompiledHeaderOutputFile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
+      <ObjectFileName>.\Objs\Release\</ObjectFileName>
+      <ProgramDataBaseFileName>.\Objs\Release\</ProgramDataBaseFileName>
+    </ClCompile>
+    <ResourceCompile>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>.\lib\MFCX.bsc</OutputFile>
+    </Bscmake>
+    <Lib>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>lib\MFCXs.lib</OutputFile>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
+      <FunctionLevelLinking>false</FunctionLevelLinking>
+      <Optimization>Disabled</Optimization>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <WarningLevel>Level3</WarningLevel>
+      <MinimalRebuild>true</MinimalRebuild>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <AdditionalIncludeDirectories>..\expat\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;MFCX_LOG_USELOG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AssemblerListingLocation>.\Objs\Debug\</AssemblerListingLocation>
+      <PrecompiledHeaderOutputFile>.\Objs\Debug\MFCX.pch</PrecompiledHeaderOutputFile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
+      <ObjectFileName>.\Objs\Debug\</ObjectFileName>
+      <ProgramDataBaseFileName>.\Objs\Debug\</ProgramDataBaseFileName>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+    </ClCompile>
+    <ResourceCompile>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>.\lib\MFCX.bsc</OutputFile>
+    </Bscmake>
+    <Lib>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>lib\MFCXsd.lib</OutputFile>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="src\BrowseForFolder.cpp" />
+    <ClCompile Include="src\ColourPicker.cpp" />
+    <ClCompile Include="src\ColourPopup.cpp" />
+    <ClCompile Include="src\Crypt.cpp" />
+    <ClCompile Include="src\DataQueue.cpp" />
+    <ClCompile Include="src\Directory.cpp" />
+    <ClCompile Include="src\Dragger.cpp" />
+    <ClCompile Include="src\DragMultiTree.cpp" />
+    <ClCompile Include="src\DriveCB.cpp" />
+    <ClCompile Include="src\Filename.cpp" />
+    <ClCompile Include="src\FolderCB.cpp" />
+    <ClCompile Include="src\GKeyboard.cpp" />
+    <ClCompile Include="src\GMouse.cpp" />
+    <ClCompile Include="src\GradStatic.cpp" />
+    <ClCompile Include="src\ImageButton.cpp" />
+    <ClCompile Include="src\Logger.cpp" />
+    <ClCompile Include="src\MenuButton.cpp" />
+    <ClCompile Include="src\MFCX_DLL.cpp" />
+    <ClCompile Include="src\MultiTree.cpp" />
+    <ClCompile Include="src\PersistColourDlg.cpp" />
+    <ClCompile Include="src\PersistListCtrl.cpp" />
+    <ClCompile Include="src\Regex.cpp" />
+    <ClCompile Include="src\RegexString.cpp" />
+    <ClCompile Include="src\regex\chartables.cpp" />
+    <ClCompile Include="src\regex\pcre.cpp" />
+    <ClCompile Include="src\RegKey.cpp" />
+    <ClCompile Include="src\SBDestination.cpp" />
+    <ClCompile Include="src\Sound.cpp" />
+    <ClCompile Include="src\Splasher.cpp" />
+    <ClCompile Include="src\StdAfx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">stdafx.h</PrecompiledHeaderFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">stdafx.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <ClCompile Include="src\SysImageList.cpp" />
+    <ClCompile Include="src\Thread.cpp" />
+    <ClCompile Include="src\Utils.cpp" />
+    <ClCompile Include="src\VerInfo.cpp" />
+    <ClCompile Include="src\XListBox.cpp" />
+    <ClCompile Include="src\XListCtrl.cpp" />
+    <ClCompile Include="src\xml.cpp" />
+    <ClCompile Include="src\XRecentFile.cpp" />
+    <ClCompile Include="src\XScrollView.cpp" />
+    <ClCompile Include="src\XString.cpp" />
+    <ClCompile Include="src\XStringList.cpp" />
+    <ClCompile Include="src\XTime.cpp" />
+    <ClCompile Include="src\XTreeCtrl.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\BrowseForFolder.h" />
+    <ClInclude Include="include\ColourPicker.h" />
+    <ClInclude Include="include\ColourPopup.h" />
+    <ClInclude Include="include\Crypt.h" />
+    <ClInclude Include="include\DataQueue.h" />
+    <ClInclude Include="include\Directory.h" />
+    <ClInclude Include="include\Dragger.h" />
+    <ClInclude Include="include\DragMultiTree.h" />
+    <ClInclude Include="include\DriveCB.h" />
+    <ClInclude Include="include\Filename.h" />
+    <ClInclude Include="include\FolderCB.h" />
+    <ClInclude Include="include\GKeyboard.h" />
+    <ClInclude Include="include\GMouse.h" />
+    <ClInclude Include="include\GradStatic.h" />
+    <ClInclude Include="include\ImageButton.h" />
+    <ClInclude Include="include\Logger.h" />
+    <ClInclude Include="include\MenuButton.h" />
+    <ClInclude Include="include\MFCX.h" />
+    <ClInclude Include="include\MFCXres.h" />
+    <ClInclude Include="include\MultiTree.h" />
+    <ClInclude Include="include\PersistColourDlg.h" />
+    <ClInclude Include="include\PersistListCtrl.h" />
+    <ClInclude Include="include\Regex.h" />
+    <ClInclude Include="include\RegexString.h" />
+    <ClInclude Include="include\RegKey.h" />
+    <ClInclude Include="include\SBDestination.h" />
+    <ClInclude Include="include\Sound.h" />
+    <ClInclude Include="include\Splasher.h" />
+    <ClInclude Include="include\SysImageList.h" />
+    <ClInclude Include="include\TArray.h" />
+    <ClInclude Include="include\Thread.h" />
+    <ClInclude Include="include\TList.h" />
+    <ClInclude Include="include\TMap.h" />
+    <ClInclude Include="include\Utils.h" />
+    <ClInclude Include="include\VerInfo.h" />
+    <ClInclude Include="include\XListBox.h" />
+    <ClInclude Include="include\XListCtrl.h" />
+    <ClInclude Include="include\xml.h" />
+    <ClInclude Include="include\XRecentFile.h" />
+    <ClInclude Include="include\XScrollView.h" />
+    <ClInclude Include="include\XString.h" />
+    <ClInclude Include="include\XStringList.h" />
+    <ClInclude Include="include\XTime.h" />
+    <ClInclude Include="include\XTreeCtrl.h" />
+    <ClInclude Include="src\DriveCB.h" />
+    <ClInclude Include="src\FolderCB.h" />
+    <ClInclude Include="src\GradStatic.h" />
+    <ClInclude Include="src\MFCX_DLL.h" />
+    <ClInclude Include="src\PersistListCtrl.h" />
+    <ClInclude Include="src\regex\internal.h" />
+    <ClInclude Include="src\StdAfx.h" />
+    <ClInclude Include="src\SysImageList.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="include\MFCX.rc">
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="include\res\folders.bmp" />
+    <Image Include="include\res\folders_disabled.bmp" />
+    <Image Include="include\res\xlbDelete.bmp" />
+    <Image Include="include\res\xlbMoveDown.bmp" />
+    <Image Include="include\res\xlbMoveUp.bmp" />
+    <Image Include="include\res\xlbNew.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="src\regex\maketables\maketables.vcxproj">
+      <Project>{de6c183c-602f-41de-aa64-429e6d1e98c4}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

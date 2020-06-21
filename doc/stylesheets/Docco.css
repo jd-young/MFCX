@@ -1,0 +1,60 @@
+body { 
+     margin-left: 10%; 
+     margin-right: 10%;
+     font-family: verdana;
+     font-size: 10pt;
+     background: #fffcf0;
+     }
+h1 { margin-left: -8%; font-size: 18pt; color: #8080ff}
+h2,h3,h4,h5,h6 { margin-left: -4%; color: #8080ff}
+h2 { font-size: 14pt; }
+pre.bold { color: green; font-weight: bold }
+pre { color: green }
+em { font-style: italic; font-weight: bold; color: blue }
+strong { text-transform: uppercase; font-weight: bold; }
+div.box { border: solid; border-width: thin }
+div.color {
+     background: rgb(204,204,255);
+     padding: 0.5em;
+     border: none
+     }
+p.changed {
+     padding-left: 0.2em;
+     border-left: solid;
+     border-top: none;
+     border-bottom: none;
+     border-right: none;
+     border-left-width: thin;
+     border-color: red
+     }
+.dropcap {
+     float: left;
+     font: bold 1.4em "Times New Roman", serif;
+     color: rgb(51, 0, 102);
+     background: rgb(255, 255, 153)
+     }  
+span.error { color: red }
+span.small-caps { font-variant: small-caps }
+table {
+     font-family: verdana;
+     font-size: 10pt;
+     }
+td   {
+     font-family: verdana;
+     vertical-align: top;
+     font-size: 10pt;
+     }
+th   {
+     font-family: verdana;
+     text-align: left;
+     font-size: 10pt;
+     }
+
+span.copyright { font-size: 8pt; font-style: italic; }
+
+p.synopsis { color: blue; }
+:link    { color: blue; text-decoration: none}
+:visited { color: purple }
+:hover   { color: fuchsia; background: #e0e0e0 }
+:active  { color: red }
+

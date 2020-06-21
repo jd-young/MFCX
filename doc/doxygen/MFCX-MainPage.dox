@@ -1,0 +1,98 @@
+/**
+
+\mainpage MFCX Software Documentation
+ 
+\section intro Introduction
+  
+     This document is a feeble attempt to document Thistle Software's MFCX 
+     library, a libary of MFC extensions and utility classes that will allow 
+     the MFC programmer access to a much richer functionality with the minimum
+     of ease.
+     
+     Copyright &copy; 1998 ~ 2004 Thistle Software
+  
+     If you find any broken links, odd looking documentation or just want to 
+     make a suggestion, then email me on jyoung@thistlesoft.com.
+  
+\section overview Overview
+
+	Most of the classes presented herein are derived from MFC classes.  The 
+	only other external dependency (apart from MFC) is the expat XML parser 
+	DLLs.  These are not required if you don't use the XML class.
+
+	MFCX was built using Microsoft's VC++ v6.
+
+\section touse	To Use
+
+	Load MFCX.dsp workspace into DevStudio then...
+	
+	- Open the "Resource Includes" dialog (View | Resource Includes).  
+	- Add <b>#include "MFCXres.h"</b> to <b>"Read-only symbol directives"</b>.  
+	- Add <b>#include "MFCX.rc"</b> to <b>"compile-time directives"</b>.
+	- Remove _AFX_NO_SPLITTER_RESOURCES. Otherwise, you'll not be able to see 
+  	  splitter cursors required by the library. 
+  	- If you are using static library version with MFC shared DLL, add 
+  	  <b>"#define _MFCX_STATIC_"</b> to <b>"compile-time directives"</b>.
+
+\section	contents Contents by Category
+
+	- Colour
+		- ColourPicker.cpp
+		- ColourPopup.cpp
+		- PersistColourDlg.cpp
+
+	- Cryptography
+		- Crypt.cpp
+		
+	- GUI
+		- DragMultiTree.cpp
+		- GradStatic.cpp
+		- ImageButton.cpp
+		- MenuButton.cpp
+		- MultiTree.cpp
+		- PersistListCtrl.cpp
+		- Splasher.cpp
+		- XListBox.cpp
+		- XListCtrl.cpp
+		- XStringList.cpp
+		- XTreeCtrl.cpp
+
+	- Miscellaneous
+		- Directory.cpp
+		- Dragger.cpp
+		- Filename.cpp
+		- GKeyboard.cpp
+		- GMouse.cpp
+		- Logger.cpp
+		- Sound.cpp
+		- Utils.cpp
+		- VerInfo.cpp
+		- XRecentFile.cpp
+		- XScrollView.cpp
+		- XString.cpp
+		- XTime.cpp
+		- xml.cpp
+
+	- Multithreading
+		- DataQueue.cpp
+		- Thread.cpp
+
+	- Regular Expressions
+		- RegKey.cpp
+		- Regex.cpp
+		- RegexString.cpp
+
+	- Shell
+		- BrowseForFolder.cpp    
+		- DriveCB.cpp
+		- FolderCB.cpp
+		- SBDestination.cpp
+		- SysImageList.cpp
+
+\section	history History
+
+
+<a href="History.html">History</a>
+
+
+*/

@@ -1,0 +1,180 @@
+<html>
+<head>
+	<title>CXString class</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<Style>
+	BODY { FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif; FONT-SIZE: 10pt }
+      H1 { BACKGROUND-COLOR: #ffffcc; FONT-SIZE: 18pt; FONT-WEIGHT: 700; }
+	H2 { COLOR: #0066ff; FONT-SIZE: 13pt; FONT-WEIGHT: 700; }
+	H3 { COLOR: #0066ff; FONT-SIZE: 12pt; }
+	PRE { BACKGROUND-COLOR: #cccccc; FONT-FAMILY: "Courier New", Courier, mono; 
+            WHITE-SPACE: pre; }
+	CODE { COLOR: #990000; FONT-FAMILY: "Courier New", Courier, mono;
+             MARGIN-LEFT: 5em; MARGIN-RIGHT: 5em; PADDING-LEFT: 5em; 
+             PADDING-RIGHT: 5em; WHITE-SPACE: pre; }
+	</style>
+</head>
+
+<body bgcolor="#FFFFFF" color=#000000>
+
+
+<h1 align="center">CXString - an extended string class</h1>
+<h4 align="center"><a href="mailto:jyoung@gol.com">John Young</a></h4>
+
+<p><font size="2">
+Level: Intermediate<br>
+Posted: 1 Dec 1999<br>
+Updated: 1 Dec 1999<br>
+Environment: VC5/6; Win9X/NT4<br>
+Keywords: Utilities, MFC
+</font></p>
+
+<hr width=100% noshade>
+
+<li><font size="2"><a href="Article_src.zip">Download source - XXX Kb</a></font></li>
+
+<h2>CXString Overview</h2>
+<p>
+CXString is an extension of the MFC CString class that adds the following 
+features:
+<ul>
+     <li>Chops strings to a given length and (optionally) adds an ellipsis (...)
+     <li>Limits a long pathname to the given number of characters or a given 
+     width.
+     <li>'Commatises' a number <i>ie</i>. "9999" becomes "9,999" (and 
+     'Decommatises')
+     <li>Parses a string for a date/time
+     <li>Provides general purpose attribute query methods (<i>IsDigitStr</i>, 
+     <i>IsNumber</i>, and <i>GetLineCount</i>)
+</ul>
+
+There is no demo project with this article since this is really a utility class.  
+Refer to the examples included with the method documentation on how to use the 
+class.
+
+<h2>Methods</h2>
+<h3>Chop</h3>
+<b>int Chop();</b><br>
+<b>int Chop (int</b> <i>nChars</i><b>, BOOL</b> <i>bEllipsis</i><b> = TRUE);</b><br>
+<b>int Chop (CDC*</b> <i>pDC</i><b>, int</b> <i>nWidth</i><b>, BOOL</b> 
+<i>bEllipsis</i> <b>= TRUE);</b>
+
+<dl>
+     <dt><i>nChars</i>
+          <dd>Number of characters to limit the string to.
+     <dt><i>bEllipsis</i>
+          <dd>Flag whether to add the ellipsis (the three dots "...") to the 
+          end of the string.
+     <dt><i>pDC</i>
+          <dd>The device context to print to.
+     <dt><i>nWidth</i>
+          <dd>The number of logical units to limit the string to.
+</dl>
+<p>
+The first is more similar to Perl's <i>chomp</i> except that it will remove all
+newlines from the end of the string. If there are no newlines, then the string
+is left untouched. The second version chops the string to the given length. It
+will add an ellipsis at the end if asked. The third version is similar to the
+second, except that it limits the string to a physical width, specified in
+logical units.
+
+<h4>Returns</h4>
+The new length of the string.
+
+<h3>Limit</h3>
+<b>int Limit (int</b> <i>nChars</i><b>);</b>
+<dl>
+     <dt><i>nChars</i>
+          <dd>The number of characters to limit the text to.
+</dl>
+<p>
+Limit a long pathname to the given number of characters.
+
+<p>
+For example<br>
+<code>c:\first\second\third\fourth\filename.ext</code> would become <br>
+<code>c:\first\...\fourth\filename.ext</code>, or<br><br>
+<code>\\server_one\sys\archives\project5001\software\version1.00.4\config.zip</code>
+would become <br>
+<code>\\server_one\...\version1.00.4\config.zip</code>.
+
+<h4>Returns</h4>
+The new length of the string.
+
+<h3>Commatise</h3>
+<b>void Commatise();</b>
+<p>
+Puts commas into a number.  For example, the string "123456789" would become 
+"123,456,789".
+
+<h3>Decommatise</h3>
+<b>void Decommatise();</b><br> 
+<b>static void Decommatise (TCHAR*</b> <i>psz</i><b>);</b>
+<p>
+Takes out the commas from a number.  Does the reverse of <i>Commatise</i>.
+
+<h3>GetTime</h3>
+<p>
+<b>CTime GetTime();</b>
+<p>
+Parses a string to get the date and/or time and returns it.  
+<p>
+Time formats are always expected in HH:MM:SS (seconds optional), with or without 
+an "am" or "pm" suffix.  Dates can be in any of the following formats...
+<ul>
+     <li>dd/mm/yy   <i>e.g.</i> 26/2/61 or 26.2.61
+     <li>dd-mmm-yy  <i>e.g.</i> 26-Feb-61
+     <li>mmm dd yy  <i>e.g.</i> February 26 1961
+</ul>
+<p>
+<i>yy</i> can be 1970~2038, or 70~38.<br>
+<i>mmm</i> can be the full month or the abbreviated month name<br>
+Weekdays (abbreviated or not) are ignored.
+<p>
+Omissions are dealt with as follows...
+<ul>
+     <li>if the time is omitted, then the current time is assumed
+     <li>if the date is omitted, then today's date is assumed
+     <li>if the number of seconds is omitted, then it is assumed to be zero
+     <li>if the year is omitted, then it is assumed to be this year.
+</ul>
+
+<p>
+<b>PS</b> Can anyone guess when my birthday is?
+
+<h3>IsDigitStr</h3>
+<b>static BOOL PASCAL IsDigitStr (const TCHAR*</b> <i>s</i><b>);</b><br>
+<br>BOOL IsDigitStr();</b>
+<p>
+Checks if the string is made up entirely of digits.
+
+<h4>Returns</h4>
+TRUE if the string has only digits in it, FALSE if it doesn't (<i>ie</i>. is 
+empty, or has other characters in it).
+
+	static BOOL PASCAL IsNumber (const TCHAR *s, 
+						    int cSeparator = ',',
+						    int cDecimalPoint = '.');
+     static int  PASCAL GetLineCount (const TCHAR* psz);
+
+	BOOL IsNumber (int cSeparator = ',',
+				int cDecimalPoint = '.')
+				{ return IsNumber (m_pchData, cSeparator, cDecimalPoint); }
+     int  PASCAL GetLineCount() { return GetLineCount (m_pchData); };
+
+<h2>Limitations</h2>
+<ul>
+     <li>It would be nice if <i>Limit</i> had a brother with the following 
+     parameters...<br>
+     <b>int Limit (CDC*</b> <i>pDC</i><b>, int</b> <i>nWidth</i><b>);</b>
+     <li><i>GetTime</i> only looks for UK format dates.  It would be nice to 
+     use the Control Panel's Regional Settings to parse the string.
+</ul>
+<p>
+... so if anyone has the time and inclination...
+<p>
+email the result to <a href="mailto:jyoung@gol.com">me</a> and I'll include the 
+updates here.
+
+</body>
+</html>
