@@ -231,7 +231,7 @@ void CFolderComboBox::Initialize( void )
 	if(SUCCEEDED(SHGetSpecialFolderPath(NULL, szPath, CSIDL_DRIVES, FALSE)))
 	{
 		SFOLDER* tmpMainFolder;
-		tmpPath = afxEmptyString;
+		tmpPath = _T("");
 		int iTmpAddedItem = -1;
 		tmpStr.LoadString (IDS_MFCX_MYCOMPUTER);
 		iMainAddedItem = AddString(tmpStr);	// Set folder name/text
@@ -434,7 +434,7 @@ CString CFolderComboBox::GetSelectedPathName( void )
 
 	// If nothing selected, return an empty string
 	if(iSelectedItem == CB_ERR)
-		return(afxEmptyString);
+		return(_T(""));
 
 	// Get pathname
 	SFOLDER* tmpFolder = (SFOLDER*)GetItemDataPtr(iSelectedItem);

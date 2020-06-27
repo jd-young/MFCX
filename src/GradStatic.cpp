@@ -203,7 +203,8 @@ BOOL CGradStatic::OnEraseBkgnd(CDC* pDC)
      return TRUE;
 }
 
-BOOL CGradStatic::OnSetText (WPARAM wParam, LPARAM lParam)
+
+LRESULT CGradStatic::OnSetText(WPARAM wParam, LPARAM lParam)
 {
 	DefWindowProc (WM_SETTEXT, wParam, lParam);
 	Invalidate (TRUE);

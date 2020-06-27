@@ -29,7 +29,7 @@ if /I "%2"=="rebuild" set BUILDOPT=/REBUILD
 
 echo Building %BUILD%...
 
-call "\Program Files\Microsoft Visual Studio\VC98\Bin\VCVARS32.BAT"
+:: call "\Program Files\Microsoft Visual Studio\VC98\Bin\VCVARS32.BAT"
 msdev MFCX.dsp /MAKE %BUILD% %BUILDOPT% /USEENV
 
 echo Done!

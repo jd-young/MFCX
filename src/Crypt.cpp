@@ -217,7 +217,7 @@ void CCrypt::Crypt (const CString& sKey, CString& sData)
 
 	int keylen = sKey.GetLength();
 	int j = 0;
-	for (i = 0; i < 256; i++)
+	for (int i = 0; i < 256; i++)
 	{
 		j += perm [i] + sKey [i % keylen];
 		j &= 255;
@@ -230,7 +230,7 @@ void CCrypt::Crypt (const CString& sKey, CString& sData)
 	int x = 0;
 	int y = 0;
      int datalen = sData.GetLength();
-	for (i = 0; i < datalen; i++)
+	for (int i = 0; i < datalen; i++)
 	{
 		x = (x + 1) & 255;
 		y = (y + perm [x]) & 255;

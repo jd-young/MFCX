@@ -567,7 +567,8 @@ static UINT GetUniqueID (const CWnd* pWnd)
      const UINT max = 32767;
      const UINT min = 1;
      HWND hWnd = pWnd->GetSafeHwnd();
-     for (UINT nID = min; nID <= max; nID++)
+     UINT nID = min;
+     for (; nID <= max; nID++)
           if ( ::GetDlgItem (hWnd, nID) == NULL )
                break;
      return nID;

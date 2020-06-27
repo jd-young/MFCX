@@ -390,9 +390,9 @@ void CDateParser::SetYear (int year)
 
 void CDateParser::ProcessAmPm (const TCHAR* s)
 {
-	if ( stricmp (s, "am") == 0 )
+	if ( _stricmp (s, "am") == 0 )
 		;
-	else if ( stricmp (s, "pm") == 0 )
+	else if ( _stricmp (s, "pm") == 0 )
 	{
 		if ( m_nHour < 12 )
 			m_nHour += 12;
@@ -439,7 +439,7 @@ int CDateParser::GetMonth (const TCHAR* s)
 	
 	for (i = 1; i <= 12; i++, pszMon++)
 		if ( len <= strlen (*pszMon) &&
-			!strnicmp (s, *pszMon, len) )
+			!_strnicmp (s, *pszMon, len) )
 			return i;
 	
 	return 0;
@@ -466,7 +466,7 @@ int CDateParser::GetWeekDay (const TCHAR *s)
 	
 	for (i = 1; i <= 7; i++, pszDay++)
 		if ( len <= strlen (*pszDay) &&
-			!strnicmp (s, *pszDay, len) )
+			!_strnicmp (s, *pszDay, len) )
 			return i;
 	
 	return 0;
@@ -821,7 +821,7 @@ bool CXString::IsUpper() const
      if ( len == 0 )
           return false;
 
-     for (const TCHAR* s = m_pchData; *s; s++)
+     for (const TCHAR* s = (PCXSTR) this; *s; s++)
           if ( isalpha (*s) && !isupper (*s) )
                return false;
      
@@ -834,7 +834,7 @@ bool CXString::IsLower() const
      if ( len == 0 )
           return false;
 
-     for (const TCHAR* s = m_pchData; *s; s++)
+     for (const TCHAR* s = (PCXSTR) this; *s; s++)
           if ( isalpha (*s) && !islower (*s) )
                return false;
      
@@ -853,7 +853,7 @@ bool CXString::IsCapitalised() const
      if ( len == 0 )
           return false;
 
-     const TCHAR* s = m_pchData;
+     const TCHAR* s = (PCXSTR) this;
      const TCHAR* p = NULL;
      for (; *s; s++)
      {
@@ -881,7 +881,7 @@ bool CXString::IsCapitalised() const
 */
 CTime CXString::GetTime()
 {
-	CDateParser dp (m_pchData);
+	CDateParser dp ((PCXSTR) this);
 	CTime time = dp.Parse();
 	return time;
 }
@@ -896,32 +896,37 @@ void CXString::Commatise()
 	if ( IsEmpty() )
 		return;
 
-	TCHAR str [40];		// Big enough for any number string (?!)
-	TCHAR *s;
-	TCHAR *d;
+     // TODO: Big enough for any number string (?!) - Need to to better
+     const int MAX_BUF = 40;
+
+     if (GetLength() >= MAX_BUF)
+          return;
+
+     TCHAR str[MAX_BUF];
 	int	len = 0;
 	int	start = 0;
 
 	// Put number portion into the buffer
-	s = m_pchData;
-	d = str;
+	const TCHAR* orig = (PCXSTR) this;
+	TCHAR* d = str;
 	
-	while ( isspace (*s) )				// Skip leading space
+     // Skip leading space
+	while ( isspace (*orig) )
 	{
-		s++;
+		orig++;
 		start++;
 	}
 
 	int	end = start;
-	while ( isdigit (*s) )				// Get the number portion
+	while ( isdigit (*orig) )			// Get the number portion
 	{
-		*d++ = *s++;
+		*d++ = *orig++;
 		end++;
 		if ( ++len > sizeof str )
 			return;					// don't do anything. The number is too big
 	}
 	
-	s = str+len-1;						/* s points at the lsd */
+	TCHAR* s = str+len-1;				/* s points at the lsd */
 	d = s+((len-1)/3)+1;	*d-- = '\0';	/* d is shifted by nr of commas */
 	for (int digits = 0; s != d; *d-- = *s--)	/* shift the string right and */
 		if ( digits++ >= 3 )				/* insert commas			*/
@@ -1121,7 +1126,8 @@ bool CXString::FindReplace (int nIndex, int nLen, const TCHAR* pszReplace)
 /*static*/ int CXString::GetMaxLineLength (const TCHAR* psz)
 {
      int max = 0;
-     for (int len = 0; *psz; psz++)
+     int len = 0;
+     for (; *psz; psz++)
      {
           if ( *psz == '\n' || *psz == '\r' )
           {
@@ -1375,7 +1381,7 @@ CString CXString::FromHex (const TCHAR* pszHex)
 int CXString::ReverseFind (const CString& sTarget) const
 {
      int nLen = sTarget.GetLength();
-     const TCHAR* s = this->m_pchData;
+     const TCHAR* s = (PCXSTR) this;
      for (const TCHAR* p = s + GetLength() - nLen; p >= s; p--)
      {
           if ( strncmp (p, sTarget, nLen) == 0 )

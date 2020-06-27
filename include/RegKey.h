@@ -7,6 +7,9 @@
 
 #include <winreg.h>
 
+namespace MFCX
+{
+
 /**	The CRegKey class encapsulates the Registry API and simplies the 
 	programming task of reading from and writing to the Registry.
 
@@ -140,4 +143,5 @@ protected:
 	            DWORD& nDataSize);
 };
 
+}    // namespace MFCX
 #endif    //   __MFCX_REGKEY_H

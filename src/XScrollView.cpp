@@ -35,7 +35,6 @@ CXScrollView::CXScrollView()
 void CXScrollView::Initialise()
 {
 	// Init everything to zero
-	AFX_ZERO_INIT_OBJECT(CView);
 	m_nMapMode = MM_NONE;
 	m_sizeScalingFactor.cx = 
 	m_sizeScalingFactor.cy = 1;

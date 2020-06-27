@@ -34,6 +34,8 @@
 #ifndef   __MFCX_XLISTCTRL_H
 #define   __MFCX_XLISTCTRL_H
 
+class CXListCtrl;
+
 /////////////////////////////////////////////////////////////////////////////
 // CXHeaderCtrl window
 
@@ -42,7 +44,7 @@ class CXHeaderCtrl : public CHeaderCtrl
 // Construction
 public:
 	CXHeaderCtrl();
-	CXHeaderCtrl (CWnd* pWnd, void (CWnd::*fpDragCol)(int, int));
+	CXHeaderCtrl (CXListCtrl* pWnd, void (CWnd::*fpDragCol)(int, int));
 
 // Attributes
 public:
@@ -69,7 +71,8 @@ public:
 // Implementation
 public:
 	virtual ~CXHeaderCtrl();
-     void SetCallback(CWnd* pWnd, void (CWnd::*fpDragCol)(int, int));
+//     void SetCallback(CWnd* pWnd, void (CWnd::*fpDragCol)(int, int));
+     void SetCallback(CXListCtrl* pWnd, void (CXListCtrl::*fpDragCol)(int, int));
 
 protected:
      void CommonConstruct();
@@ -81,8 +84,9 @@ protected:
 	int	m_nDragCol;
 	int	m_nDropPos;
 	CRect	marker_rect;
-	void	(CWnd::*m_fpDragCol)(int, int);
-	CWnd	*m_pOwnerWnd;
+//     void	(CWnd::*m_fpDragCol)(int, int);
+     void	(CXListCtrl::*m_fpDragCol)(int, int);
+	CXListCtrl *m_pOwnerWnd;
 	bool m_bAllowDragColumns;
 
 

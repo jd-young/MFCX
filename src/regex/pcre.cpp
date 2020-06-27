@@ -52,7 +52,7 @@
 
 #else
 
-     #define REGEXTRACE       (void) 0
+     #define REGEXTRACE       (void) __noop
 
 #endif
 

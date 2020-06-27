@@ -12,7 +12,6 @@
 #include "../include/PersistListCtrl.h"
 #include "../include/RegKey.h"
 
-
 // Registry keys
 const TCHAR szOrder[] = "Order";
 const TCHAR szCol[] = "Col";
@@ -54,7 +53,7 @@ bool CPersistentListCtrl::Initialise (const TCHAR** ppszHeadings,
      // possible...
      if ( !m_sRegBase.IsEmpty() )
      {
-          CRegKey reg (HKEY_CURRENT_USER, m_sRegBase);
+          MFCX::CRegKey reg (HKEY_CURRENT_USER, m_sRegBase);
           if ( reg.IsOpen() )
           {
                CRect rect;
@@ -117,7 +116,7 @@ void CPersistentListCtrl::OnDestroy()
      {
           CRect rect;
           GetWindowRect (rect);
-          CRegKey reg (HKEY_CURRENT_USER, m_sRegBase, KEY_ALL_ACCESS);
+          MFCX::CRegKey reg (HKEY_CURRENT_USER, m_sRegBase, KEY_ALL_ACCESS);
           if ( reg.IsOpen() )
           {
                CString sOrder;

@@ -22,8 +22,9 @@
 */
 
 #include "stdafx.h"
-#include <winreg.h>
 #include "../include/RegKey.h"
+
+namespace MFCX {
 
 #define	RK_NOTOPEN	-1
 
@@ -956,3 +957,5 @@ BOOL CRegKey::MoveTo (CRegKey& rkDest)
      }
      return FALSE;
 }
+
+} // namespace MFCX

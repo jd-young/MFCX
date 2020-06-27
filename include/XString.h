@@ -106,17 +106,17 @@ public:
 	static bool PASCAL IsSpace (const TCHAR* s);
 
      /// Returns true if this string is made up of whitespace characters.
-	bool IsSpace() const { return IsSpace (m_pchData); }
+	bool IsSpace() const { return IsSpace((PCXSTR) this); }
 
      /// Returns true if the string is composed entirely of digits.
 	static bool PASCAL IsDigit (const TCHAR* s);	
 	static bool PASCAL IsNumber (const TCHAR *s, 
 						    int cSeparator = ',',
 						    int cDecimalPoint = '.');
-	bool IsDigit() const { return IsDigit (m_pchData); }
+	bool IsDigit() const { return IsDigit ((PCXSTR) this); }
 	bool IsNumber (int cSeparator = ',',
 				int cDecimalPoint = '.') const
-		{ return IsNumber (m_pchData, cSeparator, cDecimalPoint); }
+		{ return IsNumber ((PCXSTR) this, cSeparator, cDecimalPoint); }
 
      bool IsUpper() const;
      bool IsLower() const;

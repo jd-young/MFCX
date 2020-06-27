@@ -97,7 +97,7 @@ protected:
 	//{{AFX_MSG(CGradStatic)
 	afx_msg void OnPaint();
 	afx_msg BOOL OnEraseBkgnd(CDC* pDC);
-	afx_msg BOOL OnSetText (WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnSetText (WPARAM wParam, LPARAM lParam);
 	//}}AFX_MSG
 
 	DECLARE_MESSAGE_MAP()

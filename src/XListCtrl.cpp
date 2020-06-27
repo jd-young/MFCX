@@ -33,7 +33,9 @@ static char THIS_FILE[] = __FILE__;
 
 CXListCtrl::CXListCtrl()
 {
-     m_headerCtrl.SetCallback (this, (void (CWnd::*)(int, int))DragColumn );
+//     m_headerCtrl.SetCallback (this, (void (CWnd::*)(int, int))DragColumn );
+//     m_headerCtrl.SetCallback(this, (void (&CXListCtrl::DragColumn)));
+     m_headerCtrl.SetCallback(this, &CXListCtrl::DragColumn);
 }
 
 CXListCtrl::~CXListCtrl()
@@ -176,7 +178,7 @@ void CXListCtrl::SetDefaultWidths (CWordArray& arrWidths)
 	GetClientRect (&rect);
      for (int i = 0; i < m_arrHeadings.GetSize(); i++)
      {
-          arrWidths [i] = rect.right / m_arrHeadings.GetSize(); 
+          arrWidths [i] = (WORD) (rect.right / m_arrHeadings.GetSize()); 
           m_arrOrder [i] = i;
      }
 }
@@ -338,7 +340,7 @@ void CXListCtrl::DragColumn (int source, int dest)
 
 	// Sort out the m_arrOrder array...
      int nColCount = m_headerCtrl.GetItemCount();
-     for (i = 0; i < nColCount; i++)
+     for (int i = 0; i < nColCount; i++)
      {
           LVCOLUMN lvCol;
           TCHAR szBuf [256];
@@ -403,7 +405,7 @@ CXHeaderCtrl::CXHeaderCtrl()
      CommonConstruct();
 }
 
-CXHeaderCtrl::CXHeaderCtrl (CWnd *pWnd, void (CWnd::*fpDragCol)(int, int)) 
+CXHeaderCtrl::CXHeaderCtrl (CXListCtrl *pWnd, void (CWnd::*fpDragCol)(int, int)) 
 	: marker_rect (0, 0, 0, 0)
 {
      CommonConstruct();
@@ -703,13 +705,13 @@ void CXHeaderCtrl::OnLButtonUp(UINT nFlags, CPoint point)
 		// Call the callback function.
 		if( m_nDragCol != m_nDropPos && m_nDragCol != m_nDropPos -1 )
 
-			(m_pOwnerWnd->*m_fpDragCol)( m_nDragCol, m_nDropPos );
-	}
+	//		(m_pOwnerWnd->*m_fpDragCol)( m_nDragCol, m_nDropPos );
+               (m_pOwnerWnd->*m_fpDragCol)(m_nDragCol, m_nDropPos);
+     }
 	CHeaderCtrl::OnLButtonUp(nFlags, point);
 }
 
-
-void CXHeaderCtrl::SetCallback( CWnd* pWnd, void (CWnd::*fpDragCol)(int, int) )
+void CXHeaderCtrl::SetCallback(CXListCtrl* pWnd, void (CXListCtrl::*fpDragCol)(int, int) )
 {
 	m_fpDragCol = fpDragCol;
 	m_pOwnerWnd = pWnd;
@@ -749,7 +751,7 @@ void CXListCtrl::DoSort (int nSortCol, bool bAscending)
 	SortItems (Compare, (LPARAM) &data);
 
      // Now put the old data back to the way it was...
-	for (i = 0; i < NumItems; i++) 
+	for (int i = 0; i < NumItems; i++) 
 	{
 		SortItem* pData = (SortItem*) GetItemData (i);
 		SetItemData (i, pData->_dwData);
