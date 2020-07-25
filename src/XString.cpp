@@ -480,16 +480,16 @@ int CDateParser::GetWeekDay (const TCHAR *s)
 /** Chops any cr/lf pairs off the end of the string */
 int CXString::Chop()
 {
-	int	  nLen = GetLength();
-	LPTSTR s = GetBuffer (nLen) + nLen - 1;
+	int	  nLen = _string.GetLength();
+	LPTSTR s = _string.GetBuffer (nLen) + nLen - 1;
 	
 	while ( nLen && (*s == '\n' || *s == '\r') )
 	{
 		--s;
 		--nLen;
 	}
-	ReleaseBuffer (nLen);
-	return GetLength();
+     _string.ReleaseBuffer (nLen);
+	return _string.GetLength();
 }
 
 
@@ -515,12 +515,12 @@ int CXString::Chop()
 */
 int CXString::Chop (int nChars, bool bEllipsis)
 {
-	int	nLen = GetLength();
+	int	nLen = _string.GetLength();
 
 	if ( nLen == 0 || nChars >= nLen )
 		return nLen;
 
-	LPTSTR s = GetBuffer (nLen);
+	LPTSTR s = _string.GetBuffer (nLen);
 	if ( bEllipsis )
 	{
 		int	nDots = 3;			// Normal case
@@ -537,8 +537,8 @@ int CXString::Chop (int nChars, bool bEllipsis)
 			*s++ = '.';
 	}
 
-	ReleaseBuffer (nChars);
-	return GetLength();
+	_string.ReleaseBuffer (nChars);
+	return _string.GetLength();
 }
 
 /**	Clips the text to the given rectangle and adds an ellipsis if asked to.  
@@ -553,18 +553,18 @@ int	CXString::Chop (CDC* pDC, int nWidth, bool bEllipsis /*= true*/)
 {
      UNREFERENCED_PARAMETER (bEllipsis);
 
-	int nLen = GetLength();
+	int nLen = _string.GetLength();
 	
 	if ( nLen < 2 )
 		return nLen;
 	 
 	int	nMaxBuf = nLen + 5;			// Since CalcStringEllipsis can return
 								// a string that's longer than the orig!
-	LPTSTR psz = GetBuffer (nMaxBuf);		// 
+	LPTSTR psz = _string.GetBuffer (nMaxBuf);		// 
 
 	CalcStringEllipsis (pDC->m_hDC, psz, nLen, nMaxBuf, nWidth);
-	ReleaseBuffer();
-	return GetLength();
+     _string.ReleaseBuffer();
+	return _string.GetLength();
 }
 
 
@@ -603,7 +603,8 @@ bool CXString::CalcStringEllipsis (HDC hdc, LPTSTR pszString, int nLen,
 
 		if ( !GetVersionEx (&osvi) || osvi.dwPlatformId == VER_PLATFORM_WIN32s )
 			pGetTextExtentPoint = &GetTextExtentPoint;
-		else	pGetTextExtentPoint = &GetTextExtentPoint32;
+
+          else	pGetTextExtentPoint = &GetTextExtentPoint32;
 	}
 
 
@@ -817,11 +818,11 @@ int CXString::Limit (int nChars)
 
 bool CXString::IsUpper() const
 {
-     int len = GetLength();
+     int len = _string.GetLength();
      if ( len == 0 )
           return false;
 
-     for (const TCHAR* s = (PCXSTR) this; *s; s++)
+     for (const TCHAR* s = (LPCTSTR) this; *s; s++)
           if ( isalpha (*s) && !isupper (*s) )
                return false;
      
@@ -830,11 +831,11 @@ bool CXString::IsUpper() const
 
 bool CXString::IsLower() const
 {
-     int len = GetLength();
+     int len = _string.GetLength();
      if ( len == 0 )
           return false;
 
-     for (const TCHAR* s = (PCXSTR) this; *s; s++)
+     for (const TCHAR* s = (LPCTSTR) this; *s; s++)
           if ( isalpha (*s) && !islower (*s) )
                return false;
      
@@ -849,11 +850,11 @@ bool CXString::IsLower() const
 */
 bool CXString::IsCapitalised() const
 {
-     int len = GetLength();
+     int len = _string.GetLength();
      if ( len == 0 )
           return false;
 
-     const TCHAR* s = (PCXSTR) this;
+     const TCHAR* s = (LPCTSTR) this;
      const TCHAR* p = NULL;
      for (; *s; s++)
      {
@@ -881,7 +882,7 @@ bool CXString::IsCapitalised() const
 */
 CTime CXString::GetTime()
 {
-	CDateParser dp ((PCXSTR) this);
+	CDateParser dp (_string);
 	CTime time = dp.Parse();
 	return time;
 }
@@ -893,13 +894,13 @@ void CXString::Commatise()
 {
 	// Insert commas in a numeric CXString 
 	
-	if ( IsEmpty() )
+	if ( _string.IsEmpty() )
 		return;
 
      // TODO: Big enough for any number string (?!) - Need to to better
      const int MAX_BUF = 40;
 
-     if (GetLength() >= MAX_BUF)
+     if (_string.GetLength() >= MAX_BUF)
           return;
 
      TCHAR str[MAX_BUF];
@@ -907,7 +908,7 @@ void CXString::Commatise()
 	int	start = 0;
 
 	// Put number portion into the buffer
-	const TCHAR* orig = (PCXSTR) this;
+	const TCHAR* orig = _string;
 	TCHAR* d = str;
 	
      // Skip leading space
@@ -935,17 +936,17 @@ void CXString::Commatise()
 			digits = 1;
 		}
 	
-	CString strTrail = Mid (end);
-	*this = Left (start);
-	*this += str;
-	*this += strTrail;
+	CString strTrail = _string.Mid (end);
+	_string = _string.Left (start);
+	_string += str;
+	_string += (LPCTSTR) strTrail;
 }
 
 
 void CXString::Decommatise()
 {
-     Decommatise (GetBuffer (0));
-     ReleaseBuffer();
+     Decommatise (_string.GetBuffer (0));
+     _string.ReleaseBuffer();
 }
 
 /*static*/ void CXString::Decommatise (TCHAR* psz)
@@ -964,7 +965,7 @@ void CXString::Decommatise()
 
 void CXString::Capitalise()
 {
-     Capitalise (*this);
+     Capitalise (_string);
 }
 
 
@@ -990,13 +991,6 @@ void CXString::Capitalise (CString& s)
           prev = psz;
      }
 }
-
-
-void CXString::ToggleCase()
-{
-     ToggleCase (*this);
-}
-
 
 void CXString::ToggleCase (CString& s)
 {
@@ -1034,8 +1028,8 @@ int CXString::Limit (int nChars)
 	//
 	//	Returns the number of characters in the string
 
-	int	nLen = GetLength();
-	LPTSTR pszData = GetBuffer (nLen);
+	int	nLen = _string.GetLength();
+	LPTSTR pszData = _string.GetBuffer (nLen);
 
 	if ( nLen > nChars-1 )
 	{
@@ -1068,26 +1062,26 @@ int CXString::Limit (int nChars)
 		else Chop (nChars);
 	}
 
-	ReleaseBuffer();
-	return GetLength();
+	_string.ReleaseBuffer();
+	return _string.GetLength();
 }
 
 /// Replaces the pszFind text with the pszReplace text
 bool CXString::FindReplace (const TCHAR* pszFind, const TCHAR* pszReplace)
 {
-	int nIndex = Find (pszFind);
+	int nIndex = _string.Find (pszFind);
 	if ( nIndex != -1 )
 		return FindReplace (nIndex, _tcslen (pszFind), pszReplace);
 	return false;
 }
 
 ///	Replaces the nLen chars at nIndex with the pszReplace text.
-bool CXString::FindReplace (int nIndex, int nLen, const TCHAR* pszReplace)
+ bool CXString::FindReplace (int nIndex, int nLen, const TCHAR* pszReplace)
 {
-	int nOldLen = GetLength();
+	int nOldLen = _string.GetLength();
 	int nReplaceLen = _tcslen (pszReplace);
 	int nNewLen = nOldLen - nLen + nReplaceLen;
-	TCHAR* pThis = GetBuffer (nNewLen > nOldLen ? nNewLen : nOldLen);
+	TCHAR* pThis = _string.GetBuffer (nNewLen > nOldLen ? nNewLen : nOldLen);
 
 	// Move last portion (if find and replace lengths are different)
 	// The +1 is to get the terminating '\0'.
@@ -1114,7 +1108,7 @@ bool CXString::FindReplace (int nIndex, int nLen, const TCHAR* pszReplace)
 	TCHAR* d = pThis + nIndex;
 	for (int i = 0; i < nReplaceLen; i++)
 		*d++ = *s++;
-	ReleaseBuffer (nNewLen);
+	_string.ReleaseBuffer (nNewLen);
 	return true;
 }
 
@@ -1146,11 +1140,11 @@ bool CXString::FindReplace (int nIndex, int nLen, const TCHAR* pszReplace)
 
 bool CXString::LoadDescription (UINT nIDS)
 {
-     if ( LoadString (nIDS) )
+     if ( _string.LoadString (nIDS) )
      {
-          int index = Find ('\n');
+          int index = _string.Find ('\n');
           if ( index != -1 )
-               *this = Left (index);
+               *this = _string.Left (index);
           return true;
      }
      return false;
@@ -1158,12 +1152,12 @@ bool CXString::LoadDescription (UINT nIDS)
 
 bool CXString::LoadToolTip (UINT nIDS)
 {
-     if ( LoadString (nIDS) )
+     if ( _string.LoadString (nIDS) )
      {
-          int index = Find ('\n');
+          int index = _string.Find ('\n');
           if ( index != -1 )
           {
-               *this = Mid (index + 1);
+               *this = _string.Mid (index + 1);
                return true;
           }
      }
@@ -1172,9 +1166,9 @@ bool CXString::LoadToolTip (UINT nIDS)
 
 
 
-void CXString::MakeSameCase (const CXString& sSource)
+void CXString::MakeSameCase (const CString& sSource)
 {
-	MakeSameCase (*this, sSource);
+	MakeSameCase (_string, sSource);
 }
 
 
@@ -1189,14 +1183,15 @@ void CXString::MakeSameCase (const CXString& sSource)
 \param	sTarget		The string to change.
 \param	sSource		The string to make the same as.
 */
-/*static*/ void CXString::MakeSameCase (CXString& sTarget, const CXString& sSource)
+/*static*/ void CXString::MakeSameCase (CString& sTarget, const CString& sSource)
 {
-     if ( sSource.IsUpper() )
+     CXString cxSource(sSource);
+     if ( cxSource.IsUpper() )
           sTarget.MakeUpper();
-     else if ( sSource.IsLower() )
+     else if ( cxSource.IsLower() )
           sTarget.MakeLower();
-     else if ( sSource.IsCapitalised() )
-          sTarget.Capitalise();
+     else if ( cxSource.IsCapitalised() )
+          CXString::Capitalise(sTarget);
      //else leave as is...
 }
 
@@ -1381,8 +1376,8 @@ CString CXString::FromHex (const TCHAR* pszHex)
 int CXString::ReverseFind (const CString& sTarget) const
 {
      int nLen = sTarget.GetLength();
-     const TCHAR* s = (PCXSTR) this;
-     for (const TCHAR* p = s + GetLength() - nLen; p >= s; p--)
+     const TCHAR* s = (LPCTSTR) this;
+     for (const TCHAR* p = s + _string.GetLength() - nLen; p >= s; p--)
      {
           if ( strncmp (p, sTarget, nLen) == 0 )
                return p - s;
@@ -1390,3 +1385,12 @@ int CXString::ReverseFind (const CString& sTarget) const
      
 	return -1;
 }
+
+void CXString::Format(LPCTSTR pszFormat, ...)
+{
+     va_list argList;
+     va_start(argList, pszFormat);
+     _string.FormatV(pszFormat, argList);
+     va_end(argList);
+}
+

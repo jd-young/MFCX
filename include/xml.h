@@ -133,10 +133,14 @@ public:
      /// Returns the line number where the last error occurred.
      int  GetErrorLine() const;
 
+     /// Returns the line number where the last error occurred.
+     int  GetErrorColumn() const;
+
 protected:
 	CElement* m_pRoot;
 	CString m_sError;
 	int  m_nErrorLine;
+     int  m_nErrorColumn;
 
 // Operations
 public:

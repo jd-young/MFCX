@@ -14,16 +14,21 @@ class CRegexString : public CXString
 public:
 	// Constructors
 	CRegexString();
-	CRegexString (const char* str);
-	CRegexString (CString s);
+	CRegexString (const TCHAR* str);
+     CRegexString (const CString& s);
 
-     void Copy (const CRegexString& from);
+     void Copy(const CRegexString& from);
 
 	// Assignment
-	const CRegexString& operator= (const char* str)
-          { CXString::operator=(str);   return *this; }
-	const CRegexString& operator= (CString s)
-          { CXString::operator=(s);     return *this; }
+     friend bool operator==(const CRegexString& s1, LPCTSTR psz2) throw()
+     {
+          return s1._string == psz2;
+     }
+
+     friend bool operator==(const CRegexString& s1, const CString& s2) throw()
+     {
+          return s1._string == s2;
+     }
 
      bool IsRegex() const { return m_bIsRegex; }
      int  GetOptions() const;

@@ -171,3 +171,8 @@ CString CXTimeSpan::GetStr()
      return sTime;
 }
 
+bool CXTime::GetLocalTm(struct tm& ttm) const
+{
+	struct tm * ptm = CTime::GetLocalTm(&ttm);
+	return ptm != NULL;
+}

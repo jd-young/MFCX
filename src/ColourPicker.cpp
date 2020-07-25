@@ -126,10 +126,10 @@ BEGIN_MESSAGE_MAP(CColourPicker, CButton)
     ON_WM_CREATE()
 	ON_WM_ERASEBKGND()
 	ON_WM_PAINT()
-	//}}AFX_MSG_MAP
     ON_MESSAGE(CPN_SELENDOK,     OnSelEndOK)
     ON_MESSAGE(CPN_SELENDCANCEL, OnSelEndCancel)
     ON_MESSAGE(CPN_SELCHANGE,    OnSelChange)
+     //}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////

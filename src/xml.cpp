@@ -12,7 +12,7 @@
 
 #include "stdafx.h"
 #include "../include/xml.h"
-#include <xmlparse.h>
+#include <expat.h>
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -35,7 +35,7 @@ public:
 	~CXmlParser();
 
      /// Parses the given data.
-	bool Parse (const char* pData, int len);
+	bool Parse (const char* pData, int len = -1);
 
      /// Gets the error description of the last error that occurred.
 	const CString& GetErrorStr() const { return m_sError; }
@@ -44,7 +44,7 @@ public:
 	int   GetErrorLine() const { return m_nErrorLine; }
 
      /// Gets the column number in which the last error occurred.
-	int   GetErrorCol() const { return m_nErrorCol; }
+	int   GetErrorColumn() const { return m_nErrorColumn; }
 
 protected:
 	CXml&      m_xml;	
@@ -62,7 +62,7 @@ protected:
 // Error processing
 	CString    m_sError;
 	int 	      m_nErrorLine;
-	int 		 m_nErrorCol;
+	int 		 m_nErrorColumn;
 };
 
 
@@ -125,12 +125,13 @@ bool CXml::WriteFile (CFile* pFile) const
 bool CXml::Parse (const TCHAR* pBuf, long len /*= -1*/)
 {
 	CXmlParser xmlParser (*this);
-	if ( xmlParser.Parse (pBuf, -1) )
+	if ( xmlParser.Parse (pBuf, len) )
 	     return true;
 	else
 	{
 	     m_sError = xmlParser.GetErrorStr();
 	     m_nErrorLine = xmlParser.GetErrorLine();
+          m_nErrorColumn = xmlParser.GetErrorColumn();
      	return false;
 	}
 }
@@ -192,6 +193,7 @@ CXml::CElement::CElement()
 CXml::CElement::~CElement()
 {
 	// Delete all the children
+	// TODO: Does this delete all the children?
 	while ( m_pChild )
 		delete m_pChild;
 	
@@ -292,7 +294,7 @@ CXmlParser::CXmlParser (CXml& xml)
 {
 	m_pCurElement = NULL;
 	m_nErrorLine = -1;
-	m_nErrorCol = -1;
+	m_nErrorColumn = -1;
 
 	m_xmlParser = XML_ParserCreate (NULL);
 
@@ -315,10 +317,11 @@ bool CXmlParser::Parse (const char* pData, int len)
 {
 	if ( len == -1 )
 		len = strlen (pData);
-	if ( !XML_Parse (m_xmlParser, pData, len, 1) ) 
+	if ( XML_Parse (m_xmlParser, pData, len, 1) == XML_STATUS_ERROR ) 
 	{
-		m_sError = XML_ErrorString (XML_GetErrorCode (m_xmlParser)),
+		m_sError = XML_ErrorString (XML_GetErrorCode (m_xmlParser));
 		m_nErrorLine = XML_GetCurrentLineNumber (m_xmlParser);
+          m_nErrorColumn = XML_GetCurrentColumnNumber (m_xmlParser);
 		return false;
 	}
 	return true;

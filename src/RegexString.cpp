@@ -25,43 +25,26 @@ CRegexString::CRegexString()
 }
 
 CRegexString::CRegexString (const char* str) : 
-     CXString (str)
+     _string (str)
 {
      Initialise();
 }
 
-CRegexString::CRegexString (CString s) :
-     CXString (s)
+CRegexString::CRegexString (const CString& s) :
+     _string (s)
 {
      Initialise();
 }
 
 
-void CRegexString::Copy (const CRegexString& from)
+void CRegexString::Copy(const CRegexString& from)
 {
-     *this = (const char*) from;
+     _string = from._string;
      m_bIsRegex = from.m_bIsRegex;
      m_bIgnoreCase = from.m_bIgnoreCase;
      m_bMultiline = from.m_bMultiline;
      m_bExtended = from.m_bExtended;
 }
-
-
-/*
-const CRegexString& CRegexString::operator= (const char* str)  
-{
-     CXString::operator=(str); 
-     Initialise();
-     return *this;
-}
-
-const CRegexString& CRegexString::operator= (CString s) 
-{
-     CXString::operator=(s); 
-     Initialise();
-     return *this; 
-}
-*/
 
 /*static*/ void CRegexString::Initialise()
 {
@@ -70,12 +53,12 @@ const CRegexString& CRegexString::operator= (CString s)
      m_bMultiline = false;
      m_bExtended = false;
 
-     int nLen = GetLength();
-     const char* s = (const char*) *this;
+     int nLen = _string.GetLength();
+     const char* s = (const char*) _string;
      if ( nLen && *s == '/' )
      {
           m_bIsRegex = true;
-          int iSlash = ReverseFind ('/');
+          int iSlash = _string.ReverseFind ('/');
           if ( iSlash > 0 )
           {
                for (s = s + iSlash + 1; *s; s++)       // Deal with any modifiers
@@ -87,10 +70,10 @@ const CRegexString& CRegexString::operator= (CString s)
                          case 'x': m_bExtended = true;      break;
                     }
           
-               char* p = GetBuffer (nLen);
+               char* p = _string.GetBuffer (nLen);
                strncpy (p, p+1, iSlash-1);
                *(p + iSlash - 1) = '\0';
-               ReleaseBuffer (iSlash);
+               _string.ReleaseBuffer (iSlash);
           }
      }
 }

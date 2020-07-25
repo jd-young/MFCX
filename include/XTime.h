@@ -5,6 +5,8 @@
 #ifndef   __MFXC_XTIME_H
 #define   __MFXC_XTIME_H
 
+#include <atltime.h>
+
 
 /// An extended CTimeSpan class
 class CXTimeSpan : public CTimeSpan
@@ -42,6 +44,7 @@ public:
 		CTime (sysTime, nDST) {}
 	CXTime (const FILETIME& fileTime, int nDST = -1) : 
 		CTime (fileTime, nDST ) {}
+     bool GetLocalTm(struct tm&) const;
 	static CString FormatShortDate (const struct tm* pTime);
 	static CString FormatLongDate (const struct tm* pTime);
 	static CString FormatTime (const struct tm* pTime, DWORD flags = includeSecs);

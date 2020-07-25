@@ -545,11 +545,9 @@ BOOL CRegKey::Query (const TCHAR* pszValueName, CString& sValue)
 {
 	// retrieve a string value
 
-
 	DWORD dwSize = m_dwMaxValueData;
 	DWORD dwValType = 0;
-	Query (pszValueName,	dwValType,
-			  (BYTE*) sValue.GetBufferSetLength (dwSize), dwSize);
+	Query (pszValueName, dwValType, (BYTE*) sValue.GetBufferSetLength (dwSize), dwSize);
 	sValue.ReleaseBuffer();
 
 	return m_lError == ERROR_SUCCESS;

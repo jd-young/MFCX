@@ -7,6 +7,9 @@
 
 #include <winreg.h>
 
+#include "../include/XString.h"
+
+
 namespace MFCX
 {
 
