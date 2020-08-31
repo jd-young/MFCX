@@ -3,6 +3,9 @@
      
      \author   John Young
      \date     circa 1997
+     \deprecated use CScrollView instead.  This was created because Windows 95
+                 couldn't cope with scroll bars of more than 32678.  MFC has 
+                 moved on since then.
 */
 
 #include "stdafx.h"

@@ -165,7 +165,7 @@ void CLogger::PrintTime()
 				time.wHour, time.wMinute, time.wSecond, 
 				time.wMilliseconds);
 
-     fprintf (m_logfl, "%s: ", sTime);
+     fprintf (m_logfl, "%s: ", (LPCTSTR) sTime);
      TRACE ("%s: ", sTime);
 }
 

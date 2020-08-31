@@ -24,16 +24,14 @@ CRegexString::CRegexString()
      Initialise();
 }
 
-CRegexString::CRegexString (const char* str) : 
-     _string (str)
+CRegexString::CRegexString (const TCHAR* str)
 {
-     Initialise();
+     Initialise(str);
 }
 
-CRegexString::CRegexString (const CString& s) :
-     _string (s)
+CRegexString::CRegexString (const CString& s)
 {
-     Initialise();
+     Initialise((const TCHAR*) s);
 }
 
 
@@ -46,15 +44,16 @@ void CRegexString::Copy(const CRegexString& from)
      m_bExtended = from.m_bExtended;
 }
 
-/*static*/ void CRegexString::Initialise()
+/*static*/ void CRegexString::Initialise(const TCHAR* psz /*= NULL*/)
 {
+     _string = psz ? psz : "";
      m_bIsRegex = false;
      m_bIgnoreCase = false;
      m_bMultiline = false;
      m_bExtended = false;
 
      int nLen = _string.GetLength();
-     const char* s = (const char*) _string;
+     const TCHAR* s = (const TCHAR*) _string;
      if ( nLen && *s == '/' )
      {
           m_bIsRegex = true;

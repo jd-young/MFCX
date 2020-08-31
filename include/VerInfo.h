@@ -6,6 +6,9 @@
 #ifndef	__MFCX_VERINFO_H
 #define	__MFCX_VERINFO_H
 
+/**
+ * Extracts version inforamtion from an application's 
+ */
 class CVersionInfo
 {
 public:
@@ -20,17 +23,16 @@ public:
 
      const TCHAR* GetDescription() { return m_sDescription; }///< Returns "ProductName"
      const TCHAR* GetAuthor() { return m_sAuthor; }          ///< Returns "Author"     
-     const TCHAR* GetVersion() { return m_sVersion; }        ///< Returns "ProductVersion"
+     const TCHAR* GetVersion() { return m_sVersion; }        ///< Returns M.m or M.m.r if there is a revision number.
      const TCHAR* GetCopyright() { return m_sCopyright; }    ///< Returns "LegalCopyright"
      const TCHAR* GetBetaBuild() { return m_sBetaBuild; }    ///< Returns "BetaBuild"
      const TCHAR* GetBuildDate() { return m_sBuildDate; }    ///< Returns "BuildDate"
 
+protected:
      /// Helper to extract the four digits from the PRODUCTVERSION.
      static BOOL ExtractVersion (const TCHAR* s, int* nMaj, int* nMin, 
 									    int* nRev, int* nBuild);
-
-protected:
-     BOOL ExtractVersion();
+     BOOL ExtractVersion (const TCHAR* s);
 
 private:
      CString m_sName;

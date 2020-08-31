@@ -116,10 +116,8 @@ CVersionInfo::CVersionInfo()
                                 "\\StringFileInfo\\080904b0\\ProductVersion",
                                 (void **)(&pszTemp),  &nVerInfoSize ) )
           {
-               m_sVersion = pszTemp;
-               ExtractVersion();
+               ExtractVersion (pszTemp);
           }
-          else m_sVersion = "No version info";
  
           if ( ::VerQueryValue (pVerInfo,
                                 "\\StringFileInfo\\080904b0\\InternalName",
@@ -157,12 +155,16 @@ CVersionInfo::CVersionInfo()
           // Free the version info buffer.
           delete pVerInfo;
      }
+
+     if ( m_nRevision )
+          m_sVersion.Format ("%d.%d.%d", m_nMajorVer, m_nMinorVer, m_nRevision);
+     else m_sVersion.Format ("%d.%d", m_nMajorVer, m_nMinorVer);
 }
 
 
-BOOL CVersionInfo::ExtractVersion()
+BOOL CVersionInfo::ExtractVersion(const TCHAR* pszVer)
 {
-     return ExtractVersion (m_sVersion,
+     return ExtractVersion (pszVer,
                            &m_nMajorVer, &m_nMinorVer, &m_nRevision, &m_nBuildNr);
 }
 

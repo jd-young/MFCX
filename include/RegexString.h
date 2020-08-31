@@ -33,7 +33,7 @@ public:
      bool IsRegex() const { return m_bIsRegex; }
      int  GetOptions() const;
 
-     void Set (const char* psz) { *this = psz; Initialise(); }
+     void Set (const char* psz) { Initialise(psz); }
      void SetOptions (int options);
 
      bool IsIgnoreCase() const { return m_bIgnoreCase; }
@@ -49,7 +49,7 @@ protected:
      bool m_bMultiline;       // The 'm' or opposite of the 's' modifier
      bool m_bExtended;        // The 'x' modifier
 
-     void Initialise();
+     void Initialise(const TCHAR* s = NULL);
 };
 
 #endif	// __MFCX_REGEXSTRING_H

@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.329
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MFCX", "MFCX.vcxproj", "{08E0E919-BE86-44F5-95B0-BBF15EE8E89A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+		Template|x86 = Template|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{08E0E919-BE86-44F5-95B0-BBF15EE8E89A}.Debug|x86.ActiveCfg = Debug|Win32
+		{08E0E919-BE86-44F5-95B0-BBF15EE8E89A}.Debug|x86.Build.0 = Debug|Win32
+		{08E0E919-BE86-44F5-95B0-BBF15EE8E89A}.Release|x86.ActiveCfg = Release|Win32
+		{08E0E919-BE86-44F5-95B0-BBF15EE8E89A}.Release|x86.Build.0 = Release|Win32
+		{08E0E919-BE86-44F5-95B0-BBF15EE8E89A}.Template|x86.ActiveCfg = Template|Win32
+		{08E0E919-BE86-44F5-95B0-BBF15EE8E89A}.Template|x86.Build.0 = Template|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2581534B-FEA7-4D50-82F8-9CD7EF84A63D}
+	EndGlobalSection
+EndGlobal
