@@ -34,6 +34,18 @@ CRegexString::CRegexString (const CString& s)
      Initialise((const TCHAR*) s);
 }
 
+CRegexString::CRegexString (const CRegexString& rs)
+{
+     _string = rs._string;
+     m_bIsRegex = rs.m_bIsRegex;
+
+     m_bIgnoreCase = rs.m_bIgnoreCase;
+     m_bMultiline = rs.m_bMultiline;
+     m_bExtended = rs.m_bExtended;
+
+}
+
+
 
 void CRegexString::Copy(const CRegexString& from)
 {
@@ -93,5 +105,12 @@ void CRegexString::SetOptions (int options)
      m_bIgnoreCase = (options & PCRE_CASELESS) == PCRE_CASELESS;
      m_bExtended   = (options & PCRE_EXTENDED) == PCRE_EXTENDED;
      m_bMultiline  = (options & PCRE_MULTILINE) == PCRE_MULTILINE;
+}
+
+CRegexString operator+ (TCHAR ch, const CRegexString& str)
+{
+     CRegexString strResult (str);
+     strResult._string = ch + strResult._string;
+     return strResult;
 }
 

@@ -16,10 +16,19 @@ public:
 	CRegexString();
 	CRegexString (const TCHAR* str);
      CRegexString (const CString& s);
+     CRegexString (const CRegexString& rs);
 
      void Copy(const CRegexString& from);
 
 	// Assignment
+//    const CRegexString& operator= (const char* str)
+//         { CXString::operator=(str);   return *this; }
+//    const CRegexString& operator= (CString s)
+//         { CXString::operator=(s);     return *this; }
+
+     friend CRegexString operator+ (TCHAR ch, const CRegexString& str);
+
+     // Equivalence
      friend bool operator==(const CRegexString& s1, LPCTSTR psz2) throw()
      {
           return s1._string == psz2;
