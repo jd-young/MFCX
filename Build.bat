@@ -18,6 +18,13 @@ rem
 rem		If 'clean' and 'rebuild' are omitted, then a build is done.
 rem
 
+echo "This is out of date - build using VS2017"
+goto End
+
+set MSVS="C:\Program Files (x86)\Microsoft Visual Studio"
+set VCVARS=%MSVS%\VC98\Bin\VCVARS32.BAT
+set MSDEV=%MSVS%\Common\MSDev98\Bin\msdev.exe
+
 set BUILDOPT=
 if /I "%1"=="all" set BUILD="All"
 if /I "%1"=="debug" set BUILD="MFCX - Win32 Debug"
@@ -29,8 +36,22 @@ if /I "%2"=="rebuild" set BUILDOPT=/REBUILD
 
 echo Building %BUILD%...
 
-:: call "\Program Files\Microsoft Visual Studio\VC98\Bin\VCVARS32.BAT"
-msdev MFCX.dsp /MAKE %BUILD% %BUILDOPT% /USEENV
+set PATH_OLD=%PATH%
+set INCLUDE_OLD=%INCLUDE%
+set LIB_OLD=%LIB%
+call %VCVARS%
+
+echo Building binary
+%MSDEV% MFCX.dsp /MAKE %BUILD% %BUILDOPT% /USEENV
+pause
+
+echo Restore INCLUDE and LIB
+set PATH=%PATH_OLD%
+set INCLUDE=%INCLUDE_OLD%
+set LIB=%LIB_OLD%
+
+set INCLUDE_OLD=
+set LIB_OLD=
 
 echo Done!
 goto End

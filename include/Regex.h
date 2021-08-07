@@ -25,7 +25,7 @@
      produces the following output...
 
 \verbatim
-     Match 1 is '1', Match 2 is '567890'
+     Match 1 is '1', Match 2 is '67890'
 \endverbatim
 */
 class CRegex

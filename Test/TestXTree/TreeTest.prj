@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <Project version="2" magic-number="0xaf41b307">
 	<ToolsCmds>
-		<ToolCmd menu="&amp;Compile" cmd="cl" args="%f %n CFG=&quot;%N - %C&quot;" dir="" file-regex="(.*)\(" line-regex="\((\d*)" use-output-window="Yes" prompt-for-args="No" close-on-exit="No" />
-		<ToolCmd menu="&amp;Build" cmd="nmake" args="/nologo /f &quot;%N.mak&quot; CFG=&quot;%N - %C&quot;" dir="" file-regex="\s*(.*?)\(" line-regex="\((\d*)" use-output-window="Yes" prompt-for-args="No" close-on-exit="No" />
-		<ToolCmd menu="&amp;Rebuild" cmd="nmake" args="/nologo /a /f &quot;%N.mak&quot; CFG=&quot;%N - %C&quot; clean all" dir="" file-regex="(.*)\(" line-regex="\((\d*)" use-output-window="Yes" prompt-for-args="No" close-on-exit="No" />
-		<ToolCmd menu="C&amp;lean" cmd="nmake" args="/nologo /f &quot;%N.mak&quot; CFG=&quot;%N - %C&quot; clean" dir="" file-regex="" line-regex="" use-output-window="Yes" prompt-for-args="No" close-on-exit="No" />
+		<ToolCmd menu="&amp;Compile" cmd="cl" args="%f %n CFG=&quot;%N - %C&quot;" dir="" file-regex="(.*)\(" line-regex="\((\d*)" use-output-window="Yes" prompt-for-args="No" close-on-exit="No"  />
+		<ToolCmd menu="&amp;Build" cmd="nmake" args="/nologo /f &quot;%N.mak&quot; CFG=&quot;%N - %C&quot;" dir="" file-regex="\s*(.*?)\(" line-regex="\((\d*)" use-output-window="Yes" prompt-for-args="No" close-on-exit="No"  />
+		<ToolCmd menu="&amp;Rebuild" cmd="nmake" args="/nologo /a /f &quot;%N.mak&quot; CFG=&quot;%N - %C&quot; clean all" dir="" file-regex="(.*)\(" line-regex="\((\d*)" use-output-window="Yes" prompt-for-args="No" close-on-exit="No"  />
+		<ToolCmd menu="C&amp;lean" cmd="nmake" args="/nologo /f &quot;%N.mak&quot; CFG=&quot;%N - %C&quot; clean" dir="" file-regex="" line-regex="" use-output-window="Yes" prompt-for-args="No" close-on-exit="No"  />
 	</ToolsCmds>
 	<Env-vars>
 		<var name="LIB" value="%LIB%;../../lib"/>
@@ -18,230 +18,32 @@
 	<ProjectTree>
 		<Branch name="TreeTest" type="Title" expanded="no">
 			<Branch name="res" type="Heading" expanded="no">
-				<ProjectItem type="Relative Filename" name="DragCopy.cur" path="res\DragCopy.cur"/>
-				<ProjectItem type="Relative Filename" name="DragMove.cur" path="res\DragMove.cur"/>
-				<ProjectItem type="Relative Filename" name="Images.bmp" path="res\Images.bmp"/>
-				<ProjectItem type="Relative Filename" name="NoDrop.cur" path="res\NoDrop.cur"/>
-				<ProjectItem type="Relative Filename" name="TreeTest.ico" path="res\TreeTest.ico"/>
-				<ProjectItem type="Relative Filename" name="TreeTest.rc2" path="res\TreeTest.rc2"/>
-				<ProjectItem type="Relative Filename" name="TreeTestDoc.ico" path="res\TreeTestDoc.ico"/>
+				<ProjectItem type="Filename" name="DragCopy.cur" path="C:\Users\jyoung\Documents\Work\Libraries\MFCX\Test\TestXTree\res\DragCopy.cur"/>
+				<ProjectItem type="Filename" name="DragMove.cur" path="C:\Users\jyoung\Documents\Work\Libraries\MFCX\Test\TestXTree\res\DragMove.cur"/>
+				<ProjectItem type="Filename" name="Images.bmp" path="C:\Users\jyoung\Documents\Work\Libraries\MFCX\Test\TestXTree\res\Images.bmp"/>
+				<ProjectItem type="Filename" name="NoDrop.cur" path="C:\Users\jyoung\Documents\Work\Libraries\MFCX\Test\TestXTree\res\NoDrop.cur"/>
+				<ProjectItem type="Filename" name="TreeTest.ico" path="C:\Users\jyoung\Documents\Work\Libraries\MFCX\Test\TestXTree\res\TreeTest.ico"/>
+				<ProjectItem type="Filename" name="TreeTest.rc2" path="C:\Users\jyoung\Documents\Work\Libraries\MFCX\Test\TestXTree\res\TreeTest.rc2"/>
+				<ProjectItem type="Filename" name="TreeTestDoc.ico" path="C:\Users\jyoung\Documents\Work\Libraries\MFCX\Test\TestXTree\res\TreeTestDoc.ico"/>
 			</Branch>
-			<ProjectItem type="Relative Filename" name="MainFrm.cpp" path="MainFrm.cpp"/>
-			<ProjectItem type="Relative Filename" name="MainFrm.h" path="MainFrm.h"/>
-			<ProjectItem type="Relative Filename" name="MyTree.cpp" path="MyTree.cpp"/>
-			<ProjectItem type="Relative Filename" name="MyTree.h" path="MyTree.h"/>
-			<ProjectItem type="Relative Filename" name="resource.h" path="resource.h"/>
-			<ProjectItem type="Relative Filename" name="StdAfx.cpp" path="StdAfx.cpp"/>
-			<ProjectItem type="Relative Filename" name="StdAfx.h" path="StdAfx.h"/>
-			<ProjectItem type="Relative Filename" name="TreeTest.cpp" path="TreeTest.cpp"/>
-			<ProjectItem type="Relative Filename" name="TreeTest.h" path="TreeTest.h"/>
-			<ProjectItem type="Relative Filename" name="TreeTest.mak" path="TreeTest.mak"/>
-			<ProjectItem type="Relative Filename" name="TreeTest.rc" path="TreeTest.rc"/>
-			<ProjectItem type="Relative Filename" name="TreeTestDoc.cpp" path="TreeTestDoc.cpp"/>
-			<ProjectItem type="Relative Filename" name="TreeTestDoc.h" path="TreeTestDoc.h"/>
-			<ProjectItem type="Relative Filename" name="TreeTestView.cpp" path="TreeTestView.cpp"/>
-			<ProjectItem type="Relative Filename" name="treetestview.h" path="treetestview.h"/>
+			<ProjectItem type="Filename" name="MainFrm.cpp" path="C:\Users\jyoung\Documents\Work\Libraries\MFCX\Test\TestXTree\MainFrm.cpp"/>
+			<ProjectItem type="Filename" name="MainFrm.h" path="C:\Users\jyoung\Documents\Work\Libraries\MFCX\Test\TestXTree\MainFrm.h"/>
+			<ProjectItem type="Filename" name="MyTree.cpp" path="C:\Users\jyoung\Documents\Work\Libraries\MFCX\Test\TestXTree\MyTree.cpp"/>
+			<ProjectItem type="Filename" name="MyTree.h" path="C:\Users\jyoung\Documents\Work\Libraries\MFCX\Test\TestXTree\MyTree.h"/>
+			<ProjectItem type="Filename" name="resource.h" path="C:\Users\jyoung\Documents\Work\Libraries\MFCX\Test\TestXTree\resource.h"/>
+			<ProjectItem type="Filename" name="StdAfx.cpp" path="C:\Users\jyoung\Documents\Work\Libraries\MFCX\Test\TestXTree\StdAfx.cpp"/>
+			<ProjectItem type="Filename" name="StdAfx.h" path="C:\Users\jyoung\Documents\Work\Libraries\MFCX\Test\TestXTree\StdAfx.h"/>
+			<ProjectItem type="Filename" name="TreeTest.cpp" path="C:\Users\jyoung\Documents\Work\Libraries\MFCX\Test\TestXTree\TreeTest.cpp"/>
+			<ProjectItem type="Filename" name="TreeTest.h" path="C:\Users\jyoung\Documents\Work\Libraries\MFCX\Test\TestXTree\TreeTest.h"/>
+			<ProjectItem type="Filename" name="TreeTest.mak" path="C:\Users\jyoung\Documents\Work\Libraries\MFCX\Test\TestXTree\TreeTest.mak"/>
+			<ProjectItem type="Filename" name="TreeTest.rc" path="C:\Users\jyoung\Documents\Work\Libraries\MFCX\Test\TestXTree\TreeTest.rc"/>
+			<ProjectItem type="Filename" name="TreeTestDoc.cpp" path="C:\Users\jyoung\Documents\Work\Libraries\MFCX\Test\TestXTree\TreeTestDoc.cpp"/>
+			<ProjectItem type="Filename" name="TreeTestDoc.h" path="C:\Users\jyoung\Documents\Work\Libraries\MFCX\Test\TestXTree\TreeTestDoc.h"/>
+			<ProjectItem type="Filename" name="TreeTestView.cpp" path="C:\Users\jyoung\Documents\Work\Libraries\MFCX\Test\TestXTree\TreeTestView.cpp"/>
+			<ProjectItem type="Filename" name="treetestview.h" path="C:\Users\jyoung\Documents\Work\Libraries\MFCX\Test\TestXTree\treetestview.h"/>
 		</Branch>
 	</ProjectTree>
 	<Workspace>
-		<CWD path="C:\Users\jyoung\Documents\Work\Libraries\MFCX"/>
-		<View alt="22" path="C:\Users\jyoung\Documents\Work\Libraries\MFCX\include\XString.h" LineWrap="1">
-			<Pos flags="0" showCmd="1" showCmdDesc="SW_SHOWNORMAL">
-				<MinPos x="-1" y="-1"/>
-				<MaxPos x="-8" y="-31"/>
-				<NormPos top="52" left="52" bottom="432" right="534"/>
-			</Pos>
-			<ScrollPos line="96" col="0"/>
-			<Cursor line="121" col="26"/>
-		</View>
-		<View alt="21" path="C:\Program Files (x86)\Microsoft Visual Studio\VC98\MFC\SRC\EXCEPT.CPP" LineWrap="1">
-			<Pos flags="0" showCmd="1" showCmdDesc="SW_SHOWNORMAL">
-				<MinPos x="-1" y="-1"/>
-				<MaxPos x="-8" y="-31"/>
-				<NormPos top="0" left="0" bottom="380" right="783"/>
-			</Pos>
-			<ScrollPos line="255" col="0"/>
-			<Cursor line="288" col="38"/>
-		</View>
-		<View alt="20" path="C:\Users\jyoung\Documents\Work\Projects\PrEditor.git\src\Project\ProjectDoc.cpp" LineWrap="1">
-			<Pos flags="0" showCmd="1" showCmdDesc="SW_SHOWNORMAL">
-				<MinPos x="-1" y="-1"/>
-				<MaxPos x="-8" y="-31"/>
-				<NormPos top="156" left="156" bottom="536" right="939"/>
-			</Pos>
-			<ScrollPos line="599" col="0"/>
-			<Cursor line="617" col="18"/>
-		</View>
-		<View alt="17" path="C:\Users\jyoung\Documents\Work\Projects\PrEditor.git\src\Workspace.cpp" LineWrap="1">
-			<Pos flags="0" showCmd="1" showCmdDesc="SW_SHOWNORMAL">
-				<MinPos x="-1" y="-1"/>
-				<MaxPos x="-8" y="-31"/>
-				<NormPos top="130" left="130" bottom="510" right="913"/>
-			</Pos>
-			<ScrollPos line="730" col="0"/>
-			<Cursor line="751" col="0"/>
-		</View>
-		<View alt="11" path="C:\Users\jyoung\Documents\Work\Projects\PrEditor.git\src\ToolsMgr.cpp" LineWrap="1">
-			<Pos flags="0" showCmd="1" showCmdDesc="SW_SHOWNORMAL">
-				<MinPos x="-1" y="-1"/>
-				<MaxPos x="-8" y="-31"/>
-				<NormPos top="104" left="104" bottom="484" right="887"/>
-			</Pos>
-			<ScrollPos line="477" col="0"/>
-			<Cursor line="498" col="0"/>
-		</View>
-		<View alt="19" path="C:\PROGRA~2\MICROS~2\VC98\MFC\INCLUDE\afx.h" LineWrap="1">
-			<Pos flags="0" showCmd="1" showCmdDesc="SW_SHOWNORMAL">
-				<MinPos x="-1" y="-1"/>
-				<MaxPos x="-8" y="-31"/>
-				<NormPos top="78" left="78" bottom="458" right="861"/>
-			</Pos>
-			<ScrollPos line="897" col="0"/>
-			<Cursor line="920" col="21"/>
-		</View>
-		<View alt="18" path="C:\PROGRA~2\MICROS~2\VC98\MFC\INCLUDE\afxwin.h" LineWrap="1">
-			<Pos flags="0" showCmd="1" showCmdDesc="SW_SHOWNORMAL">
-				<MinPos x="-1" y="-1"/>
-				<MaxPos x="-8" y="-31"/>
-				<NormPos top="52" left="52" bottom="432" right="835"/>
-			</Pos>
-			<ScrollPos line="0" col="0"/>
-			<Cursor line="18" col="0"/>
-		</View>
-		<View alt="16" path="C:\Users\jyoung\Documents\Work\Projects\PrEditor.git\src\Text\Text.cpp" LineWrap="1">
-			<Pos flags="0" showCmd="1" showCmdDesc="SW_SHOWNORMAL">
-				<MinPos x="-1" y="-1"/>
-				<MaxPos x="-8" y="-31"/>
-				<NormPos top="0" left="0" bottom="380" right="482"/>
-			</Pos>
-			<ScrollPos line="0" col="0"/>
-			<Cursor line="8" col="0"/>
-		</View>
-		<View alt="15" path="C:\Users\jyoung\Documents\Work\Projects\PrEditor.git\src\Text\Text.h" LineWrap="1">
-			<Pos flags="0" showCmd="1" showCmdDesc="SW_SHOWNORMAL">
-				<MinPos x="-1" y="-1"/>
-				<MaxPos x="-8" y="-31"/>
-				<NormPos top="26" left="26" bottom="406" right="809"/>
-			</Pos>
-			<ScrollPos line="352" col="0"/>
-			<Cursor line="383" col="63"/>
-		</View>
-		<View alt="14" path="C:\Users\jyoung\Documents\Work\Projects\Test\test-post-receive\test.pl" LineWrap="1">
-			<Pos flags="0" showCmd="1" showCmdDesc="SW_SHOWNORMAL">
-				<MinPos x="-1" y="-1"/>
-				<MaxPos x="-8" y="-31"/>
-				<NormPos top="78" left="78" bottom="458" right="859"/>
-			</Pos>
-			<ScrollPos line="0" col="0"/>
-			<Cursor line="13" col="1"/>
-		</View>
-		<View alt="13" path="C:\Users\jyoung\Documents\Work\GIT-REPOS\test.git\hooks\post-receive" LineWrap="1">
-			<Pos flags="0" showCmd="1" showCmdDesc="SW_SHOWNORMAL">
-				<MinPos x="-1" y="-1"/>
-				<MaxPos x="-8" y="-31"/>
-				<NormPos top="26" left="26" bottom="406" right="807"/>
-			</Pos>
-			<ScrollPos line="0" col="0"/>
-			<Cursor line="7" col="0"/>
-		</View>
-		<View alt="12" path="C:\tmp\run-cl.bat" LineWrap="1">
-			<Pos flags="0" showCmd="1" showCmdDesc="SW_SHOWNORMAL">
-				<MinPos x="-1" y="-1"/>
-				<MaxPos x="-8" y="-31"/>
-				<NormPos top="104" left="104" bottom="484" right="891"/>
-			</Pos>
-			<ScrollPos line="0" col="0"/>
-			<Cursor line="12" col="48"/>
-		</View>
-		<View alt="10" path="C:\Users\jyoung\Documents\Work\Projects\PrEditor.git\test\PrEditorTest.cpp" LineWrap="1">
-			<Pos flags="0" showCmd="1" showCmdDesc="SW_SHOWNORMAL">
-				<MinPos x="-1" y="-1"/>
-				<MaxPos x="-8" y="-31"/>
-				<NormPos top="26" left="26" bottom="406" right="512"/>
-			</Pos>
-			<ScrollPos line="10" col="0"/>
-			<Cursor line="32" col="31"/>
-		</View>
-		<View alt="9" path="C:\Users\jyoung\Documents\Work\Projects\PrEditor.git\test\TextTest.h" LineWrap="1">
-			<Pos flags="0" showCmd="1" showCmdDesc="SW_SHOWNORMAL">
-				<MinPos x="-1" y="-1"/>
-				<MaxPos x="-8" y="-31"/>
-				<NormPos top="26" left="26" bottom="602" right="709"/>
-			</Pos>
-			<ScrollPos line="0" col="0"/>
-			<Cursor line="19" col="0"/>
-		</View>
-		<View alt="8" path="C:\Users\jyoung\Documents\Work\Projects\PrEditor.git\test\TextTest.cpp" LineWrap="1">
-			<Pos flags="0" showCmd="1" showCmdDesc="SW_SHOWNORMAL">
-				<MinPos x="-1" y="-1"/>
-				<MaxPos x="-8" y="-31"/>
-				<NormPos top="0" left="0" bottom="576" right="683"/>
-			</Pos>
-			<ScrollPos line="52" col="0"/>
-			<Cursor line="69" col="28"/>
-		</View>
-		<View alt="7" path="C:\Users\jyoung\Documents\Work\Projects\PrEditor.git\test\UnitTest.h" LineWrap="1">
-			<Pos flags="0" showCmd="1" showCmdDesc="SW_SHOWNORMAL">
-				<MinPos x="-1" y="-1"/>
-				<MaxPos x="-8" y="-31"/>
-				<NormPos top="260" left="260" bottom="836" right="943"/>
-			</Pos>
-			<ScrollPos line="0" col="0"/>
-			<Cursor line="11" col="0"/>
-		</View>
-		<View alt="6" path="C:\Users\jyoung\Documents\Work\Projects\PrEditor.git\test\UnitTest.cpp" LineWrap="1">
-			<Pos flags="2" showCmd="3" showCmdDesc="SW_SHOWMAXIMIZED">
-				<MinPos x="-1" y="-1"/>
-				<MaxPos x="-8" y="-31"/>
-				<NormPos top="234" left="234" bottom="810" right="917"/>
-			</Pos>
-			<ScrollPos line="104" col="0"/>
-			<Cursor line="126" col="43"/>
-		</View>
-		<View alt="5" path="C:\Users\jyoung\Documents\Work\Projects\PrEditor.git\test\scripts\TestMakefile.bat" LineWrap="1">
-			<Pos flags="0" showCmd="1" showCmdDesc="SW_SHOWNORMAL">
-				<MinPos x="-1" y="-1"/>
-				<MaxPos x="-8" y="-31"/>
-				<NormPos top="130" left="130" bottom="706" right="807"/>
-			</Pos>
-			<ScrollPos line="4" col="0"/>
-			<Cursor line="35" col="28"/>
-		</View>
-		<View alt="4" path="C:\Users\jyoung\Documents\Work\Projects\PrEditor.git\src\Makefile" LineWrap="1">
-			<Pos flags="0" showCmd="1" showCmdDesc="SW_SHOWNORMAL">
-				<MinPos x="-1" y="-1"/>
-				<MaxPos x="-8" y="-31"/>
-				<NormPos top="104" left="104" bottom="680" right="480"/>
-			</Pos>
-			<ScrollPos line="377" col="0"/>
-			<Cursor line="415" col="9"/>
-		</View>
-		<View alt="3" path="C:\Users\jyoung\Documents\Work\Projects\PrEditor.git\Makefile" LineWrap="1">
-			<Pos flags="0" showCmd="1" showCmdDesc="SW_SHOWNORMAL">
-				<MinPos x="-1" y="-1"/>
-				<MaxPos x="-8" y="-31"/>
-				<NormPos top="78" left="78" bottom="654" right="454"/>
-			</Pos>
-			<ScrollPos line="142" col="0"/>
-			<Cursor line="96" col="0"/>
-		</View>
-		<View alt="1" path="C:\Users\jyoung\Documents\Notes.txt" LineWrap="1">
-			<Pos flags="0" showCmd="1" showCmdDesc="SW_SHOWNORMAL">
-				<MinPos x="-1" y="-1"/>
-				<MaxPos x="-8" y="-31"/>
-				<NormPos top="156" left="156" bottom="541" right="913"/>
-			</Pos>
-			<ScrollPos line="247" col="0"/>
-			<Cursor line="243" col="27"/>
-		</View>
-		<View alt="2" path="C:\tmp\scratch-pad.txt">
-			<Pos flags="0" showCmd="1" showCmdDesc="SW_SHOWNORMAL">
-				<MinPos x="-1" y="-1"/>
-				<MaxPos x="-8" y="-31"/>
-				<NormPos top="52" left="52" bottom="628" right="731"/>
-			</Pos>
-			<ScrollPos line="0" col="0"/>
-			<Cursor line="41" col="0"/>
-		</View>
+		<CWD path="C:\Users\jyoung\Documents\Work\Libraries\MFCX\Test\TestXTree"/>
 	</Workspace>
 </Project>

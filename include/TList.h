@@ -14,20 +14,29 @@ public:
 	/// Destructor that will delete all the pointer objects in the list.
 	~TList() { MakeEmpty(); }
 
+     POSITION Find (TYPE searchValue, POSITION startAfter = NULL) const
+          { return CPtrList::Find (searchValue, startAfter); }
+
 	///  Gets a reference to the head (without removing it)
-	TYPE& GetHead()		{ return (TYPE&)CPtrList::GetHead(); }
+	TYPE& GetHead()		{ return (TYPE&) CPtrList::GetHead(); }
 	
 	/// Copies the head object and returns it.
-	TYPE  GetHead() const	{ return (TYPE)CPtrList::GetHead(); }
+	TYPE  GetHead() const	{ return (TYPE) CPtrList::GetHead(); }
+
+	/// 
+	POSITION GetHeadPosition() const { return CPtrList::GetHeadPosition(); }
 
      /// Gets a reference to the tail object.
-	TYPE& GetTail()		{ return (TYPE&)CPtrList::GetTail(); }
+	TYPE& GetTail()		{ return (TYPE&) CPtrList::GetTail(); }
 
      /// Copies the object from the tail and returns it.
-	TYPE  GetTail() const	{ return (TYPE)CPtrList::GetTail(); }
+	TYPE  GetTail() const	{ return (TYPE) CPtrList::GetTail(); }
 
 	///  Removes the head from the list.  (Don't call on an empty list!).
-	TYPE RemoveHead()		{ return (TYPE)CPtrList::RemoveHead(); }
+	TYPE RemoveHead()		{ return (TYPE) CPtrList::RemoveHead(); }
+
+     ///  Removes the element at the given position.
+     void RemoveAt (POSITION pos) { CPtrList::RemoveAt (pos); }
 
      /// 	Removes the tail from the list.  (Don't call on empty list!).
 	TYPE RemoveTail()		{ return (TYPE)CPtrList::RemoveTail(); }

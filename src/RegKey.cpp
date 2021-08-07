@@ -647,9 +647,8 @@ BOOL CRegKey::Close()
 
 BOOL CRegKey::EnumerateKeys (const DWORD dwSubkeyIndex,
                              CString& strSubkeyName,
-                             CString& strClassName )
+                             CString& strClassName)
 {
-
      TCHAR szSubkeyName [2048];
      TCHAR szClassName [2048];
 
