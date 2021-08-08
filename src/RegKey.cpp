@@ -329,7 +329,7 @@ BOOL CRegKey::DeleteSubBranch (const TCHAR* pszSubKey)
           CString sSubKey = listSubKeys.GetNext (pos);
           rkSub.DeleteSubBranch (sSubKey);
      }
-     
+     // TODO: Update the error flag is this is not successful
      LONG lRet = ::RegDeleteKey (m_hKey, pszSubKey);
      return lRet == ERROR_SUCCESS;
 }
@@ -714,9 +714,9 @@ BOOL CRegKey::DeleteValue (const TCHAR* pszValue)
 {
 	ASSERT ( m_hKey != NULL );         // must have valid HKEY 
 	ASSERT ( m_bOpen );
-     ASSERT ( m_sam & KEY_WRITE );
+     ASSERT ( m_sam & KEY_WRITE );      // TODO: Check if this fires - KEY_SET_VALUE?
 
-     return ::RegDeleteValue (m_hKey, pszValue) == ERROR_SUCCESS;
+     return ::RegDeleteValue (m_hKey, pszValue) == ERROR_SUCCESS;     // TODO: Set the error code if this fails.
 }
 
 
@@ -946,7 +946,7 @@ BOOL CRegKey::CopyTo (CRegKey& rkDest, BOOL bDeleteFirst /*= FALSE*/)
 	values and keys.
 */
 BOOL CRegKey::MoveTo (CRegKey& rkDest)
-{
+{    // TODO: Fail early if the this.m_sam doesn't have delete rights.
      if ( CopyTo (rkDest, true) )
      {
           DeleteAll();

@@ -1,6 +1,6 @@
 # .gitignore
 
-Objs/
+builds/
 lib/
 
 *.aps
@@ -18,10 +18,13 @@ MFCXTest/Release
 MFCXTest/Debug
 
 doc/doxygen/html
-changes.txt
 *.log
+
+# Remove when 'test' is sorted out.
 /MFCXTest/EncryptText-plain.cpp
 /MFCXTest/EncryptText-plain.cpp.encrypted
 /MFCXTest/EncryptText-plain.txt
 /MFCXTest/EncryptText-plain.txt.encrypted
 *.ini
+
+tags

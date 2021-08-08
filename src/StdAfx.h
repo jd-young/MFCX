@@ -15,6 +15,10 @@
 
 #define VC_EXTRALEAN		// Exclude rarely-used stuff from Windows headers
 
+#ifndef   _WIN32_WINNT
+#define _WIN32_WINNT     _WIN32_WINNT_MAXVER
+#endif
+
 #include <afxwin.h>         // MFC core and standard components
 #include <afxext.h>         // MFC extensions
 #include <afxcview.h>

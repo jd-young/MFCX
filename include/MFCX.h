@@ -90,6 +90,5 @@
 #include "XStringList.h"		// Extended string list that can be sorted
 #include "XTreeCtrl.h"        // Extended tree control 
 #include "XTime.h"			// Time processing
-#include "xml.h"			// XML processing
 
 #endif // __MFCX_H
