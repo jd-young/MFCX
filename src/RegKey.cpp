@@ -126,7 +126,7 @@ CRegKey::CRegKey (const HKEY hKey, const TCHAR* pszSubKey, REGSAM sam /* = KEY_R
 		m_bOpen = Open (hKey, pszSubKey, sam);
 	     m_strKey = pszSubKey;
 	}
-	else ASSERT (FALSE);
+	else ASSERT (false);
 }
 
 
@@ -188,7 +188,7 @@ void CRegKey::Initialise()
 
 	m_sam = 0;
 
-	m_bOpen = FALSE;
+	m_bOpen = false;
 	m_dwClassSize = 
 	m_dwSubKeys = 
 	m_dwMaxSubkey = 
@@ -210,13 +210,14 @@ void CRegKey::Initialise()
 
 	Note that if pszSubKey doesn't have a leading backslash, then one is added.
 
-\param	hKey			Must be one of the pre-defined keys (see CRegKey::CRegKey).
+\param	hKey			One of the pre-defined keys (see CRegKey::CRegKey), or
+                         a sub-key from another CRegKey object.
 \param	pszSubKey		The sub-key to open.
 \param	sam			The desired Security Access Mask (see CRegKey::CRegKey).
 
-\return	\b TRUE if successful, \b FALSE if not.
+\return	\b true if successful, \b false if not.
 */
-BOOL CRegKey::Open (const HKEY hKey, const TCHAR* pszSubKey, REGSAM sam /* = KEY_READ */)
+bool CRegKey::Open (const HKEY hKey, const TCHAR* pszSubKey, REGSAM sam /* = KEY_READ */)
 {
 	ASSERT ( hKey != NULL );	  // must have valid HKEY
 
@@ -242,7 +243,7 @@ BOOL CRegKey::Open (const HKEY hKey, const TCHAR* pszSubKey, REGSAM sam /* = KEY
 	// if successful, store the new hKey;
 	if ( m_lError == ERROR_SUCCESS )
 	{
-		m_bOpen = TRUE;
+		m_bOpen = true;
 		QueryInfo();
 	}
 	else	m_hKey = NULL;
@@ -253,9 +254,9 @@ BOOL CRegKey::Open (const HKEY hKey, const TCHAR* pszSubKey, REGSAM sam /* = KEY
 
 /**	Deletes all the keys and values from the current key.
 
-\return	\b TRUE if successful, \b FALSE if not.
+\return	\b true if successful, \b false if not.
 */
-BOOL CRegKey::DeleteAll()
+bool CRegKey::DeleteAll()
 {
      return DeleteAllKeys() && DeleteAllValues();
 }
@@ -263,14 +264,14 @@ BOOL CRegKey::DeleteAll()
 
 /**	Deletes all the keys from the current key.
 
-\return	\b TRUE if successful, \b FALSE if not.
+\return	\b true if successful, \b false if not.
 */
-BOOL CRegKey::DeleteAllKeys()
+bool CRegKey::DeleteAllKeys()
 {
      // Deletes all the keys in 'this'.
-	ASSERT ( m_hKey != NULL && 
-			m_bOpen && 
-			(m_sam & KEY_WRITE) );	     // must have valid HKEY
+	ASSERT ( m_hKey != NULL );
+	ASSERT ( m_bOpen );
+	ASSERT ( (m_sam & KEY_WRITE) == KEY_WRITE );
 
      // First of all collect up all the sub-keys and 
 	DWORD dwCount = 0;
@@ -281,12 +282,12 @@ BOOL CRegKey::DeleteAllKeys()
 		listKeys.AddTail (sKey);
 
      // key deletion pass...
-     BOOL bRet = TRUE;
+     bool bRet = true;
      for (POSITION pos = listKeys.GetHeadPosition(); pos; )
      {
           CString sKey = listKeys.GetNext (pos);
           if ( !DeleteSubBranch (sKey) )
-               bRet = FALSE;
+               bRet = false;
      }
      return bRet;
 }
@@ -300,21 +301,21 @@ BOOL CRegKey::DeleteAllKeys()
      will delete everything under a deleted key).  This calls DeleteSubKey.
 
 \param	pszSubKey		The name of the branch to delete.
-\return	\b TRUE if successful, \b FALSE if not.
+\return	\b true if successful, \b false if not.
 */
-BOOL CRegKey::DeleteSubBranch (const TCHAR* pszSubKey)
+bool CRegKey::DeleteSubBranch (const TCHAR* pszSubKey)
 {
      //TRACE (_T("\"%s\"->DeleteSubBranch (\"%s\")\n"), m_strKey, pszSubKey);
 
-	ASSERT ( m_hKey != NULL && 
-			m_bOpen && 
-			(m_sam & KEY_WRITE) );	     // must have valid HKEY
+	ASSERT ( m_hKey != NULL );
+	ASSERT ( m_bOpen );
+	ASSERT ( (m_sam & KEY_WRITE) == KEY_WRITE );
 
      CRegKey rkSub (*this, pszSubKey, KEY_ALL_ACCESS);
 
      if ( !rkSub.IsOpen() )
           return ERROR_SUCCESS;	// No' open - so it disnae exist - therefore 
-          					// we micht as weel 'a' deleted it!
+          					// we micht as weel o deleted it!
      
 	DWORD dwCount = 0;
      CString sKey;
@@ -324,14 +325,20 @@ BOOL CRegKey::DeleteSubBranch (const TCHAR* pszSubKey)
 		listSubKeys.AddTail (sKey);
 
      // key deletion pass...
+     bool bRet = true;
      for (POSITION pos = listSubKeys.GetHeadPosition(); pos; )
      {
           CString sSubKey = listSubKeys.GetNext (pos);
-          rkSub.DeleteSubBranch (sSubKey);
+          if ( !rkSub.DeleteSubBranch (sSubKey) )
+               bRet = false; 
      }
-     // TODO: Update the error flag is this is not successful
-     LONG lRet = ::RegDeleteKey (m_hKey, pszSubKey);
-     return lRet == ERROR_SUCCESS;
+     
+     if ( bRet )
+     {
+          m_lError = ::RegDeleteKey (m_hKey, pszSubKey);
+          return m_lError == ERROR_SUCCESS;
+     }
+     return false;
 }
 
 /**	Deletes the given sub-key (but only if it is empty).
@@ -345,14 +352,14 @@ BOOL CRegKey::DeleteSubBranch (const TCHAR* pszSubKey)
 	up the registry now, but you'll be taking a chance.
 
 \param	pszSubKey		The name of the branch to delete.
-\return	\b TRUE if successful, \b FALSE if not.
+\return	\b true if successful, \b false if not.
 */
-BOOL CRegKey::DeleteSubKey (const TCHAR* pszSubKey)
+bool CRegKey::DeleteSubKey (const TCHAR* pszSubKey)
 {
 	//TRACE ("CRegKey::Delete (\"%s\")\n", pszSubKey);
-	ASSERT ( m_hKey != NULL && 
-			m_bOpen && 
-			(m_sam & KEY_WRITE) );	     // must have valid HKEY
+	ASSERT ( m_hKey != NULL );
+	ASSERT ( m_bOpen );
+	ASSERT ( (m_sam & KEY_WRITE) == KEY_WRITE );
 
 	if ( !m_bOpen || m_dwSubKeys > 0 )      // Cannot delete a key with sub-
 									// keys (default NT behaviour)
@@ -363,18 +370,18 @@ BOOL CRegKey::DeleteSubKey (const TCHAR* pszSubKey)
      QueryInfo();		// Update the info because we may have changed something
 
 	return m_lError != ERROR_SUCCESS;
-	//	RegDeleteValue (HKEY_CURRENT_USER, NULL); - just kidding!
 }
 
 
 
 /**	Gets information about contents of this key and stores it internally.
 
-\return	\b TRUE if successful, \b FALSE if not.
+\return	\b true if successful, \b false if not.
 */
-BOOL CRegKey::QueryInfo()
+/*protected*/
+bool CRegKey::QueryInfo()
 {
-	ASSERT (m_sam && KEY_QUERY_VALUE);
+	ASSERT ( (m_sam & KEY_QUERY_VALUE) == KEY_QUERY_VALUE );
 
 	m_lError = ::RegQueryInfoKey (m_hKey, m_sClass.GetBufferSetLength (RK_MAXNAMELENGTH),
 							 &m_dwClassSize, NULL, &m_dwSubKeys, &m_dwMaxSubkey,
@@ -444,17 +451,17 @@ BOOL CRegKey::QueryInfo()
 
 \param	pData			The data to store.
 \param	nDataSize			The size of the data to store.
-\return	\b TRUE if successful, \b FALSE if not.
+\return	\b true if successful, \b false if not.
 */
-BOOL CRegKey::Set (const TCHAR* pszValueName, DWORD nValueType,
+bool CRegKey::Set (const TCHAR* pszValueName, DWORD nValueType,
 			    BYTE* pData, DWORD nDataSize)
 {
-	ASSERT (pData);
-	ASSERT (nDataSize >= 0);
-	ASSERT (m_sam & KEY_SET_VALUE);
+	ASSERT ( pData );
+	ASSERT ( nDataSize >= 0 );
+	ASSERT ( (m_sam & KEY_SET_VALUE) == KEY_SET_VALUE );
 
-	m_lError = ::RegSetValueEx (m_hKey, pszValueName, NULL,
-						    nValueType, pData, nDataSize);
+	m_lError = ::RegSetValueEx (m_hKey, pszValueName, NULL, nValueType, pData, 
+	                            nDataSize);
 
 	return m_lError == ERROR_SUCCESS;
 }
@@ -464,9 +471,9 @@ BOOL CRegKey::Set (const TCHAR* pszValueName, DWORD nValueType,
 
 \param	pszValueName		The name of the value to set.
 \param	szValue			The value to be set.
-\return	\b TRUE if successful, \b FALSE if not.
+\return	\b true if successful, \b false if not.
 */
-BOOL CRegKey::Set (const TCHAR* pszValueName, const TCHAR* szValue)
+bool CRegKey::Set (const TCHAR* pszValueName, const TCHAR* szValue)
 {
     ASSERT (szValue);
 
@@ -477,9 +484,9 @@ BOOL CRegKey::Set (const TCHAR* pszValueName, const TCHAR* szValue)
 
 \param	pszValueName		The name of the value to set.
 \param	dwValue			The value to be set.
-\return	\b TRUE if successful, \b FALSE if not.
+\return	\b true if successful, \b false if not.
 */
-BOOL CRegKey::Set (const TCHAR* pszValueName, DWORD dwValue)
+bool CRegKey::Set (const TCHAR* pszValueName, DWORD dwValue)
 {
     return Set (pszValueName, REG_DWORD, (BYTE*) &dwValue, sizeof DWORD);
 }
@@ -492,9 +499,9 @@ BOOL CRegKey::Set (const TCHAR* pszValueName, DWORD dwValue)
 
 \param	pszValueName		The name of the value to set.
 \param	dValue			The value to be set.
-\return	\b TRUE if successful, \b FALSE if not.
+\return	\b true if successful, \b false if not.
 */
-BOOL CRegKey::SetDouble (const TCHAR* pszValueName, double dValue)
+bool CRegKey::SetDouble (const TCHAR* pszValueName, double dValue)
 {
 	CString sValue;
 	sValue.Format (_T("%g"), dValue);
@@ -510,9 +517,9 @@ BOOL CRegKey::SetDouble (const TCHAR* pszValueName, double dValue)
 \param	pszValueName		The name of the value to set.
 \param	pData			The data to be set.
 \param	nBytes			The number of bytes in the data.
-\return	\b TRUE if successful, \b FALSE if not.
+\return	\b true if successful, \b false if not.
 */
-BOOL CRegKey::Set (const TCHAR* pszValueName, const void* pData, int nBytes)
+bool CRegKey::Set (const TCHAR* pszValueName, const void* pData, int nBytes)
 {
 	ASSERT (nBytes >= 0 );
 
@@ -529,19 +536,19 @@ BOOL CRegKey::Set (const TCHAR* pszValueName, const void* pData, int nBytes)
 \param	nValueType		The type of value.
 \param	pData			The data to be filled.
 \param	nDataSize			The size of the data.
-\return	\b TRUE if successful, \b FALSE if not.
+\return	\b true if successful, \b false if not.
 */
-BOOL CRegKey::Query (const TCHAR* pszValueName, DWORD& nValueType,
+bool CRegKey::Query (const TCHAR* pszValueName, DWORD& nValueType,
 					 BYTE* pData, DWORD& nDataSize)
 {
-	ASSERT (m_sam && KEY_QUERY_VALUE);
+	ASSERT ( (m_sam && KEY_QUERY_VALUE) == KEY_QUERY_VALUE );
 
 	m_lError = ::RegQueryValueEx (m_hKey, pszValueName, NULL,
 							 &nValueType, pData, &nDataSize);
 	return m_lError == ERROR_SUCCESS;
 }
 
-BOOL CRegKey::Query (const TCHAR* pszValueName, CString& sValue)
+bool CRegKey::Query (const TCHAR* pszValueName, CString& sValue)
 {
 	// retrieve a string value
 
@@ -553,7 +560,7 @@ BOOL CRegKey::Query (const TCHAR* pszValueName, CString& sValue)
 	return m_lError == ERROR_SUCCESS;
 }
 
-BOOL CRegKey::Query (const TCHAR* pszValueName, DWORD& dwValue)
+bool CRegKey::Query (const TCHAR* pszValueName, DWORD& dwValue)
 {
 	// Retrieve a DWORD value
 
@@ -562,7 +569,7 @@ BOOL CRegKey::Query (const TCHAR* pszValueName, DWORD& dwValue)
 	return Query (pszValueName, dwValType, (BYTE*) &dwValue, dwSize);
 }
 
-BOOL CRegKey::QueryDouble (const TCHAR* pszValueName, double& dValue)
+bool CRegKey::QueryDouble (const TCHAR* pszValueName, double& dValue)
 {
 	// Retrieve a double value.  Read as a string then convert.
 
@@ -570,9 +577,9 @@ BOOL CRegKey::QueryDouble (const TCHAR* pszValueName, double& dValue)
 	if ( Query (pszValueName, sValue) )
 	{
 		dValue = _tcstod (sValue, NULL);
-		return TRUE;
+		return true;
 	}
-	return FALSE;
+	return false;
 }
 
 
@@ -588,7 +595,7 @@ int	CRegKey::QueryDataSize (const TCHAR* szValue)
 	else return 0;
 }
 
-BOOL CRegKey::Query (const TCHAR* szValue, void* pData, int nBytes)
+bool CRegKey::Query (const TCHAR* szValue, void* pData, int nBytes)
 {
 	// Retrieve binary data, and puts it into the pValue buffer, only if
 	// there is enough room.
@@ -600,7 +607,7 @@ BOOL CRegKey::Query (const TCHAR* szValue, void* pData, int nBytes)
 		DWORD dwValType = REG_BINARY;
 		return Query (szValue, dwValType, (BYTE*) pData, dwSize);
 	}
-	return FALSE;
+	return false;
 }
 
 
@@ -612,11 +619,11 @@ BOOL CRegKey::Query (const TCHAR* szValue, void* pData, int nBytes)
 \param	pszValueName		The name of the value to set.
 \param	sData			The data to be filled.
 \param	nDataSize			The size of the data.
-\return	\b TRUE if successful, \b FALSE if not.
+\return	\b true if successful, \b false if not.
 */
-BOOL CRegKey::Query (const TCHAR* pszValueName, CString& sData, int& nDataSize)
+bool CRegKey::Query (const TCHAR* pszValueName, CString& sData, int& nDataSize)
 {
-	ASSERT (m_sam && KEY_QUERY_VALUE);
+	ASSERT ( (m_sam && KEY_QUERY_VALUE) == KEY_QUERY_VALUE );
 
 	nDataSize = QueryDataSize (pszValueName);
 	if ( nDataSize )
@@ -624,7 +631,7 @@ BOOL CRegKey::Query (const TCHAR* pszValueName, CString& sData, int& nDataSize)
 		DWORD dwValType = REG_BINARY;
 		DWORD dwSize = nDataSize;
 		BYTE* pData = (BYTE*) sData.GetBuffer (nDataSize);
-		BOOL bRet = Query (pszValueName, dwValType, pData, dwSize);
+		bool bRet = Query (pszValueName, dwValType, pData, dwSize);
 		nDataSize = dwSize;
 		sData.ReleaseBuffer (nDataSize);
 		return bRet;
@@ -636,7 +643,7 @@ BOOL CRegKey::Query (const TCHAR* pszValueName, CString& sData, int& nDataSize)
 
 
 
-BOOL CRegKey::Close()
+bool CRegKey::Close()
 {
 
 	LONG lRet = ::RegCloseKey (m_hKey);
@@ -645,7 +652,7 @@ BOOL CRegKey::Close()
 }
 
 
-BOOL CRegKey::EnumerateKeys (const DWORD dwSubkeyIndex,
+bool CRegKey::EnumerateKeys (const DWORD dwSubkeyIndex,
                              CString& strSubkeyName,
                              CString& strClassName)
 {
@@ -673,12 +680,12 @@ BOOL CRegKey::EnumerateKeys (const DWORD dwSubkeyIndex,
           strSubkeyName = szSubkeyName;
           strClassName  = szClassName;
 
-          return TRUE;
+          return true;
      }
-     return FALSE;
+     return false;
 }
 
-BOOL CRegKey::EnumerateValues (const DWORD    dwValueIndex,
+bool CRegKey::EnumerateValues (const DWORD    dwValueIndex,
                                CString&       sValueName,
                                DWORD*         pdwValueType /*= NULL*/,
                                BYTE*          pbDataBuffer /*= NULL*/,
@@ -703,20 +710,21 @@ BOOL CRegKey::EnumerateValues (const DWORD    dwValueIndex,
      if ( m_lError == ERROR_SUCCESS )
      {
           sValueName  = szTempName;
-          return TRUE;
+          return true;
      }
 
-     return FALSE;
+     return false;
 }
 
 
-BOOL CRegKey::DeleteValue (const TCHAR* pszValue)
+bool CRegKey::DeleteValue (const TCHAR* pszValue)
 {
 	ASSERT ( m_hKey != NULL );         // must have valid HKEY 
 	ASSERT ( m_bOpen );
-     ASSERT ( m_sam & KEY_WRITE );      // TODO: Check if this fires - KEY_SET_VALUE?
+     ASSERT ( (m_sam & KEY_WRITE) == KEY_WRITE );
 
-     return ::RegDeleteValue (m_hKey, pszValue) == ERROR_SUCCESS;     // TODO: Set the error code if this fails.
+     m_lError = ::RegDeleteValue (m_hKey, pszValue);
+     return m_lError == ERROR_SUCCESS;
 }
 
 
@@ -727,13 +735,13 @@ BOOL CRegKey::DeleteValue (const TCHAR* pszValue)
 	dirty deed.  It is done this way because RegEnumValue() suffers no one
 	to change change the key whilst it is enumerating.
 
-\return	\b TRUE if successful, \b FALSE if not.
+\return	\b true if successful, \b false if not.
 */
-BOOL CRegKey::DeleteAllValues()
+bool CRegKey::DeleteAllValues()
 {
 	ASSERT ( m_hKey != NULL );         // must have valid HKEY 
 	ASSERT ( m_bOpen );
-     ASSERT ( m_sam & KEY_WRITE );
+     ASSERT ( (m_sam & KEY_WRITE) == KEY_WRITE );
 
      // Collect the values...
 	DWORD dwCount = 0;
@@ -743,12 +751,12 @@ BOOL CRegKey::DeleteAllValues()
 		listValues.AddTail (sValue);
 
      // Value deletion pass...
-     BOOL bRet = TRUE;
+     bool bRet = true;
      for (POSITION pos = listValues.GetHeadPosition(); pos; )
      {
           sValue = listValues.GetNext (pos);
           if ( !DeleteValue (sValue) )
-               bRet = FALSE;
+               bRet = false;
      }
      return bRet;
 }
@@ -777,9 +785,9 @@ const TCHAR szFontQuality[] = _T("Quality");
 
 \param	szFont		The name of the font key to read from.
 \param	lf			The LOGFONT structure to fill with the font details.
-\return	\b TRUE if successful, \b FALSE if not.
+\return	\b true if successful, \b false if not.
 */
-BOOL CRegKey::ReadFont (const TCHAR* szFont, LOGFONT& lf)
+bool CRegKey::ReadFont (const TCHAR* szFont, LOGFONT& lf)
 {
      ASSERT ( this );
      CRegKey rkFont (*this, szFont);
@@ -838,10 +846,10 @@ BOOL CRegKey::ReadFont (const TCHAR* szFont, LOGFONT& lf)
 		     lf.lfQuality = (BYTE) dwQuality;
           }
 
-          return TRUE;
+          return true;
 	}
 
-     return FALSE;
+     return false;
 }
 
 
@@ -850,9 +858,9 @@ BOOL CRegKey::ReadFont (const TCHAR* szFont, LOGFONT& lf)
 \param	szFont		The name of the font key to write to.
 \param	lf			The LOGFONT structure with the font details to be 
 					stored in the registry.
-\return	\b TRUE if successful, \b FALSE if not.
+\return	\b true if successful, \b false if not.
 */
-BOOL CRegKey::WriteFont (const TCHAR* szFont, const LOGFONT& lf)
+bool CRegKey::WriteFont (const TCHAR* szFont, const LOGFONT& lf)
 {
      ASSERT ( this );
 
@@ -882,14 +890,13 @@ BOOL CRegKey::WriteFont (const TCHAR* szFont, const LOGFONT& lf)
 \param	bDeleteFirst	If this is \b true, then the destination hive is 
 					deleted first before the copy.
 
-\return	\b TRUE if successful, \b FALSE if not.
-
+\return	\b true if successful, \b false if not.
 */
-BOOL CRegKey::CopyTo (CRegKey& rkDest, BOOL bDeleteFirst /*= FALSE*/)
+bool CRegKey::CopyTo (CRegKey& rkDest, bool bDeleteFirst /*= false*/)
 {
 	ASSERT ( m_hKey != NULL );         // must have valid HKEY 
 	ASSERT ( m_bOpen );
-	ASSERT ( rkDest.m_sam & KEY_SET_VALUE );
+	ASSERT ( (rkDest.m_sam & KEY_SET_VALUE) == KEY_SET_VALUE );
 
      if ( rkDest.IsOpen() )
      {
@@ -944,15 +951,24 @@ BOOL CRegKey::CopyTo (CRegKey& rkDest, BOOL bDeleteFirst /*= FALSE*/)
 
 	We simply do a copy first, and if that is successful, we delete all our 
 	values and keys.
+
+\param	rkDest		The destination hive.
+\param	bDeleteFirst	If this is \b true, then the destination hive is 
+					deleted first before the copy.
+\return	\b true if successful, \b false if not.
 */
-BOOL CRegKey::MoveTo (CRegKey& rkDest)
-{    // TODO: Fail early if the this.m_sam doesn't have delete rights.
-     if ( CopyTo (rkDest, true) )
+bool CRegKey::MoveTo (CRegKey& rkDest, bool bDeleteFirst /*= false*/)
+{
+	ASSERT ( m_hKey != NULL );         // must have valid HKEY 
+	ASSERT ( m_bOpen );
+	ASSERT ( (rkDest.m_sam & KEY_SET_VALUE) == KEY_SET_VALUE );
+
+     if ( CopyTo (rkDest, bDeleteFirst) )
      {
           DeleteAll();
-          return TRUE;
+          return true;
      }
-     return FALSE;
+     return false;
 }
 
 } // namespace MFCX

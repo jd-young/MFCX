@@ -7,9 +7,6 @@
 
 #include <winreg.h>
 
-#include "../include/XString.h"
-
-
 namespace MFCX
 {
 
@@ -69,7 +66,7 @@ public:
 protected:
 	HKEY m_hKey;
 	LONG	m_lError;
-	BOOL m_bOpen;
+	bool m_bOpen;
 	REGSAM m_sam;
 
 	CString m_strKey;				///< Stores the name of this key
@@ -87,60 +84,60 @@ protected:
 
 // Operations
 public:
-	BOOL IsOpen() const { return m_bOpen; }
+	bool IsOpen() const { return m_bOpen; }
 	int	NrSubKeys() { return m_dwSubKeys; }
      int  CountValues() { return m_dwValues; }
 	CString GetKeyPath() { return m_strKey; }
 
-     BOOL Open (const CRegKey& regKey, const TCHAR* pszSubKey, REGSAM sam = KEY_READ)
+     bool Open (const CRegKey& regKey, const TCHAR* pszSubKey, REGSAM sam = KEY_READ)
           { return Open (regKey.m_hKey, pszSubKey, sam); }
-	BOOL Open (const HKEY hKey, const TCHAR* pszSubKey, REGSAM sam = KEY_READ);
-	BOOL Close();
+	bool Open (const HKEY hKey, const TCHAR* pszSubKey, REGSAM sam = KEY_READ);
+	bool Close();
 
-	BOOL Set (const TCHAR* pszValueName, DWORD dwValue);
-	BOOL Set (const TCHAR* pszName, const TCHAR* szValue);
-	BOOL Set (const TCHAR* pszName, const void* pValue, int nSize);
-	BOOL Query (const TCHAR* pszValueName, CString& sValue);
-	BOOL Query (const TCHAR* pszValueName, DWORD& dwValue);
-	BOOL Query (const TCHAR* pszValueName, void* pData, int nSize);
-	BOOL Query (const TCHAR* pszValueName, CString& sData, int& nDataSize);
+	bool Set (const TCHAR* pszValueName, DWORD dwValue);
+	bool Set (const TCHAR* pszName, const TCHAR* szValue);
+	bool Set (const TCHAR* pszName, const void* pValue, int nSize);
+	bool Query (const TCHAR* pszValueName, CString& sValue);
+	bool Query (const TCHAR* pszValueName, DWORD& dwValue);
+	bool Query (const TCHAR* pszValueName, void* pData, int nSize);
+	bool Query (const TCHAR* pszValueName, CString& sData, int& nDataSize);
 	int	QueryDataSize (const TCHAR* pszValueName);
 
-	BOOL SetDouble (const TCHAR* pszValueName, double dValue);
-	BOOL QueryDouble (const TCHAR* pszValueName, double& dValue);
+	bool SetDouble (const TCHAR* pszValueName, double dValue);
+	bool QueryDouble (const TCHAR* pszValueName, double& dValue);
 
-     BOOL DeleteValue (const TCHAR* pszValue);
-     BOOL DeleteAllValues();
-     BOOL DeleteAll();
-     BOOL DeleteAllKeys();                                  ///< Recursive delete
-	BOOL DeleteSubKey (const TCHAR* pszSubKey);
-     BOOL DeleteSubBranch (const TCHAR* pszSubKey);         ///< Recursive delete
+     bool DeleteValue (const TCHAR* pszValue);
+     bool DeleteAllValues();
+     bool DeleteAll();
+     bool DeleteAllKeys();                                  ///< Recursive delete
+	bool DeleteSubKey (const TCHAR* pszSubKey);
+     bool DeleteSubBranch (const TCHAR* pszSubKey);         ///< Recursive delete
 
-     BOOL EnumerateKeys (const DWORD dwSubkeyIndex,
+     bool EnumerateKeys (const DWORD dwSubkeyIndex,
                          CString& strSubkeyName,
                          CString& strClassName);
-     BOOL EnumerateValues (const DWORD    dwValueIndex,
+     bool EnumerateValues (const DWORD    dwValueIndex,
                            CString&       sValueName,
                            DWORD*         pdwValueType = NULL,
                            BYTE*          pbDataBuffer = NULL,
                            DWORD*         pdwSizeDataBuffer = NULL);
 
      // Useful helper functions.
-     BOOL ReadFont (const TCHAR* szFont, LOGFONT& pLogFont);
-     BOOL WriteFont (const TCHAR* szFont, const LOGFONT& pLogFont);
+     bool ReadFont (const TCHAR* szFont, LOGFONT& pLogFont);
+     bool WriteFont (const TCHAR* szFont, const LOGFONT& pLogFont);
 
-     BOOL CopyTo (CRegKey& rkDest, BOOL bDeleteFirst = FALSE);
-     BOOL MoveTo (CRegKey& rkDest);
+     bool CopyTo (CRegKey& rkDest, bool bDeleteFirst = false);
+     bool MoveTo (CRegKey& rkDest);
 
 // Implementation
 protected:
 	void Initialise();
-	BOOL QueryInfo();
-	BOOL Set (const TCHAR* pszValueName, 
+	bool QueryInfo();
+	bool Set (const TCHAR* pszValueName, 
 	          DWORD nValueType, 
 	          BYTE* pData, 
 	          DWORD nDataSize);
-	BOOL Query (const TCHAR* szValueName, 
+	bool Query (const TCHAR* szValueName, 
 	            DWORD& nValueType, 
 	            BYTE* pData, 
 	            DWORD& nDataSize);
