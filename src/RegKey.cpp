@@ -361,15 +361,12 @@ bool CRegKey::DeleteSubKey (const TCHAR* pszSubKey)
 	ASSERT ( m_bOpen );
 	ASSERT ( (m_sam & KEY_WRITE) == KEY_WRITE );
 
-	if ( !m_bOpen || m_dwSubKeys > 0 )      // Cannot delete a key with sub-
-									// keys (default NT behaviour)
-		return FALSE;
-
      m_lError = ::RegDeleteKey (m_hKey, pszSubKey);
 
-     QueryInfo();		// Update the info because we may have changed something
-
-	return m_lError != ERROR_SUCCESS;
+     if ( m_lError == ERROR_SUCCESS )
+          QueryInfo();		// Update the info because we may have changed something
+     
+	return m_lError == ERROR_SUCCESS;
 }
 
 
@@ -646,9 +643,10 @@ bool CRegKey::Query (const TCHAR* pszValueName, CString& sData, int& nDataSize)
 bool CRegKey::Close()
 {
 
-	LONG lRet = ::RegCloseKey (m_hKey);
-	Initialise();
-	return lRet == ERROR_SUCCESS;
+	m_lError = ::RegCloseKey (m_hKey);
+	if ( m_lError == ERROR_SUCCESS )
+     	Initialise();
+	return m_lError == ERROR_SUCCESS;
 }
 
 
@@ -884,6 +882,44 @@ bool CRegKey::WriteFont (const TCHAR* szFont, const LOGFONT& lf)
 }
 
 
+/*!  Renames a sub-key.
+
+\param pszFrom           The key to be renamed.
+\param pszTo             The new name for the key.
+\return \b true if the key was successfully renamed, \b false otherwise.
+*/
+bool CRegKey::RenameKey (const TCHAR* pszFrom, const TCHAR* pszTo)
+{
+	ASSERT ( m_hKey );
+	ASSERT ( m_bOpen );
+	ASSERT ( (m_sam & KEY_WRITE) == KEY_WRITE );
+
+     // We cannot use this since only the wide-char version is available.
+//     m_lError = ::RegRenameKey (m_hKey, pszFrom, pszTo);
+
+     CRegKey rkSource (*this, pszFrom);
+     CRegKey rkDest (*this, pszTo);
+     if ( !rkSource.IsOpen() || rkDest.IsOpen() )
+     {
+          // Either the source is missing or the target already exists
+          m_lError = rkSource.m_lError ? rkSource.m_lError : rkDest.m_lError;
+          return false;
+     }
+
+     return DoRenameKey (pszFrom, pszTo);
+}
+
+bool CRegKey::DoRenameKey (const TCHAR* pszFrom, const TCHAR* pszTo)
+{
+     // Both need to have full access since one is written to and the other is
+     // deleted after the move.
+     CRegKey rkSource (*this, pszFrom, KEY_ALL_ACCESS);
+     CRegKey rkDest (*this, pszTo, KEY_ALL_ACCESS);
+     return rkSource.MoveTo (rkDest) && // Move all sub values and keys
+            DeleteSubKey (pszFrom);      // Remove the from key
+}
+
+
 /**	Copies the current registry key and branch to the destination key.
 
 \param	rkDest		The destination hive.
@@ -970,5 +1006,19 @@ bool CRegKey::MoveTo (CRegKey& rkDest, bool bDeleteFirst /*= false*/)
      }
      return false;
 }
+
+
+/*!
+\return the last error message in human readable format.
+*/
+CString CRegKey::GetLastError() const
+{
+     CString sError;
+     DWORD ret = ::FormatMessage (FORMAT_MESSAGE_FROM_SYSTEM, NULL, m_lError, 0, 
+                         sError.GetBuffer (255), 255, NULL); // TODO: Hard-coding.
+     sError.ReleaseBuffer();             
+     return sError;
+}
+
 
 } // namespace MFCX

@@ -127,7 +127,11 @@ public:
      bool WriteFont (const TCHAR* szFont, const LOGFONT& pLogFont);
 
      bool CopyTo (CRegKey& rkDest, bool bDeleteFirst = false);
-     bool MoveTo (CRegKey& rkDest);
+     bool MoveTo (CRegKey& rkDest, bool bDeleteFirst = false);
+
+     bool RenameKey (const TCHAR* pszFrom, const TCHAR* pszTo);
+
+     CString GetLastError() const;
 
 // Implementation
 protected:
@@ -141,6 +145,7 @@ protected:
 	            DWORD& nValueType, 
 	            BYTE* pData, 
 	            DWORD& nDataSize);
+     bool DoRenameKey (const TCHAR* pszFrom, const TCHAR* pszTo);
 };
 
 }    // namespace MFCX
