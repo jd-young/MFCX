@@ -2,6 +2,7 @@
 // Microsoft Developer Studio generated include file.
 // Used by MFCX.rc
 //
+// TODO: Do we need any of these?
 #define IDB_MFCX_LB_NEW                 20001
 #define IDB_MFCX_LB_DELETE              20002
 #define IDB_MFCX_LB_MOVEUP              20003

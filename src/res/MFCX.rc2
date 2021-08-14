@@ -38,7 +38,7 @@ BEGIN
             VALUE "FileDescription", "MFCX DLL\0"
             VALUE "FileVersion", "3, 0, 0, 0\0"
             VALUE "InternalName", "MFCX\0"
-            VALUE "LegalCopyright", "Copyright (c) 2003 Thistle Software. All rights reserved\0"
+            VALUE "LegalCopyright", "Copyright (c) 2021 Thistle Software. All rights reserved\0"
             VALUE "OriginalFilename", "MFCX.DLL\0"
             VALUE "ProductName", "MFCX Dynamic Link Library\0"
             VALUE "ProductVersion", "3, 0, 0, 0\0"

@@ -109,10 +109,6 @@ LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_UK
 // Bitmap
 //
 
-IDB_MFCX_LB_DELETE      BITMAP  DISCARDABLE     "res\\xlbDelete.bmp"
-IDB_MFCX_LB_MOVEDOWN    BITMAP  DISCARDABLE     "res\\xlbMoveDown.bmp"
-IDB_MFCX_LB_MOVEUP      BITMAP  DISCARDABLE     "res\\xlbMoveUp.bmp"
-IDB_MFCX_LB_NEW         BITMAP  DISCARDABLE     "res\\xlbNew.bmp"
 #endif    // English (U.K.) resources
 /////////////////////////////////////////////////////////////////////////////
 
