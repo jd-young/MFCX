@@ -11,8 +11,10 @@
 */
 
 #include "stdafx.h"
+#include <afxribbonres.h>          // To get the IDB_AFXBARRES_XXX button ID's.
 #include "../include/MFCXres.h"
 #include "../include/XListBox.h"
+
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -27,10 +29,14 @@ static UINT GetUniqueID (const CWnd* pWnd);
 #define   BUTTON_MOVEUP       2
 #define   BUTTON_MOVEDOWN     3          
 
-static UINT arrStandardButtonIDs[] = { IDB_MFCX_LB_NEW, 
-                                       IDB_MFCX_LB_DELETE,
-                                       IDB_MFCX_LB_MOVEUP,
-                                       IDB_MFCX_LB_MOVEDOWN };
+static UINT arrStandardButtonIDs[] =
+{
+     IDB_AFXBARRES_NEW32,
+     IDB_AFXBARRES_DELETE32,
+     IDB_AFXBARRES_UP32,
+     IDB_AFXBARRES_DOWN32
+};
+
 #define  NR_BUTTONS  (sizeof arrStandardButtonIDs / sizeof UINT)
 
 #define   IDC_EDITCTRL        1
@@ -79,8 +85,6 @@ public:
 	//}}AFX_VIRTUAL
 
 // Implementation
-
-
 private:
      int HitTest (CPoint pt) const;
      void InvalidateButton (int nIndex);
@@ -97,7 +101,6 @@ protected:
 
 	DECLARE_MESSAGE_MAP()
 };
-
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -143,6 +146,15 @@ protected:
 
 
 
+ListBoxInfo::ListBoxInfo (const ListBoxInfo& from)
+ :   sText (from.sText), dwData (from.dwData)
+{
+}
+
+ListBoxInfo::ListBoxInfo (CString sText, DWORD data)
+ :   sText (sText), dwData (data)
+{
+}
 
 CXListBox::CXListBox()
 {
@@ -282,7 +294,7 @@ void CXListBox::OnNew()
 
 void CXListBox::OnDelete()
 {
-     if ( GetCount() != 0 && !IsEditing() )
+     if ( !IsEditing() && GetCount() != 0 )
           DoDelete();
 }
 
@@ -339,29 +351,48 @@ void CXListBox::NotifyParent (int nMsg)
                              (LPARAM) m_hWnd);
 }
 
+
+void CXListBox::InsertItem (int nIndex, const ListBoxInfo& lbInfo, bool bSelect)
+{
+	int newIndex = InsertString (nIndex, lbInfo.sText);
+	if (newIndex != LB_ERR)
+	{
+	     ASSERT ( newIndex == nIndex );
+	     SetItemData (newIndex, lbInfo.dwData);
+          if ( bSelect )
+         		SetCurSel (newIndex);
+	}
+}
+
+
+
+ListBoxInfo CXListBox::RemoveItem (int nIndex)
+{
+	CString sText;
+	GetText (nIndex, sText);
+
+	// Now remove current in list
+	DWORD dwData = GetItemData (nIndex);
+	DeleteString (nIndex);
+	
+	return ListBoxInfo (sText, dwData);
+}
+
+
+
 /*virtual*/ void CXListBox::DoMoveUp()
 {
      // Moves the current selection up one line.
      int nSelected = GetCurSel();
      if ( nSelected != LB_ERR && nSelected > 0 )
      {
-     	CString sSelected;
-     	GetText (nSelected, sSelected);
-     
-     	// Now remove current in list
-     	DWORD dwData = GetItemData (nSelected);
-     	DeleteString (nSelected);
-     
+          ListBoxInfo lbInfo = RemoveItem (nSelected);
           nSelected--;   // Move up
-     	int newIndex = InsertString (nSelected, sSelected);
-     	if (newIndex != LB_ERR)
-     	{
-     	     ASSERT ( newIndex == nSelected );
-     	     SetItemData (newIndex, dwData);
-     		SetCurSel (newIndex);
-     	}
+          InsertItem (nSelected, lbInfo, true);
      }
 }
+
+
 
 /*virtual*/ void CXListBox::DoMoveDown()
 {
@@ -369,21 +400,9 @@ void CXListBox::NotifyParent (int nMsg)
      int nSelected = GetCurSel();
      if ( nSelected != LB_ERR && nSelected < GetCount() - 1 )
      {
-     	CString sSelected;
-     	GetText (nSelected, sSelected);
-     
-     	// Now remove current in list
-     	DWORD dwData = GetItemData (nSelected);
-     	DeleteString (nSelected);
-     
+          ListBoxInfo lbInfo = RemoveItem (nSelected);
           nSelected++;   // Move down
-     	int newIndex = InsertString (nSelected, sSelected);
-     	if (newIndex != LB_ERR)
-     	{
-     	     ASSERT ( newIndex == nSelected );
-     	     SetItemData (newIndex, dwData);
-     		SetCurSel (newIndex);
-     	}
+          InsertItem (nSelected, lbInfo, true);
      }
 }
 

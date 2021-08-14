@@ -13,11 +13,23 @@ class CButtonsWnd;
 class CListEdit;
 class CBrowseButton;
 
+struct ListBoxInfo
+{
+     ListBoxInfo (const ListBoxInfo& from);
+     ListBoxInfo (CString sText, DWORD data);
+
+     const CString sText;
+     const DWORD dwData;
+};
+
 
 ///  An extended list box that allows creation, editing, deletion and moving 
 ///  position of the entries.
 class CXListBox : public CListBox
 {
+friend CListEdit;
+friend CButtonsWnd;
+
 public:
      CXListBox();
      virtual ~CXListBox();
@@ -28,18 +40,19 @@ public:
      void SetWindowText (const TCHAR* pText);
 
      CEdit* GetEditCtrl() const;
-     bool IsEditing() const { return m_pEdit != NULL; }
 
 // Overrides
      virtual void DoNew();
      virtual void DoDelete();
      virtual void DoMoveUp();
      virtual void DoMoveDown();
-     
-     virtual bool StartEdit (int nIndex, const TCHAR* pszText = NULL);
 
+
+protected:
+     virtual bool StartEdit (int nIndex, const TCHAR* pszText = NULL);
      virtual void OnEndEdit (const TCHAR* pszText = NULL);
      virtual void OnBrowse() {};
+
 	// ClassWizard generated virtual function overrides
 	//{{AFX_VIRTUAL(CXListBox)
 	public:
@@ -53,13 +66,16 @@ private:
      void OnMoveDown();
      void NotifyParent (int nMsg);
 
+     bool IsEditing() const { return m_pEdit != NULL; }
+
+     void InsertItem (int nIndex, const ListBoxInfo& lbInfo, bool bSelect);
+     ListBoxInfo RemoveItem (int nIndex);
+
      UINT m_nStyle;                // Refer to the XLB_... flags above
 
      CStatic m_wndStatic;          // The static area to put the title
      CListEdit* m_pEdit;           // For in-place editing
      CButton* m_pBrowse;
-     friend CListEdit;
-     friend CButtonsWnd;
      CButtonsWnd* m_pButtons;      // The buttons to add, delete, and move.
      int m_nPrevClicked;
 
