@@ -51,7 +51,7 @@ public:
 
 
 
-
+// TODO: Can we use typedef TMap<int, VALUE> TIntMap<VALUE>?
 template<class VALUE>
 class TIntMap : public CMapPtrToPtr
 {
@@ -73,11 +73,14 @@ public:
 
 	// add a new key (key, value) pair
 	void SetAt (int key, VALUE newValue)
-		{ CMapPtrToPtr::SetAt ((void*) key, (void*&) newValue); }
+		{ CMapPtrToPtr::SetAt ((void*) key, (void*) newValue); }
 
 	// removing existing (key, ?) pair
 	BOOL RemoveKey (int key)
-		{ return CMapPtrToPtr::RemoveKey (key); }
+		{ 
+		     void* vkey = reinterpret_cast<void*> (key); 
+		     return CMapPtrToPtr::RemoveKey (vkey);
+		}
 
 	// iteration
 	void GetNextAssoc (POSITION& rPosition, int& rKey, VALUE& rValue) const

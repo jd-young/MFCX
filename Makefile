@@ -8,12 +8,12 @@
 #    make [-f <make-file>] [CFG = <config>] [<target>]
 #
 #    where 
-#         -f <make-file>      Specifies the make file to use.  Normally, this is
-#                             omitted, in which case make looks for 
-#                             'GNUmakefile', 'makefile', and `Makefile', in that 
-#                             order, and use the first of these three.  This 
-#                             file is called 'Makefile', so make will probably 
-#                             use this one!
+#         -f <make-file>      Specifies the make file to use.  Normally, this 
+#                             is omitted, in which case make looks for 
+#                             'GNUmakefile', 'makefile', and `Makefile', in 
+#                             that order, and use the first of these three.
+#                             This file is called 'Makefile', so make will 
+#                             probably use this one!
 #
 #         CFG = <config>      Specifies the configuration to build.  These can 
 #                             be 'Debug' or 'Release'.  If this omitted, then 
@@ -103,7 +103,7 @@ help: ## Prints out this help message
 	@echo Welcome to the $(PROGRAM) project makefile
 	@echo Targets:
 	@$(SED) -n "s/\(^[a-z]*\) *:.* ## *\(.*\)/\1:\2/p" Makefile | \
-	     $(AWK) -F: "{ printf \"   %%-10s %%s\n\", $$1, $$2 }" | \
+	     $(AWK) -F: '{ printf "   %-10s %s\n", $$1, $$2 }' | \
 	     sort
 
 cleanmost: ## Cleans most common files, but leaves rarely changed files (.pch, etc).
@@ -121,8 +121,8 @@ clean: ## Cleans the project of intermediate files for a given configuration.
 cleanall: ## Cleans all generated files and directories for Debug and Release builds.
 	@cd src && $(MAKE) clean CFG=Debug
 	@cd src && $(MAKE) clean CFG=Release
-	@if exist bin rmdir /S /Q bin
-	@if exist builds rmdir /S /Q builds
+	@rm -fr lib
+	@rm -fr builds
 	
 #	@cd Setup && $(MAKE) clean CFG=Release
 

@@ -10,26 +10,32 @@ PROGRAM	=	MFCX
 .DEFAULT_GOAL := build
 .PHONY:	cleanmost clean build test ext-deps check check-xml check-html
 
-# PRED-654: Figure out how to get rid of hard-coded library path
-# EXTERNAL DEPENDENCIES
-
 # TOOLS
 CXX            =    cl.exe
 RSC            =    rc.exe
 # Note 'LIBEXE' not 'LIB' so as not to clash with the environment variable of the same name.
 LIBEXE         =    lib.exe
-MKDEP          =    mkdep
+MKDEP          =    mkdep.bat
 BSC32          =    bscmake.exe
 PERL           =    perl.exe
-PYTHON         =    C:\Users\jyoung\AppData\Local\Programs\Python\Python37-32\python.exe
+PYTHON         =    python
 SED            =    sed.exe
-CPPCHECK_HOME  =    C:\Program Files\Cppcheck
-CPPCHECK       =    $(CPPCHECK_HOME)\cppcheck.exe
-CPPCHECK_HTMLREP=   $(CPPCHECK_HOME)\src\cppcheck-1.89\htmlreport\cppcheck-htmlreport
-COVERAGE       =    C:\Program Files\OpenCppCoverage\OpenCppCoverage.exe
+CPPCHECK       =    cppcheck.exe
+COVERAGE       =    OpenCppCoverage.exe
 
-# Global includes / libraries
-HTMLHELP 	= C:\Program Files (x86)\HTML Help Workshop
+# Check that all tool dependencies are installed.
+EXECS := $(CXX) $(RSC) $(BSC32) $(PERL) $(PYTHON) \
+         $(SED) $(CPPCHECK) $(COVERAGE)
+# Note: Use 'where' instead of 'which' to find .bat files as well.
+K := $(foreach exec,$(EXECS),\
+          $(if $(shell where $(exec)),some string,$(error "No '$(exec)' in PATH")))
+
+# Pull out CPPCHECK_HOME and _HTMLREP from the CPPCHECK app location.
+CPPCHECK_PATH  =    $(shell which "$(CPPCHECK)")
+CPPCHECK_DIR   =    $(shell dirname "$(CPPCHECK_PATH)")
+CPPCHECK_HOME  =    $(shell cygpath -m "$(CPPCHECK_DIR)")
+CPPCHECK_HTMLREP=   $(CPPCHECK_HOME)/htmlreport/cppcheck-htmlreport
+
 
 # SUBROUTINES
 
@@ -55,9 +61,9 @@ ifneq ($(MAKECMDGOALS), test)
 endif # goal = test
 
 # Configuration dependent settings...
-OUTDIR	  = ../lib
-INTDIR	  =	../builds/$(CFG)
-DEPDIR	  =	../builds/dep
+OUTDIR	= ../lib
+INTDIR	= ../builds/$(CFG)
+DEPDIR	= ../builds/dep
 TESTDIR   = ../builds/test
 CHECKDIR  = ../builds/cppcheck
 
@@ -79,15 +85,15 @@ CHECKDIR  = ../builds/cppcheck
 
 # There is a dependency on expat.
 # Common
-CXX_CMN_FLAGS = /Gd /GS /analyze- /Oy- /W3 /Zc:wchar_t,inline,forScope \
-                /D "WIN32" /D "_WINDOWS" /D "MFCX_LOG_USELOG" \
-                /D "_VC80_UPGRADE=0x0600" /D "_MBCS" /D "_AFXDLL" /WX- \
-                /fp:precise /errorReport:prompt /EHsc /nologo \
-                /Fd"$(INTDIR)\\" /FC \
-                /Fp"$(INTDIR)\$(PROGRAM).pch" /diagnostics:classic /c
+CXX_CMN_FLAGS = -Gd -GS -analyze- -Oy- -W3 -Zc:wchar_t,inline,forScope \
+                -D "WIN32" -D "_WINDOWS" -D "MFCX_LOG_USELOG" \
+                -D "_VC80_UPGRADE=0x0600" -D "_MBCS" -D "_AFXDLL" -WX- \
+                -fp:precise -errorReport:prompt -EHsc -nologo \
+                -Fd"$(INTDIR)\\" -FC \
+                -Fp"$(INTDIR)\$(PROGRAM).pch" -diagnostics:classic -c
 
-RSC_CMN_FLAGS = /D "_VC80_UPGRADE=0x0600" /D "_AFXDLL" /l 0x0409 /nologo \
-                /fo"$(INTDIR)\$(PROGRAM).res" 
+RSC_CMN_FLAGS = -D "_VC80_UPGRADE=0x0600" -D "_AFXDLL" -l 0x0409 -nologo \
+                -fo"$(INTDIR)\$(PROGRAM).res" 
 
 DEPFLAGS	=	-q
 
@@ -95,32 +101,32 @@ ifeq ("$(CFG)", "Debug")
 
   TARGET    =    $(OUTDIR)\$(PROGRAM)sd.lib
 
-  # /FR:<bsc-dir> browser info
-  # /Od   - disable optimisations.
-  # /RTC1 - run-time error checking optimised for debugging.
-  # /MDd  - use debug libraries.
-  CXXFLAGS  = $(CXX_CMN_FLAGS) /Gy /ZI /Gm- /Od /D "_DEBUG" /RTC1 /MDd \
-              /FR:"$(INTDIR)\\" 
-  RSC_FLAGS = $(RSC_CMN_FLAGS) /D "_DEBUG"
+  # -FR:<bsc-dir> browser info
+  # -Od   - disable optimisations.
+  # -RTC1 - run-time error checking optimised for debugging.
+  # -MDd  - use debug libraries.
+  CXXFLAGS  = $(CXX_CMN_FLAGS) -Gy -ZI -Gm- -Od -D "_DEBUG" -RTC1 -MDd \
+              -FR:"$(INTDIR)\\" 
+  RSC_FLAGS = $(RSC_CMN_FLAGS) -D "_DEBUG"
  
-  BSC32_FLAGS=/nologo 
-  LIB_FLAGS = /OUT:"$(OUTDIR)\MFCXsd.lib" /MACHINE:X86 /NOLOGO
-  # /LIST:"$(INTDIR)\MFCX.lst" - doesn't work
+  BSC32_FLAGS=-nologo 
+  LIB_FLAGS = -OUT:"$(OUTDIR)\MFCXsd.lib" -MACHINE:X86 -NOLOGO
+  # -LIST:"$(INTDIR)\MFCX.lst" - doesn't work
               
 else ifeq ("$(CFG)", "Release")
 
   TARGET    =    $(OUTDIR)\$(PROGRAM)s.lib
 
-  # /Gy  : function level linking.
-  # /Gm- : Switch off minimum rebuild.
-  # /O2  : Optimise for max speed.
-  # /GF  : Eliminate Duplicate Strings
-  # /WX- : Treat warnings as errors.
-  # /MD  : Multithreaded DLLs.
-  CXXFLAGS  = $(CXX_CMN_FLAGS) /Zi /O2 /D "NDEBUG" /GF /MD
-  RSC_FLAGS = $(RSC_CMN_FLAGS) /D "NDEBUG" 
-  BSC32_FLAGS=/o"$(OUTDIR)\MFCX.bsc" /nologo 
-  LIB_FLAGS = /OUT:"$(OUTDIR)\MFCXs.lib" /NOLOGO 
+  # -Gy  : function level linking.
+  # -Gm- : Switch off minimum rebuild.
+  # -O2  : Optimise for max speed.
+  # -GF  : Eliminate Duplicate Strings
+  # -WX- : Treat warnings as errors.
+  # -MD  : Multithreaded DLLs.
+  CXXFLAGS  = $(CXX_CMN_FLAGS) -Zi -O2 -D "NDEBUG" -GF -MD
+  RSC_FLAGS = $(RSC_CMN_FLAGS) -D "NDEBUG" 
+  BSC32_FLAGS=-o"$(OUTDIR)\MFCX.bsc" -nologo 
+  LIB_FLAGS = -OUT:"$(OUTDIR)\MFCXs.lib" -NOLOGO 
 
 endif
 
@@ -157,28 +163,28 @@ build : $(TARGET)
 endif
 
 cleanmost:
-	@if exist $(OUTDIR)                 rmdir /S /Q "$(OUTDIR)"
-	@if exist $(INTDIR)                 rmdir /S /Q "$(INTDIR)"
-	@if exist $(PROGRAM).dep            del /Q $(PROGRAM).dep
-	@if exist $(PROGRAM).opt            del /Q $(PROGRAM).opt
-	@if exist $(PROGRAM).plg            del /Q $(PROGRAM).plg
-	@if exist LastCoverageResults.log   del /Q LastCoverageResults.log
+	@rm -fr "$(OUTDIR)"
+	@rm -fr "$(INTDIR)"
+	@rm -f $(PROGRAM).dep
+	@rm -f $(PROGRAM).opt
+	@rm -f $(PROGRAM).plg
+	@rm -f LastCoverageResults.log
 
 
 clean: cleanmost cleantest
 	@echo Cleaning $(PROGRAM) $(CFG) temporary files
-	@if exist $(DEPDIR)                 rmdir /S /Q "$(DEPDIR)"
-	@if exist $(TESTDIR)                rmdir /S /Q "$(TESTDIR)"
-	@if exist $(PROGRAM).aps            del /Q $(PROGRAM).aps
-	@if exist $(PROGRAM).plg            del /Q $(PROGRAM).plg
-	@if exist $(PROGRAM)Test.plg        del /Q $(PROGRAM)Test.plg
-	@if exist $(PROGRAM).ncb            del /Q $(PROGRAM).ncb
+	@rm -fr "$(DEPDIR)"
+	@rm -fr "$(TESTDIR)"
+	@rm -f $(PROGRAM).aps
+	@rm -f $(PROGRAM).plg
+	@rm -f $(PROGRAM)Test.plg
+	@rm -f $(PROGRAM).ncb
 
 
 # Dependency files 
 $(DEPS)   :    $(DEPDIR)/%.d  :    %.cpp
 	@echo Making $@ from $<
-	@if not exist "$(@D)" mkdir "$(@D)"
+	@mkdir -p "$(@D)"
 	@$(MKDEP) $(DEPFLAGS) $< | $(SED) "s!^\(.*\)\.cpp : !$(INTDIR)/\1.obj : !" > $@
 
 
@@ -189,15 +195,15 @@ $(RES) : $(SRC_RES)
 
 # Make the pre-compiled header file.
 $(INTDIR)/StdAfx.obj $(PCH) 		:	StdAfx.h StdAfx.cpp
-	@echo Creating the precompiled header (making $(@D))
-	@if not exist "$(@D)" mkdir "$(@D)"
-	@"$(CXX)" $(CXXFLAGS) /Yc"StdAfx.h" /Fo$@ StdAfx.cpp
+	@echo "Creating the precompiled header (making $(@D))"
+	@mkdir -p "$(@D)"
+	@"$(CXX)" $(CXXFLAGS) -Yc"StdAfx.h" -Fo$@ StdAfx.cpp
 
 # Rules making .obj from sources and puts them flat in $(INTDIR)
 $(OBJS)	:	$(INTDIR)/%.obj	:	%.cpp
-	@echo Building $@ from $< (making $(@D))
-	@if not exist "$(@D)" mkdir "$(@D)"
-	@"$(CXX)" $(CXXFLAGS) /Yu"StdAfx.h" /Fo$@ $<
+	@echo "Building $@ from $< (making $(@D))"
+	@mkdir -p "$(@D)"
+	@"$(CXX)" $(CXXFLAGS) -Yu"StdAfx.h" -Fo$@ $<
 
 #$(SBRS)	:	$(INTDIR)/%.sbr	:	%.cpp
 #	@echo Creating $@ from $<
@@ -206,16 +212,16 @@ $(OBJS)	:	$(INTDIR)/%.obj	:	%.cpp
 
 $(INTDIR)/%.res	:	%.rc
 	@echo Building resource $@ from $<
-	@$(RSC) $(RSC_FLAGS) /fo$@ $<
+	@$(RSC) $(RSC_FLAGS) -fo$@ $<
 
 $(TARGET) : $(INTDIR)/StdAfx.obj $(OBJS) $(RES)
-	@echo Creating library $@ (making $(OUTDIR))
-	@if not exist "$(OUTDIR)" mkdir "$(OUTDIR)"
+	@echo "Creating library $@ (making $(OUTDIR))"
+	@mkdir -p "$(OUTDIR)"
 	@$(LIBEXE) $(LIB_FLAGS) $(INTDIR)/StdAfx.obj $(OBJS) $(RES)
 	
 $(BSCFILE) : 
 	@echo Create browser information
-	@$(BSC32) $(BSC32_FLAGS) /o$(OUTDIR)/$(PROGRAM).bsc $(SBRS)
+	@$(BSC32) $(BSC32_FLAGS) -o$(OUTDIR)/$(PROGRAM).bsc $(SBRS)
 
 
 ## Testing below
@@ -228,19 +234,19 @@ TEST_TARGET    =  $(TESTDIR)\$(TEST_PROGRAM).exe
 # See https://docs.microsoft.com/en-us/cpp/build/reference/compiler-options-listed-alphabetically?view=vs-2019
 # for an explanation of the options.
 # Note, no space allowed between options and files. For example: '/Fp$(TEST_PCH)' works, '/Fp $(TEST_PCH)' doesn't. :-(
-CONSOLE_CXXFLAGS = /nologo /MDd /W3 /EHsc /GR /Zi /Od \
-                   /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" \
-                   /D "_AFXDLL" /D "UNIT_TEST" \
-                   /Fp$(TEST_PCH) /Fd"$(TESTDIR)\\" /FD /RTC1 /c
+CONSOLE_CXXFLAGS = -nologo -MDd -W3 -EHsc -GR -Zi -Od \
+                   -D "WIN32" -D "_DEBUG" -D "_CONSOLE" -D "_MBCS" \
+                   -D "_AFXDLL" -D "UNIT_TEST" \
+                   -Fp$(TEST_PCH) -Fd"$(TESTDIR)\\" -FD -RTC1 -c
 
 # NOTE: To find unresolved external symbols, navigate to the VC98/Lib directory and run this command...
 #       nm -A *.lib 2> /dev/null | grep <missing-symbol>
 CONSOLE_LINK_FLAGS= shlwapi.lib kernel32.lib user32.lib gdi32.lib winspool.lib \
                     comdlg32.lib advapi32.lib shell32.lib ole32.lib \
                     oleaut32.lib uuid.lib odbc32.lib odbccp32.lib version.lib \
-                    winmm.lib /nologo /subsystem:console \
-                    /pdb:"$(TESTDIR)\$(TEST_PROGRAM).pdb" /debug \
-                    /machine:I386
+                    winmm.lib -nologo -subsystem:console \
+                    -pdb:"$(TESTDIR)\$(TEST_PROGRAM).pdb" -debug \
+                    -machine:I386
 
 # Same as SCR but without all files that reference MFCX_DLL.cpp.
 UNITTEST_SRC  :=   $(wildcard ../test/*.cpp)
@@ -289,18 +295,18 @@ $(TEST_OBJS)   :    $(TEST_PCH)
 # Make the pre-compiled header file.
 $(TESTDIR)\StdAfx.obj $(TEST_PCH) 	:	StdAfx.h StdAfx.cpp
 	@echo Creating the test precompiled header 
-	@if not exist "$(@D)" mkdir "$(@D)"
-	@$(CXX) $(CONSOLE_CXXFLAGS) /Yc"StdAfx.h" /Fo$(TESTDIR)\StdAfx.obj StdAfx.cpp
+	@mkdir -p "$(@D)"
+	@$(CXX) $(CONSOLE_CXXFLAGS) -Yc"StdAfx.h" -Fo$(TESTDIR)\StdAfx.obj StdAfx.cpp
 
 # Make the other object files...
 $(TEST_OBJS)	:	$(TESTDIR)/%.obj	:	%.cpp
 	@echo Building test $@ from $< (making $(@D))
-	@if not exist "$(@D)" mkdir "$(@D)"
-	@$(CXX) $(CONSOLE_CXXFLAGS) /Yu"StdAfx.h" /Fo$@ $<
+	@mkdir -p "$(@D)"
+	@$(CXX) $(CONSOLE_CXXFLAGS) -Yu"StdAfx.h" -Fo$@ $<
 
 $(TESTDIR)\$(TEST_PROGRAM).exe : $(TEST_OBJS)
 	@echo Creating $@
-	@$(LINK) $(CONSOLE_LINK_FLAGS) /out:$@ $(TESTDIR)\StdAfx.obj $(TEST_OBJS)
+	@$(LINK) $(CONSOLE_LINK_FLAGS) -out:$@ $(TESTDIR)\StdAfx.obj $(TEST_OBJS)
 
 test : $(TEST_TARGET) test_files
 	@echo Running unit tests
@@ -308,7 +314,7 @@ test : $(TEST_TARGET) test_files
 
 cleantest : 
 	@echo Cleaning test files
-	@if exist $(TESTDIR) rmdir /S /Q "$(TESTDIR)"
+	@rm -fr "$(TESTDIR)"
 
 $(CHECKDIR)/cppcheck.xml : $(SRC)
 	@echo Running checks...

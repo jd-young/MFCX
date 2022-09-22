@@ -12,6 +12,7 @@ lib/
 *.ncb
 *.dep
 .vs
+.pred/
 
 
 MFCXTest/Release

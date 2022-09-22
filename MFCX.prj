@@ -18,7 +18,7 @@
 			<Branch name="MFCXTest" type="Title" expanded="no" path="MFCXTest\MFCXTest.prj"/>
 			<Branch name="TestXList" type="Title" expanded="no" path="Test\TestXList\TestXList.prj"/>
 			<Branch name="TreeTest" type="Title" expanded="no" path="Test\TestXTree\TreeTest.prj"/>
-			<Branch name="Doc" type="Heading" expanded="no">
+			<Branch name="doc" type="Heading" expanded="no">
 				<Branch name="doxygen" type="Heading" expanded="no">
 					<ProjectItem type="Relative Filename" name="dox.bat" path="doc\doxygen\dox.bat"/>
 					<ProjectItem type="Relative Filename" name="doxygen.css" path="doc\doxygen\doxygen.css"/>
@@ -31,7 +31,7 @@
 				</Branch>
 				<ProjectItem type="Relative Filename" name="To-Do.txt" path="doc\To-Do.txt"/>
 			</Branch>
-			<Branch name="Includes" type="Heading" expanded="no">
+			<Branch name="includes" type="Heading" expanded="no">
 				<ProjectItem type="Relative Filename" name="BrowseForFolder.h" path="include\BrowseForFolder.h"/>
 				<ProjectItem type="Relative Filename" name="ColourPicker.h" path="include\ColourPicker.h"/>
 				<ProjectItem type="Relative Filename" name="ColourPopup.h" path="include\ColourPopup.h"/>
@@ -80,7 +80,7 @@
 				<ProjectItem type="Relative Filename" name="XTime.h" path="include\XTime.h"/>
 				<ProjectItem type="Relative Filename" name="XTreeCtrl.h" path="include\XTreeCtrl.h"/>
 			</Branch>
-			<Branch name="Source" type="Heading" expanded="no">
+			<Branch name="src" type="Heading" expanded="no">
 				<ProjectItem type="Relative Filename" name="BrowseForFolder.cpp" path="src\BrowseForFolder.cpp"/>
 				<ProjectItem type="Relative Filename" name="ColourPicker.cpp" path="src\ColourPicker.cpp"/>
 				<ProjectItem type="Relative Filename" name="ColourPopup.cpp" path="src\ColourPopup.cpp"/>
@@ -126,255 +126,19 @@
 			</Branch>
 			<Branch name="TEST" type="Heading" expanded="no">
 			</Branch>
+			<ProjectItem type="Relative Filename" name=".gitignore" path=".gitignore"/>
 			<ProjectItem type="Relative Filename" name="Build.bat" path="Build.bat"/>
+			<ProjectItem type="Relative Filename" name="Makefile" path="Makefile"/>
+			<ProjectItem type="Relative Filename" name="MFCX.dsp" path="MFCX.dsp"/>
+			<ProjectItem type="Relative Filename" name="MFCX.dsw" path="MFCX.dsw"/>
 			<ProjectItem type="Relative Filename" name="MFCX.mak" path="MFCX.mak"/>
+			<ProjectItem type="Relative Filename" name="MFCX.sln" path="MFCX.sln"/>
+			<ProjectItem type="Relative Filename" name="MFCX.vcxproj" path="MFCX.vcxproj"/>
+			<ProjectItem type="Relative Filename" name="MFCX.vcxproj.filters" path="MFCX.vcxproj.filters"/>
+			<ProjectItem type="Relative Filename" name="MFCX.vcxproj.user" path="MFCX.vcxproj.user"/>
+			<ProjectItem type="Relative Filename" name="MFCX_DLL.dsp" path="MFCX_DLL.dsp"/>
+			<ProjectItem type="Relative Filename" name="MFCX_DLL.dsw" path="MFCX_DLL.dsw"/>
 			<ProjectItem type="Relative Filename" name="MFCX_DLL.mak" path="MFCX_DLL.mak"/>
 		</Branch>
 	</ProjectTree>
-	<Workspace>
-		<CWD path="C:\Users\jyoung\Documents\Work\Libraries\MFCX"/>
-		<View alt="27" path="C:\Users\jyoung\Documents\Work\Libraries\MFCX\src\RegKey.cpp" LineWrap="1">
-			<Pos flags="0" showCmd="1" showCmdDesc="SW_SHOWNORMAL">
-				<MinPos x="-1" y="-1"/>
-				<MaxPos x="-8" y="-31"/>
-				<NormPos top="22" left="3" bottom="809" right="677"/>
-			</Pos>
-			<ScrollPos line="301" col="0"/>
-			<Cursor line="322" col="24"/>
-		</View>
-		<View alt="26" path="C:\Users\jyoung\Documents\Work\Libraries\MFCX\include\RegKey.h" LineWrap="1">
-			<Pos flags="0" showCmd="1" showCmdDesc="SW_SHOWNORMAL">
-				<MinPos x="-1" y="-1"/>
-				<MaxPos x="3" y="22"/>
-				<NormPos top="22" left="3" bottom="809" right="677"/>
-			</Pos>
-			<ScrollPos line="111" col="0"/>
-			<Cursor line="120" col="48"/>
-		</View>
-		<View alt="25" path="C:\Program Files (x86)\Microsoft Visual Studio\VC98\MFC\Include\AFXEXT.H" LineWrap="1">
-			<Pos flags="0" showCmd="1" showCmdDesc="SW_SHOWNORMAL">
-				<MinPos x="-1" y="-1"/>
-				<MaxPos x="-8" y="-31"/>
-				<NormPos top="22" left="3" bottom="809" right="677"/>
-			</Pos>
-			<ScrollPos line="743" col="0"/>
-			<Cursor line="760" col="10"/>
-		</View>
-		<View alt="24" path="C:\Users\jyoung\tmp\PrEditor\MFCDialogBar.h" LineWrap="1">
-			<Pos flags="0" showCmd="1" showCmdDesc="SW_SHOWNORMAL">
-				<MinPos x="-1" y="-1"/>
-				<MaxPos x="-8" y="-31"/>
-				<NormPos top="22" left="3" bottom="809" right="677"/>
-			</Pos>
-			<ScrollPos line="0" col="0"/>
-			<Cursor line="21" col="50"/>
-		</View>
-		<View alt="23" path="C:\Users\jyoung\tmp\PrEditor\BCGDialogBar-combined.h" LineWrap="1">
-			<Pos flags="0" showCmd="1" showCmdDesc="SW_SHOWNORMAL">
-				<MinPos x="-1" y="-1"/>
-				<MaxPos x="-8" y="-31"/>
-				<NormPos top="22" left="3" bottom="809" right="677"/>
-			</Pos>
-			<ScrollPos line="0" col="0"/>
-			<Cursor line="27" col="34"/>
-		</View>
-		<View alt="22" path="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.16.27023\atlmfc\include\afxext.h" LineWrap="1">
-			<Pos flags="0" showCmd="1" showCmdDesc="SW_SHOWNORMAL">
-				<MinPos x="-1" y="-1"/>
-				<MaxPos x="-8" y="-31"/>
-				<NormPos top="22" left="3" bottom="809" right="677"/>
-			</Pos>
-			<ScrollPos line="114" col="0"/>
-			<Cursor line="142" col="34"/>
-		</View>
-		<View alt="21" path="C:\Users\jyoung\Documents\Work\Libraries\BCG\BCGCB65\BCGControlBar\BCGDialogBar.cpp" LineWrap="1">
-			<Pos flags="0" showCmd="1" showCmdDesc="SW_SHOWNORMAL">
-				<MinPos x="-1" y="-1"/>
-				<MaxPos x="-8" y="-31"/>
-				<NormPos top="22" left="3" bottom="809" right="677"/>
-			</Pos>
-			<ScrollPos line="17" col="0"/>
-			<Cursor line="42" col="0"/>
-		</View>
-		<View alt="20" path="C:\Users\jyoung\Documents\Work\Libraries\BCG\BCGCB65\BCGControlBar\BCGDialogBar.h" LineWrap="1">
-			<Pos flags="0" showCmd="1" showCmdDesc="SW_SHOWNORMAL">
-				<MinPos x="-1" y="-1"/>
-				<MaxPos x="-8" y="-31"/>
-				<NormPos top="22" left="3" bottom="809" right="677"/>
-			</Pos>
-			<ScrollPos line="3" col="0"/>
-			<Cursor line="29" col="64"/>
-		</View>
-		<View alt="19" path="C:\Users\jyoung\Documents\Work\Libraries\BCG\BCGCB65\BCGControlBar\BCGSizingControlBar.h" LineWrap="1">
-			<Pos flags="0" showCmd="1" showCmdDesc="SW_SHOWNORMAL">
-				<MinPos x="-1" y="-1"/>
-				<MaxPos x="-8" y="-31"/>
-				<NormPos top="22" left="3" bottom="809" right="677"/>
-			</Pos>
-			<ScrollPos line="312" col="0"/>
-			<Cursor line="336" col="0"/>
-		</View>
-		<View alt="18" path="C:\Users\jyoung\Documents\Work\Libraries\BCG\BCGCB65\BCGControlBar\BCGSizingControlBar.cpp" LineWrap="1">
-			<Pos flags="0" showCmd="1" showCmdDesc="SW_SHOWNORMAL">
-				<MinPos x="-1" y="-1"/>
-				<MaxPos x="-8" y="-31"/>
-				<NormPos top="22" left="3" bottom="809" right="677"/>
-			</Pos>
-			<ScrollPos line="1804" col="0"/>
-			<Cursor line="1826" col="30"/>
-		</View>
-		<View alt="17" path="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.16.27023\atlmfc\include\afxcommandmanager.h" LineWrap="1">
-			<Pos flags="0" showCmd="1" showCmdDesc="SW_SHOWNORMAL">
-				<MinPos x="-1" y="-1"/>
-				<MaxPos x="-8" y="-31"/>
-				<NormPos top="22" left="3" bottom="809" right="677"/>
-			</Pos>
-			<ScrollPos line="30" col="0"/>
-			<Cursor line="61" col="0"/>
-		</View>
-		<View alt="16" path="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.16.27023\atlmfc\src\mfc\afxcommandmanager.cpp" LineWrap="1">
-			<Pos flags="0" showCmd="1" showCmdDesc="SW_SHOWNORMAL">
-				<MinPos x="-1" y="-1"/>
-				<MaxPos x="-8" y="-31"/>
-				<NormPos top="22" left="3" bottom="809" right="677"/>
-			</Pos>
-			<ScrollPos line="0" col="0"/>
-			<Cursor line="12" col="0"/>
-		</View>
-		<View alt="15" path="C:\Users\jyoung\Documents\Work\Projects\PrEditor.git\src\CustomiseDlg.cpp" LineWrap="1">
-			<Pos flags="0" showCmd="1" showCmdDesc="SW_SHOWNORMAL">
-				<MinPos x="-1" y="-1"/>
-				<MaxPos x="-8" y="-31"/>
-				<NormPos top="22" left="3" bottom="809" right="677"/>
-			</Pos>
-			<ScrollPos line="0" col="0"/>
-			<Cursor line="26" col="21"/>
-		</View>
-		<View alt="14" path="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.16.27023\atlmfc\src\mfc\afxdockingmanager.cpp" LineWrap="1">
-			<Pos flags="0" showCmd="1" showCmdDesc="SW_SHOWNORMAL">
-				<MinPos x="-1" y="-1"/>
-				<MaxPos x="-8" y="-31"/>
-				<NormPos top="22" left="3" bottom="809" right="677"/>
-			</Pos>
-			<ScrollPos line="2153" col="0"/>
-			<Cursor line="2012" col="20"/>
-		</View>
-		<View alt="13" path="C:\Users\jyoung\Documents\Work\Projects\PrEditor.git\src\PrEditor.h" LineWrap="1">
-			<Pos flags="0" showCmd="1" showCmdDesc="SW_SHOWNORMAL">
-				<MinPos x="-1" y="-1"/>
-				<MaxPos x="-8" y="-31"/>
-				<NormPos top="22" left="3" bottom="809" right="677"/>
-			</Pos>
-			<ScrollPos line="289" col="0"/>
-			<Cursor line="323" col="18"/>
-		</View>
-		<View alt="11" path="C:\Users\jyoung\Documents\Work\Projects\PrEditor.git\src\PrEditor.cpp" LineWrap="1">
-			<Pos flags="0" showCmd="1" showCmdDesc="SW_SHOWNORMAL">
-				<MinPos x="-1" y="-1"/>
-				<MaxPos x="-8" y="-31"/>
-				<NormPos top="22" left="3" bottom="809" right="677"/>
-			</Pos>
-			<ScrollPos line="746" col="0"/>
-			<Cursor line="510" col="3"/>
-		</View>
-		<View alt="8" path="C:\Users\jyoung\Documents\Work\Projects\PrEditor.git\src\Registry.h" LineWrap="1">
-			<Pos flags="0" showCmd="1" showCmdDesc="SW_SHOWNORMAL">
-				<MinPos x="-1" y="-1"/>
-				<MaxPos x="-8" y="-31"/>
-				<NormPos top="22" left="3" bottom="809" right="677"/>
-			</Pos>
-			<ScrollPos line="5" col="0"/>
-			<Cursor line="26" col="0"/>
-		</View>
-		<View alt="7" path="C:\Users\jyoung\Documents\website\htdocs\thistlesoft.com\PrEditor\Development\techdoc\inc\header.inc" LineWrap="1">
-			<Pos flags="0" showCmd="1" showCmdDesc="SW_SHOWNORMAL">
-				<MinPos x="-1" y="-1"/>
-				<MaxPos x="-8" y="-31"/>
-				<NormPos top="22" left="3" bottom="809" right="677"/>
-			</Pos>
-			<ScrollPos line="0" col="0"/>
-			<Cursor line="20" col="0"/>
-		</View>
-		<View alt="12" path="C:\Users\jyoung\Documents\Work\Projects\PrEditor-Previous\PrEditor-2.2\PrEditor.2006-05-25.UTF8.reg" LineWrap="1">
-			<Pos flags="0" showCmd="1" showCmdDesc="SW_SHOWNORMAL">
-				<MinPos x="-1" y="-1"/>
-				<MaxPos x="-8" y="-31"/>
-				<NormPos top="22" left="3" bottom="809" right="677"/>
-			</Pos>
-			<ScrollPos line="1709" col="0"/>
-			<Cursor line="1684" col="29"/>
-		</View>
-		<View alt="10" path="C:\Users\jyoung\tmp\PrEditor-settings.MFC.txt" LineWrap="1">
-			<Pos flags="0" showCmd="1" showCmdDesc="SW_SHOWNORMAL">
-				<MinPos x="-1" y="-1"/>
-				<MaxPos x="-8" y="-31"/>
-				<NormPos top="22" left="3" bottom="809" right="677"/>
-			</Pos>
-			<ScrollPos line="34" col="0"/>
-			<Cursor line="63" col="55"/>
-		</View>
-		<View alt="9" path="C:\Users\jyoung\tmp\PrEditor-settings.BCG.txt" LineWrap="1">
-			<Pos flags="0" showCmd="1" showCmdDesc="SW_SHOWNORMAL">
-				<MinPos x="-1" y="-1"/>
-				<MaxPos x="-8" y="-31"/>
-				<NormPos top="22" left="3" bottom="809" right="677"/>
-			</Pos>
-			<ScrollPos line="0" col="0"/>
-			<Cursor line="0" col="0"/>
-		</View>
-		<View alt="6" path="C:\Users\jyoung\Documents\website\htdocs\thistlesoft.com\PrEditor\Development\techdoc\config\customisations.php" LineWrap="1">
-			<Pos flags="0" showCmd="1" showCmdDesc="SW_SHOWNORMAL">
-				<MinPos x="-1" y="-1"/>
-				<MaxPos x="-8" y="-31"/>
-				<NormPos top="22" left="3" bottom="809" right="677"/>
-			</Pos>
-			<ScrollPos line="490" col="0"/>
-			<Cursor line="506" col="10"/>
-		</View>
-		<View alt="5" path="C:\Users\jyoung\Documents\Work\Projects\PrEditor.git\src\Registry.cpp" LineWrap="1">
-			<Pos flags="0" showCmd="1" showCmdDesc="SW_SHOWNORMAL">
-				<MinPos x="-1" y="-1"/>
-				<MaxPos x="-8" y="-31"/>
-				<NormPos top="22" left="3" bottom="809" right="677"/>
-			</Pos>
-			<ScrollPos line="110" col="0"/>
-			<Cursor line="131" col="34"/>
-		</View>
-		<View alt="4" path="C:\Users\jyoung\tmp\scratch-pad.txt" LineWrap="1">
-			<Pos flags="0" showCmd="1" showCmdDesc="SW_SHOWNORMAL">
-				<MinPos x="-1" y="-1"/>
-				<MaxPos x="-8" y="-31"/>
-				<NormPos top="22" left="3" bottom="809" right="677"/>
-			</Pos>
-			<ScrollPos line="50" col="0"/>
-			<Cursor line="96" col="15"/>
-		</View>
-		<View alt="3" path="C:\Users\jyoung\Documents\Work\Projects\PrEditor.git\builds\PrEditor-Debug.BGC.reg" LineWrap="1">
-			<Pos flags="0" showCmd="1" showCmdDesc="SW_SHOWNORMAL">
-				<MinPos x="-1" y="-1"/>
-				<MaxPos x="-8" y="-31"/>
-				<NormPos top="22" left="3" bottom="809" right="677"/>
-			</Pos>
-			<ScrollPos line="0" col="0"/>
-			<Cursor line="12" col="30"/>
-		</View>
-		<View alt="2" path="C:\Users\jyoung\Documents\Notes.txt" LineWrap="1">
-			<Pos flags="0" showCmd="1" showCmdDesc="SW_SHOWNORMAL">
-				<MinPos x="-1" y="-1"/>
-				<MaxPos x="-8" y="-31"/>
-				<NormPos top="22" left="3" bottom="809" right="677"/>
-			</Pos>
-			<ScrollPos line="656" col="0"/>
-			<Cursor line="702" col="25"/>
-		</View>
-		<View alt="1" path="C:\Users\jyoung\Documents\scratch-pad.txt" LineWrap="1">
-			<Pos flags="0" showCmd="1" showCmdDesc="SW_SHOWNORMAL">
-				<MinPos x="-1" y="-1"/>
-				<MaxPos x="-8" y="-31"/>
-				<NormPos top="22" left="3" bottom="809" right="677"/>
-			</Pos>
-			<ScrollPos line="0" col="0"/>
-			<Cursor line="0" col="0"/>
-		</View>
-	</Workspace>
 </Project>
