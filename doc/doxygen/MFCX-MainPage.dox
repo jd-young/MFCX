@@ -32,7 +32,7 @@ Load MFCX.dsp workspace into DevStudio then...
 - Remove _AFX_NO_SPLITTER_RESOURCES. Otherwise, you'll not be able to see 
   splitter cursors required by the library. 
 - If you are using static library version with MFC shared DLL, add 
-  <b>"#define _MFCX_STATIC_"</b> to <b>"compile-time directives"</b>.
+  \b "#define _MFCX_STATIC_" to "compile-time directives".
 
 Manual
 ------
