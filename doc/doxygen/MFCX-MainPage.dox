@@ -16,23 +16,28 @@
   
 \section overview Overview
 
-	Most of the classes presented herein are derived from MFC classes.  The 
-	only other external dependency (apart from MFC) is the expat XML parser 
-	DLLs.  These are not required if you don't use the XML class.
+Most of the classes presented herein are derived from MFC classes.  The 
+only other external dependency (apart from MFC) is the expat XML parser 
+DLLs.  These are not required if you don't use the XML class.
 
-	MFCX was built using Microsoft's VC++ v6.
+MFCX was built using Microsoft's VC++ 19.16.27048.
 
 \section touse	To Use
 
-	Load MFCX.dsp workspace into DevStudio then...
+DevStudio
+---------
+
+Load MFCX.dsp workspace into DevStudio then...
 	
-	- Open the "Resource Includes" dialog (View | Resource Includes).  
-	- Add <b>#include "MFCXres.h"</b> to <b>"Read-only symbol directives"</b>.  
-	- Add <b>#include "MFCX.rc"</b> to <b>"compile-time directives"</b>.
-	- Remove _AFX_NO_SPLITTER_RESOURCES. Otherwise, you'll not be able to see 
-  	  splitter cursors required by the library. 
-  	- If you are using static library version with MFC shared DLL, add 
-  	  <b>"#define _MFCX_STATIC_"</b> to <b>"compile-time directives"</b>.
+- Remove _AFX_NO_SPLITTER_RESOURCES. Otherwise, you'll not be able to see 
+  splitter cursors required by the library. 
+- If you are using static library version with MFC shared DLL, add 
+  <b>"#define _MFCX_STATIC_"</b> to <b>"compile-time directives"</b>.
+
+Manual
+------
+- Add `#include <mfcx.h>` to stdafx.h.  
+
 
 \section	contents Contents by Category
 
