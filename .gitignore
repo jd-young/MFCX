@@ -19,6 +19,8 @@ MFCXTest/Release
 MFCXTest/Debug
 
 doc/doxygen/html
+doc/doxygen/MFCX-dox.err
+
 *.log
 
 # Remove when 'test' is sorted out.

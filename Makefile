@@ -132,8 +132,8 @@ lib: ## Builds the MFCX.lib file.
 #chm: ## Builds the MFCX.chm help file.
 #	@cd HTMLHelp && $(MAKE) chm
 
-#doc:   ## Creates the documentation (including doxygen).
-#	@cd doc && $(MAKE) doc
+doc:   ## Creates the documentation (including doxygen).
+	@cd doc && $(MAKE) doc
 
 #package: exe ## Creates the MFCX distribution package.
 #	@cd Setup && $(MAKE) package
