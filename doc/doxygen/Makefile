@@ -51,8 +51,9 @@ endif
 
 doxygen : $(DOXYFILE)
 	@echo "Running doxygen ($(FORMAT)) for $(PROGRAM)"
+	@echo "See $(LOG) for messages"
 	@echo "See $(ERR) for errors"
-	@$(DOX) $(DOXYFILE) 2> $(ERR)
+	@$(DOX) $(DOXYFILE) > $(LOG) 2> $(ERR)
 
 clean:
 	@rm -rf html
