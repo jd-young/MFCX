@@ -286,7 +286,7 @@ debug:
 # Dependency files 
 $(TEST_DEPS)   :    $(DEPDIR)/%.d  :    ../test/%.cpp
 	@echo Making $@ from $<
-	@if not exist "$(@D)" mkdir "$(@D)"
+	@mkdir -p "$(@D)"
 	@$(MKDEP) $(DEPFLAGS) $< | $(SED) "s!^\(.*\)\.cpp : !$(TESTDIR)/\1.obj : !" > $@
 
 
@@ -318,7 +318,7 @@ cleantest :
 
 $(CHECKDIR)/cppcheck.xml : $(SRC)
 	@echo Running checks...
-	@if not exist "$(CHECKDIR)" mkdir "$(CHECKDIR)"
+	@mkdir -p "$(CHECKDIR)"
 	@"$(CPPCHECK)" $(CPPCHECK_FLAGS) --xml --xml-version=2 --output-file=$@ .
 
 check-xml : ext-deps $(CHECKDIR)/cppcheck.xml
@@ -332,7 +332,7 @@ check     : check-html
 
 coverage: $(TEST_TARGET) test_files
 	@echo Generating test coverage statistics...
-	@if not exist "..\builds\coverage" mkdir "..\builds\coverage"
+	@mkdir -p "..\builds\coverage"
 	@"$(COVERAGE)" -v --config_file ..\test\coverage\OpenCppCoverage.cfg -- \
 	               $(TESTDIR)\$(TEST_PROGRAM).exe \
 	               2> ..\builds\coverage\OpenCppCoverage.err
