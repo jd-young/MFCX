@@ -32,7 +32,7 @@ Load MFCX.dsp workspace into DevStudio then...
 - Remove _AFX_NO_SPLITTER_RESOURCES. Otherwise, you'll not be able to see 
   splitter cursors required by the library. 
 - If you are using static library version with MFC shared DLL, add 
-  \b "#define _MFCX_STATIC_" to "compile-time directives".
+  `#define _MFCX_STATIC_` to "compile-time directives".
 
 Manual
 ------
@@ -41,63 +41,63 @@ Manual
 
 \section	contents Contents by Category
 
-	- Colour
-		- ColourPicker.cpp
-		- ColourPopup.cpp
-		- PersistColourDlg.cpp
+- Colour
+  - ColourPicker.cpp
+  - ColourPopup.cpp
+  - PersistColourDlg.cpp
 
-	- Cryptography
-		- Crypt.cpp
-		
-	- GUI
-		- DragMultiTree.cpp
-		- GradStatic.cpp
-		- ImageButton.cpp
-		- MenuButton.cpp
-		- MultiTree.cpp
-		- PersistListCtrl.cpp
-		- Splasher.cpp
-		- XListBox.cpp
-		- XListCtrl.cpp
-		- XStringList.cpp
-		- XTreeCtrl.cpp
+- Cryptography
+	- Crypt.cpp
+	
+- GUI
+	- DragMultiTree.cpp
+	- GradStatic.cpp
+	- ImageButton.cpp
+	- MenuButton.cpp
+	- MultiTree.cpp
+	- PersistListCtrl.cpp
+	- Splasher.cpp
+	- XListBox.cpp
+	- XListCtrl.cpp
+	- XStringList.cpp
+	- XTreeCtrl.cpp
 
-	- Miscellaneous
-		- Directory.cpp
-		- Dragger.cpp
-		- Filename.cpp
-		- GKeyboard.cpp
-		- GMouse.cpp
-		- Logger.cpp
-		- Sound.cpp
-		- Utils.cpp
-		- VerInfo.cpp
-		- XRecentFile.cpp
-		- XScrollView.cpp
-		- XString.cpp
-		- XTime.cpp
-		- xml.cpp
+- Miscellaneous
+	- Directory.cpp
+	- Dragger.cpp
+	- Filename.cpp
+	- GKeyboard.cpp
+	- GMouse.cpp
+	- Logger.cpp
+	- Sound.cpp
+	- Utils.cpp
+	- VerInfo.cpp
+	- XRecentFile.cpp
+	- XScrollView.cpp
+	- XString.cpp
+	- XTime.cpp
+	- xml.cpp
 
-	- Multithreading
-		- DataQueue.cpp
-		- Thread.cpp
+- Multithreading
+	- DataQueue.cpp
+	- Thread.cpp
 
-	- Regular Expressions
-		- RegKey.cpp
-		- Regex.cpp
-		- RegexString.cpp
+- Regular Expressions
+	- RegKey.cpp
+	- Regex.cpp
+	- RegexString.cpp
 
-	- Shell
-		- BrowseForFolder.cpp    
-		- DriveCB.cpp
-		- FolderCB.cpp
-		- SBDestination.cpp
-		- SysImageList.cpp
+- Shell
+	- BrowseForFolder.cpp    
+	- DriveCB.cpp
+	- FolderCB.cpp
+	- SBDestination.cpp
+	- SysImageList.cpp
 
 \section	history History
 
 
-<a href="History.html">History</a>
+[History]</a>(History.html)
 
 
 */
