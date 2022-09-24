@@ -141,8 +141,8 @@ doc:   ## Creates the documentation (including doxygen).
 #test: ## Runs all the unit tests for MFCX.
 #	@cd src && $(MAKE) test
 
-#check: ## Runs source code checks.
-#	@cd src && $(MAKE) check
+check: ## Runs source code checks.
+	@cd src && $(MAKE) check
 
 #coverage: ## Creates a test coverage report.
 #	@cd src && $(MAKE) coverage
