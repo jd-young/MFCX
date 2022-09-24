@@ -95,7 +95,7 @@ CString CFilename::GetFileExt() const
 \param	pszPathname 		The path from which to extract the extension.
 \return	The extension (plus the leading dot), or the empty string if there is 
 		no extension.
-*
+*/
 /*static*/ CString CFilename::GetFileExt (const TCHAR* pszPathname)
 {
      CString sFilename = GetFileName (pszPathname);

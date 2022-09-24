@@ -39,6 +39,7 @@ endif
 LOG       =    $(PROGRAM)-dox.log
 ERR       =    $(PROGRAM)-dox.err
 
+# TODO: Add MFCX.chm file.  GENERATE_HTMLHELP = YES
 ifeq ($(FORMAT), mini)
   DOXYFILE   =    $(PROGRAM)-mini.dox
   HTML_DIR   =    html-mini

@@ -42,9 +42,9 @@ static UINT arrStandardButtonIDs[] =
 #define   IDC_EDITCTRL        1
 #define   IDC_BROWSEBTN       2
 
-// @class Private helper class for the CXListBox class
-// @base  public | CWnd
-//
+/*!  \class CButtonsWnd
+     \brief Private helper class for the CXListBox class
+*/
 class CButtonsWnd : public CWnd
 {
 friend CXListBox;
@@ -65,6 +65,9 @@ private:
      int m_nActive;           // -1 means not active.
      bool m_bPressed;
      
+     /*!  \class BUTTONINFO
+          \brief Information on buttons.
+      */
      typedef struct 
      {
           UINT nID;
