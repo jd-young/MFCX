@@ -32,6 +32,9 @@ static char THIS_FILE[] = __FILE__;
 
 CLogger logger;
 
+/*! Constructs a logger.
+
+ */
 CLogger::CLogger()
 {
      m_logfl = NULL;
