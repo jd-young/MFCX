@@ -4,6 +4,9 @@
 #ifndef   __MFCX_DRAGGER_H
 #define   __MFCX_DRAGGER_H
 
+/*!  A class that helps with mouse dragging.
+
+ */
 class CDragger
 {
 public:
