@@ -3,6 +3,8 @@
 #ifndef	__MFXC_UTILS
 #define	__MFXC_UTILS
 
+/*!  A general purpose utility class.
+ */
 class CUtils
 {
 public:
