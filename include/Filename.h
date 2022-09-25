@@ -1,10 +1,15 @@
-//
-//	Filename.h		JY's filename manipulation routines
-//
+/*!
+     \file	Filename.h
+     
+     JY's filename manipulation routines
+ */
 
 #ifndef	__MFCX__FILENAME_H
 #define	__MFCX__FILENAME_H
 
+/*!  A filename utility
+
+ */
 class CFilename
 {
 public:

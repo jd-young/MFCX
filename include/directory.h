@@ -1,11 +1,12 @@
-//
-//   Directory.h
-//
+/*!
+     \file Directory.h
+ */
 
 #ifndef   __MFCX_DIRECTORY_H
 #define   __MFCX_DIRECTORY_H
 
-
+/*!  A directory class helper.
+ */
 class CDirectory
 {
 public:
