@@ -153,7 +153,7 @@ CVersionInfo::CVersionInfo()
                m_sBuildDate = pszTemp;
 
           // Free the version info buffer.
-          delete pVerInfo;
+          delete[] pVerInfo;
      }
 
      if ( m_nRevision )
