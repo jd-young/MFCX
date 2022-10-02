@@ -204,7 +204,7 @@ public:
      int ReverseFind (TCHAR ch) const { return _string.ReverseFind (ch); }
 
      /// Searches for the last occurance of s in this CXString object.
-     int ReverseFind (const CString& s) const;
+     int ReverseFind (const CString& sTarget) const;
 
 private:
 	static bool CalcStringEllipsis(HDC hdc, 

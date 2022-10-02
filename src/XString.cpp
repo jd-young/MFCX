@@ -30,7 +30,7 @@ public:
 	enum { TM_NONE, TM_HOUR, TM_MIN, TM_SEC, TM_AMPM, 
 		  TM_DAY, TM_MONTHNR, TM_MONTHNAME, TM_YEAR };
 
-	CDateParser (const TCHAR* psz);
+	explicit CDateParser (const TCHAR* psz);
 	//~CDateParser();
 
 	CTime Parse();
@@ -49,7 +49,7 @@ private:
 	int	m_bError;
 
 	int  GetNext (TCHAR* pszItem);
-	bool IsValid();
+	bool IsValid() const;
 
 	void SetDay (int day);
 	void SetMonth (int month);
@@ -59,30 +59,30 @@ private:
 	void SetMin (int min);
 	void SetSec (int sec);
 
-	int GetMonth (const TCHAR* s);
-	int GetWeekDay (const TCHAR *s);
+	int GetMonth (const TCHAR* s) const;
+	static int GetWeekDay (const TCHAR *s);
 	void ProcessAmPm (const TCHAR* s);
 
-	const TCHAR* ExpectingStr();		// Debug only
+//	const TCHAR* ExpectingStr() const;		// Debug only
 };
 
 
-const TCHAR* CDateParser::ExpectingStr()
-{
-	switch (m_nExpecting)
-	{
-		case TM_NONE:		return "TM_NONE";
-		case TM_HOUR:		return "TM_HOUR";
-		case TM_MIN:		return "TM_MIN";
-		case TM_SEC:		return "TM_SEC";
-		case TM_AMPM: 		return "TM_AMPM";
-		case TM_DAY:		return "TM_DAY";
-		case TM_MONTHNR:	return "TM_MONTHNR";
-		case TM_MONTHNAME:	return "TM_MONTHNAME";
-		case TM_YEAR:		return "TM_YEAR";
-		default:			return "Unknown m_nExpecting";
-	}
-}
+//const TCHAR* CDateParser::ExpectingStr() const
+//{
+//	switch (m_nExpecting)
+//	{
+//		case TM_NONE:		return "TM_NONE";
+//		case TM_HOUR:		return "TM_HOUR";
+//		case TM_MIN:		return "TM_MIN";
+//		case TM_SEC:		return "TM_SEC";
+//		case TM_AMPM: 		return "TM_AMPM";
+//		case TM_DAY:		return "TM_DAY";
+//		case TM_MONTHNR:	return "TM_MONTHNR";
+//		case TM_MONTHNAME:	return "TM_MONTHNAME";
+//		case TM_YEAR:		return "TM_YEAR";
+//		default:			return "Unknown m_nExpecting";
+//	}
+//}
 	
 CDateParser::CDateParser (const TCHAR* psz)
 {
@@ -402,7 +402,7 @@ void CDateParser::ProcessAmPm (const TCHAR* s)
 
 
 
-bool CDateParser::IsValid()
+bool CDateParser::IsValid() const
 {
 	if ( m_nYear < 1970 || m_nYear > 2038 ||
 		m_nMonth < 1 || m_nMonth > 12 ||
@@ -415,7 +415,7 @@ bool CDateParser::IsValid()
 }
 
 
-int CDateParser::GetMonth (const TCHAR* s)
+int CDateParser::GetMonth (const TCHAR* s) const
 {
 	static TCHAR *szMonths[] = { "January",
 						   "February",
@@ -446,8 +446,7 @@ int CDateParser::GetMonth (const TCHAR* s)
 }
 
 
-
-int CDateParser::GetWeekDay (const TCHAR *s)
+static int CDateParser::GetWeekDay (const TCHAR *s)
 {
 	static TCHAR *szWeekDays[] = { "Sunday",
 							"Monday",
