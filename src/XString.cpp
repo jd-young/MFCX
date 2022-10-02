@@ -446,7 +446,8 @@ int CDateParser::GetMonth (const TCHAR* s) const
 }
 
 
-static int CDateParser::GetWeekDay (const TCHAR *s)
+/*static*/
+int CDateParser::GetWeekDay (const TCHAR *s)
 {
 	static TCHAR *szWeekDays[] = { "Sunday",
 							"Monday",
