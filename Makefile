@@ -138,8 +138,8 @@ doc:   ## Creates the documentation (including doxygen).
 #package: exe ## Creates the MFCX distribution package.
 #	@cd Setup && $(MAKE) package
 
-#test: ## Runs all the unit tests for MFCX.
-#	@cd src && $(MAKE) test
+test: ## Runs all the unit tests for MFCX.
+	@cd src && $(MAKE) test
 
 check: ## Runs source code checks.
 	@cd src && $(MAKE) check

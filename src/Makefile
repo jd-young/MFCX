@@ -15,6 +15,7 @@ CXX            =    cl.exe
 RSC            =    rc.exe
 # Note 'LIBEXE' not 'LIB' so as not to clash with the environment variable of the same name.
 LIBEXE         =    lib.exe
+LINK           =    link.exe
 MKDEP          =    mkdep.bat
 BSC32          =    bscmake.exe
 PERL           =    perl.exe
@@ -89,33 +90,33 @@ CXX_CMN_FLAGS = -Gd -GS -analyze- -Oy- -W3 -Zc:wchar_t,inline,forScope \
                 -D "WIN32" -D "_WINDOWS" -D "MFCX_LOG_USELOG" \
                 -D "_VC80_UPGRADE=0x0600" -D "_MBCS" -D "_AFXDLL" -WX- \
                 -fp:precise -errorReport:prompt -EHsc -nologo \
-                -Fd"$(INTDIR)\\" -FC \
-                -Fp"$(INTDIR)\$(PROGRAM).pch" -diagnostics:classic -c
+                -Fd"$(INTDIR)/" -FC \
+                -Fp"$(INTDIR)/$(PROGRAM).pch" -diagnostics:classic -c
 
 RSC_CMN_FLAGS = -D "_VC80_UPGRADE=0x0600" -D "_AFXDLL" -l 0x0409 -nologo \
-                -fo"$(INTDIR)\$(PROGRAM).res" 
+                -fo"$(INTDIR)/$(PROGRAM).res" 
 
 DEPFLAGS	=	-q
 
 ifeq ("$(CFG)", "Debug")
 
-  TARGET    =    $(OUTDIR)\$(PROGRAM)sd.lib
+  TARGET    =    $(OUTDIR)/$(PROGRAM)sd.lib
 
   # -FR:<bsc-dir> browser info
   # -Od   - disable optimisations.
   # -RTC1 - run-time error checking optimised for debugging.
   # -MDd  - use debug libraries.
   CXXFLAGS  = $(CXX_CMN_FLAGS) -Gy -ZI -Gm- -Od -D "_DEBUG" -RTC1 -MDd \
-              -FR:"$(INTDIR)\\" 
+              -FR:"$(INTDIR)/" 
   RSC_FLAGS = $(RSC_CMN_FLAGS) -D "_DEBUG"
  
   BSC32_FLAGS=-nologo 
-  LIB_FLAGS = -OUT:"$(OUTDIR)\MFCXsd.lib" -MACHINE:X86 -NOLOGO
-  # -LIST:"$(INTDIR)\MFCX.lst" - doesn't work
+  LIB_FLAGS = -OUT:"$(OUTDIR)/MFCXsd.lib" -MACHINE:X86 -NOLOGO
+  # -LIST:"$(INTDIR)/MFCX.lst" - doesn't work
               
 else ifeq ("$(CFG)", "Release")
 
-  TARGET    =    $(OUTDIR)\$(PROGRAM)s.lib
+  TARGET    =    $(OUTDIR)/$(PROGRAM)s.lib
 
   # -Gy  : function level linking.
   # -Gm- : Switch off minimum rebuild.
@@ -125,8 +126,8 @@ else ifeq ("$(CFG)", "Release")
   # -MD  : Multithreaded DLLs.
   CXXFLAGS  = $(CXX_CMN_FLAGS) -Zi -O2 -D "NDEBUG" -GF -MD
   RSC_FLAGS = $(RSC_CMN_FLAGS) -D "NDEBUG" 
-  BSC32_FLAGS=-o"$(OUTDIR)\MFCX.bsc" -nologo 
-  LIB_FLAGS = -OUT:"$(OUTDIR)\MFCXs.lib" -NOLOGO 
+  BSC32_FLAGS=-o"$(OUTDIR)/MFCX.bsc" -nologo 
+  LIB_FLAGS = -OUT:"$(OUTDIR)/MFCXs.lib" -NOLOGO 
 
 endif
 
@@ -150,8 +151,8 @@ RES       =    $(INTDIR)/$(PROGRAM).res
 
 SBRS      =    $(addprefix $(INTDIR)/, StdAfx.sbr $(notdir $(OBJS:.obj=.sbr)))
 
-PCH       =    $(INTDIR)\$(PROGRAM).pch
-BSCFILE   =    $(OUTDIR)\$(PROGRAM).bsc 
+PCH       =    $(INTDIR)/$(PROGRAM).pch
+BSCFILE   =    $(OUTDIR)/$(PROGRAM).bsc 
 
 
 # TARGETS
@@ -227,8 +228,8 @@ $(BSCFILE) :
 ## Testing below
 
 TEST_PROGRAM   =  $(PROGRAM)Test
-TEST_PCH       =  $(TESTDIR)\$(TEST_PROGRAM).pch
-TEST_TARGET    =  $(TESTDIR)\$(TEST_PROGRAM).exe
+TEST_PCH       =  $(TESTDIR)/$(TEST_PROGRAM).pch
+TEST_TARGET    =  $(TESTDIR)/$(TEST_PROGRAM).exe
 
 
 # See https://docs.microsoft.com/en-us/cpp/build/reference/compiler-options-listed-alphabetically?view=vs-2019
@@ -237,7 +238,7 @@ TEST_TARGET    =  $(TESTDIR)\$(TEST_PROGRAM).exe
 CONSOLE_CXXFLAGS = -nologo -MDd -W3 -EHsc -GR -Zi -Od \
                    -D "WIN32" -D "_DEBUG" -D "_CONSOLE" -D "_MBCS" \
                    -D "_AFXDLL" -D "UNIT_TEST" \
-                   -Fp$(TEST_PCH) -Fd"$(TESTDIR)\\" -FD -RTC1 -c
+                   -Fp$(TEST_PCH) -Fd"$(TESTDIR)/" -FD -RTC1 -c
 
 # NOTE: To find unresolved external symbols, navigate to the VC98/Lib directory and run this command...
 #       nm -A *.lib 2> /dev/null | grep <missing-symbol>
@@ -245,7 +246,7 @@ CONSOLE_LINK_FLAGS= shlwapi.lib kernel32.lib user32.lib gdi32.lib winspool.lib \
                     comdlg32.lib advapi32.lib shell32.lib ole32.lib \
                     oleaut32.lib uuid.lib odbc32.lib odbccp32.lib version.lib \
                     winmm.lib -nologo -subsystem:console \
-                    -pdb:"$(TESTDIR)\$(TEST_PROGRAM).pdb" -debug \
+                    -pdb:"$(TESTDIR)/$(TEST_PROGRAM).pdb" -debug \
                     -machine:I386
 
 # Same as SCR but without all files that reference MFCX_DLL.cpp.
@@ -257,14 +258,15 @@ UNITTEST_DEPS :=   $(UNITTEST_SRC:.cpp=.d)
 
 TEST_SRC      :=   $(UNITTEST_SRC) Crypt.cpp DataQueue.cpp Filename.cpp \
                     Regex.cpp RegexString.cpp Utils.cpp XString.cpp \
-                    XStringList.cpp XTime.cpp
+                    XStringList.cpp StringUtil.cpp XTime.cpp \
+                    regex/pcre.cpp regex/chartables.cpp
                          
 TEST_OBJS     :=   $(addprefix $(TESTDIR)/, $(TEST_SRC:.cpp=.obj))
 TEST_DEPS     :=   $(addprefix $(DEPDIR)/, $(notdir $(UNITTEST_DEPS)))
 
 
 # TEST ----------------------------------
-TXT_PATH = ../builds\exp-deps
+TXT_PATH = ../builds/exp-deps
 
 #DOS_PATH  = $(subst /,\,$(TXT_PATH))
 DOS_PATH  = $(call dospath,$(TXT_PATH))
@@ -293,22 +295,22 @@ $(TEST_DEPS)   :    $(DEPDIR)/%.d  :    ../test/%.cpp
 $(TEST_OBJS)   :    $(TEST_PCH)
 
 # Make the pre-compiled header file.
-$(TESTDIR)\StdAfx.obj $(TEST_PCH) 	:	StdAfx.h StdAfx.cpp
-	@echo Creating the test precompiled header 
+$(TESTDIR)/StdAfx.obj $(TEST_PCH) 	:	StdAfx.h StdAfx.cpp
+	@echo "Creating the test precompiled header (creating $(@D))"
 	@mkdir -p "$(@D)"
-	@$(CXX) $(CONSOLE_CXXFLAGS) -Yc"StdAfx.h" -Fo$(TESTDIR)\StdAfx.obj StdAfx.cpp
+	@$(CXX) $(CONSOLE_CXXFLAGS) -Yc"StdAfx.h" -Fo$(TESTDIR)/StdAfx.obj StdAfx.cpp
 
 # Make the other object files...
 $(TEST_OBJS)	:	$(TESTDIR)/%.obj	:	%.cpp
-	@echo Building test $@ from $< (making $(@D))
+	@echo "Building test $@ from $< (making $(@D))"
 	@mkdir -p "$(@D)"
 	@$(CXX) $(CONSOLE_CXXFLAGS) -Yu"StdAfx.h" -Fo$@ $<
 
-$(TESTDIR)\$(TEST_PROGRAM).exe : $(TEST_OBJS)
-	@echo Creating $@
-	@$(LINK) $(CONSOLE_LINK_FLAGS) -out:$@ $(TESTDIR)\StdAfx.obj $(TEST_OBJS)
+$(TESTDIR)/$(TEST_PROGRAM).exe : $(TEST_OBJS)
+	@echo "Creating $@"
+	@$(LINK) $(CONSOLE_LINK_FLAGS) -out:$@ $(TESTDIR)/StdAfx.obj $(TEST_OBJS)
 
-test : $(TEST_TARGET) test_files
+test : $(TEST_TARGET)
 	@echo Running unit tests
 	@$(TESTDIR)/$(TEST_PROGRAM).exe
 
@@ -330,12 +332,18 @@ check-html : check-xml
 
 check     : check-html
 
-coverage: $(TEST_TARGET) test_files
-	@echo Generating test coverage statistics...
-	@mkdir -p "..\builds\coverage"
-	@"$(COVERAGE)" -v --config_file ..\test\coverage\OpenCppCoverage.cfg -- \
-	               $(TESTDIR)\$(TEST_PROGRAM).exe \
-	               2> ..\builds\coverage\OpenCppCoverage.err
+#coverage: $(TEST_TARGET)
+#	@echo Generating test coverage statistics...
+#	@mkdir -p "../builds/coverage"
+#	@"$(COVERAGE)" -v --config_file ../test/coverage/OpenCppCoverage.cfg -- \
+#	               $(TESTDIR)/$(TEST_PROGRAM).exe \
+#	               2> ../builds/coverage/OpenCppCoverage.err
+
+
+
+
+
+
 
 trace:
 	@echo CXXFLAGS   = $(CXXFLAGS)
@@ -359,5 +367,7 @@ endif
 ifeq ($(MAKECMDGOALS), test)
   -include $(TEST_DEPS)
 endif
+
+
 
 # vi:ts=5
