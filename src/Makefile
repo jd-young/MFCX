@@ -131,12 +131,11 @@ else ifeq ("$(CFG)", "Release")
 
 endif
 
-CPPCHECK_FLAGS = -i Utilities/TOTDDlg.cpp -i Sockets/FTP/FTPLIST-TestCases.cpp \
-                 -i Export --quiet \
+CPPCHECK_FLAGS = --quiet \
                  --library="$(CPPCHECK_HOME)/cfg/mfc.cfg" \
                  --library="$(CPPCHECK_HOME)/cfg/windows.cfg" \
                  -D "WIN32" -D "_DEBUG" -D "_WINDOWS" -D "_AFXDLL" -D "_MBCS" \
-                 -D "__AFXWIN_H__" -U "NDEBUG" -U "BETA" \
+                 -D "__AFXWIN_H__" -U "NDEBUG" \
                  --enable=all --platform=win64 --std=c++03 --inconclusive 
                  
 #--check-config
@@ -332,17 +331,12 @@ check-html : check-xml
 
 check     : check-html
 
-#coverage: $(TEST_TARGET)
-#	@echo Generating test coverage statistics...
-#	@mkdir -p "../builds/coverage"
-#	@"$(COVERAGE)" -v --config_file ../test/coverage/OpenCppCoverage.cfg -- \
-#	               $(TESTDIR)/$(TEST_PROGRAM).exe \
-#	               2> ../builds/coverage/OpenCppCoverage.err
-
-
-
-
-
+coverage: $(TEST_TARGET)
+	@echo Generating test coverage statistics...
+	@mkdir -p "../builds/coverage"
+	@"$(COVERAGE)" -v --config_file ../test/OpenCppCoverage.cfg -- \
+	               $(TESTDIR)/$(TEST_PROGRAM).exe \
+	               2> ../builds/coverage/OpenCppCoverage.err
 
 
 trace:

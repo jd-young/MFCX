@@ -144,8 +144,8 @@ test: ## Runs all the unit tests for MFCX.
 check: ## Runs source code checks.
 	@cd src && $(MAKE) check
 
-#coverage: ## Creates a test coverage report.
-#	@cd src && $(MAKE) coverage
+coverage: ## Creates a test coverage report.
+	@cd src && $(MAKE) coverage
 
 trace: ## Prints out useful information that helps with testing / debugging.
 	@echo PROGRAM  :  $(PROGRAM)
