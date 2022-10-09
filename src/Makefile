@@ -157,9 +157,9 @@ BSCFILE   =    $(OUTDIR)/$(PROGRAM).bsc
 # TARGETS
 
 ifeq ("$(CFG)", "Debug")
-build : $(TARGET) $(BSCFILE)
+  build   : $(TARGET) $(BSCFILE)
 else
-build : $(TARGET)
+  build   : $(TARGET)
 endif
 
 cleanmost:

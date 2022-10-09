@@ -18,14 +18,13 @@
 			<Branch name="MFCXTest" type="Title" expanded="no" path="MFCXTest\MFCXTest.prj"/>
 			<Branch name="TestXList" type="Title" expanded="no" path="Test\TestXList\TestXList.prj"/>
 			<Branch name="TreeTest" type="Title" expanded="no" path="Test\TestXTree\TreeTest.prj"/>
-			<Branch name="doc" type="Heading" expanded="no">
-				<Branch name="doxygen" type="Heading" expanded="no">
+			<Branch name="doc" type="Heading" expanded="yes">
+				<Branch name="doxygen" type="Heading" expanded="yes">
 					<ProjectItem type="Relative Filename" name="dox.bat" path="doc\doxygen\dox.bat"/>
 					<ProjectItem type="Relative Filename" name="doxygen.css" path="doc\doxygen\doxygen.css"/>
 					<ProjectItem type="Relative Filename" name="History.html" path="doc\doxygen\History.html"/>
 					<ProjectItem type="Relative Filename" name="MFCX-MainPage.dox" path="doc\doxygen\MFCX-MainPage.dox"/>
 					<ProjectItem type="Relative Filename" name="MFCX.dox" path="doc\doxygen\MFCX.dox"/>
-					<ProjectItem type="Relative Filename" name="MFCX.log" path="doc\doxygen\MFCX.log"/>
 					<ProjectItem type="Relative Filename" name="MFCXFooter.html" path="doc\doxygen\MFCXFooter.html"/>
 					<ProjectItem type="Relative Filename" name="MFCXHeader.html" path="doc\doxygen\MFCXHeader.html"/>
 				</Branch>
@@ -80,7 +79,7 @@
 				<ProjectItem type="Relative Filename" name="XTime.h" path="include\XTime.h"/>
 				<ProjectItem type="Relative Filename" name="XTreeCtrl.h" path="include\XTreeCtrl.h"/>
 			</Branch>
-			<Branch name="src" type="Heading" expanded="no">
+			<Branch name="src" type="Heading" expanded="yes">
 				<ProjectItem type="Relative Filename" name="BrowseForFolder.cpp" path="src\BrowseForFolder.cpp"/>
 				<ProjectItem type="Relative Filename" name="ColourPicker.cpp" path="src\ColourPicker.cpp"/>
 				<ProjectItem type="Relative Filename" name="ColourPopup.cpp" path="src\ColourPopup.cpp"/>
@@ -97,6 +96,7 @@
 				<ProjectItem type="Relative Filename" name="GradStatic.cpp" path="src\GradStatic.cpp"/>
 				<ProjectItem type="Relative Filename" name="ImageButton.cpp" path="src\ImageButton.cpp"/>
 				<ProjectItem type="Relative Filename" name="Logger.cpp" path="src\Logger.cpp"/>
+				<ProjectItem type="Relative Filename" name="Makefile" path="src\Makefile"/>
 				<ProjectItem type="Relative Filename" name="MenuButton.cpp" path="src\MenuButton.cpp"/>
 				<ProjectItem type="Relative Filename" name="MFCX_DLL.cpp" path="src\MFCX_DLL.cpp"/>
 				<ProjectItem type="Relative Filename" name="MultiTree.cpp" path="src\MultiTree.cpp"/>
@@ -127,18 +127,15 @@
 			<Branch name="TEST" type="Heading" expanded="no">
 			</Branch>
 			<ProjectItem type="Relative Filename" name=".gitignore" path=".gitignore"/>
-			<ProjectItem type="Relative Filename" name="Build.bat" path="Build.bat"/>
 			<ProjectItem type="Relative Filename" name="Makefile" path="Makefile"/>
 			<ProjectItem type="Relative Filename" name="MFCX.dsp" path="MFCX.dsp"/>
 			<ProjectItem type="Relative Filename" name="MFCX.dsw" path="MFCX.dsw"/>
-			<ProjectItem type="Relative Filename" name="MFCX.mak" path="MFCX.mak"/>
 			<ProjectItem type="Relative Filename" name="MFCX.sln" path="MFCX.sln"/>
 			<ProjectItem type="Relative Filename" name="MFCX.vcxproj" path="MFCX.vcxproj"/>
 			<ProjectItem type="Relative Filename" name="MFCX.vcxproj.filters" path="MFCX.vcxproj.filters"/>
 			<ProjectItem type="Relative Filename" name="MFCX.vcxproj.user" path="MFCX.vcxproj.user"/>
 			<ProjectItem type="Relative Filename" name="MFCX_DLL.dsp" path="MFCX_DLL.dsp"/>
 			<ProjectItem type="Relative Filename" name="MFCX_DLL.dsw" path="MFCX_DLL.dsw"/>
-			<ProjectItem type="Relative Filename" name="MFCX_DLL.mak" path="MFCX_DLL.mak"/>
 		</Branch>
 	</ProjectTree>
 </Project>
