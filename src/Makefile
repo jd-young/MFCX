@@ -327,7 +327,9 @@ check-xml : ext-deps $(CHECKDIR)/cppcheck.xml
 check-html : check-xml
 	@echo Creating checks HTML
 	@"$(PYTHON)" "$(CPPCHECK_HTMLREP)" --file=$(CHECKDIR)/cppcheck.xml \
-	             --report-dir=$(CHECKDIR)/html --source-dir=.
+	             --report-dir=$(CHECKDIR)/html --source-dir=. \
+	             --title="$(PROGRAM)" --blame-options=w
+
 
 check     : check-html
 
