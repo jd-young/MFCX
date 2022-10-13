@@ -817,7 +817,8 @@ void CXListCtrl::DoSort (int nSortCol, bool bAscending)
 			break;
 		}
 
-		case TypeCurrency:		// Sort numerically (skipping '$' or '£' sings)
+		case TypeCurrency:  // Sort numerically (skipping '$' or other 
+		                    // currency symbols)
 		{
 			CString sL = CvtCurrency (cstL);
 			CString sR = CvtCurrency (cstR);
@@ -886,7 +887,7 @@ CString CXListCtrl::CvtCurrency (const CString& sOrig) const
 		s++;
 	}
 	
-	// Now skip past the first non numerics (i.e. the '$', or '£' sign)...
+	// Now skip past the first non numerics (i.e. the '$', or other currency symbols)...
 	while ( !isdigit (*s) && *s != '.' ) s++;
 	
 	CXString::Decommatise (s);

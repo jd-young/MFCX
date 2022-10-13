@@ -58,7 +58,6 @@ int CDriveComboBox::Populate (const TCHAR* pszPath /*= NULL*/,
      // then the drop-down would look something like...
      //
      //   + jyoung on PURPLE_HAZE
-     //     + 3½ Floppy (A:)
      //     + BOOTDISC (C:)
      //     - WORK (D:)
      //       - projects
