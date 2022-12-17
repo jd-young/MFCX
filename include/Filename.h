@@ -65,7 +65,6 @@ public:
 	/// Abreviates the given path to the given number of characters by 
 	/// inserting an ellipsis.
      static void AbbreviatePath (TCHAR* pszCanon, int nChars, bool bAtLeastName);
-     static bool GetLongFileName (const TCHAR* pszShort, TCHAR* pszLong, int nChars);
      static bool IsInPath (const TCHAR* pszExe);
      static int  ParseFileName (const TCHAR* psz, CStringArray& arrFilename);
      static bool GetIncludeName (const TCHAR* pszName, 
