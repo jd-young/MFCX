@@ -18,7 +18,8 @@
 #include  <process.h>
 #include  "../include/Logger.h"
 
-#pragma comment (exestr, "Logger.cpp v1.0")
+// TODO: 'exestr' is no longer supported.  Use a version resource instead.
+//#pragma comment (exestr, "Logger.cpp v1.0")
 
 #ifdef	MFCX_LOG_USELOG
 

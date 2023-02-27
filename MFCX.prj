@@ -1,24 +1,28 @@
 <?xml version="1.0"?>
 <Project version="2" magic-number="0xaf41b307">
 	<ToolsCmds>
-		<ToolCmd menu="&amp;Compile MFCX" cmd="cl" args="%f %n CFG=&quot;%N - %C&quot;" dir="" file-regex="(.*)\(" line-regex="\((\d*)" use-output-window="Yes" prompt-for-args="No" close-on-exit="No"  />
-		<ToolCmd menu="&amp;Build" cmd="nmake" args="/nologo /f &quot;%N.mak&quot; CFG=&quot;%N - %C&quot;" dir="" file-regex="\s*(.*?)\(" line-regex="\((\d*)" use-output-window="Yes" prompt-for-args="No" close-on-exit="No"  />
-		<ToolCmd menu="&amp;Rebuild" cmd="nmake" args="/nologo /a /f &quot;%N.mak&quot; CFG=&quot;%N - %C&quot; clean all" dir="" file-regex="(.*)\(" line-regex="\((\d*)" use-output-window="Yes" prompt-for-args="No" close-on-exit="No"  />
-		<ToolCmd menu="C&amp;lean" cmd="nmake" args="/nologo /f &quot;%N.mak&quot; CFG=&quot;%N - %C&quot; clean" dir="" file-regex="" line-regex="" use-output-window="Yes" prompt-for-args="No" close-on-exit="No"  />
+		<ToolCmd menu="&amp;Build" cmd="make" args="CFG=%C build" dir="src" file-regex="\s*(.*?)\(" line-regex="\((\d*)" use-output-window="Yes" prompt-for-args="No" close-on-exit="No" accels="MainFrame:F7"  />
+		<ToolCmd menu="&amp;Rebuild" cmd="make" args="CFG=%C clean build" dir="" file-regex="\s*(.*?)\(" line-regex="\((\d*)" use-output-window="Yes" prompt-for-args="No" close-on-exit="No"  />
+		<ToolCmd menu="C&amp;lean" cmd="make" args="CFG=&quot;%C&quot; clean" dir="src" file-regex="" line-regex="" use-output-window="Yes" prompt-for-args="No" close-on-exit="No"  />
+		<ToolCmd menu="&amp;Test" cmd="make" args="CFG=%C test" dir="src" file-regex="\s*(.*?)\(" line-regex="\((\d*)" use-output-window="Yes" prompt-for-args="No" close-on-exit="No" accels="MainFrame:Ctrl+F7"  />
 	</ToolsCmds>
 	<Env-vars>
+		<var name="LIB" value="c:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.16.27023\ATLMFC\lib\x86;c:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.16.27023\lib\x86;C:\Program Files (x86)\Windows Kits\NETFXSDK\4.6.1\lib\um\x86;C:\Program Files (x86)\Windows Kits\10\lib\10.0.17763.0\ucrt\x86;C:\Program Files (x86)\Windows Kits\10\lib\10.0.17763.0\um\x86"/>
+		<var name="INCLUDE" value="c:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.16.27023\ATLMFC\include;c:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.16.27023\include;C:\Program Files (x86)\Windows Kits\NETFXSDK\4.6.1\include\um;C:\Program Files (x86)\Windows Kits\10\include\10.0.17763.0\ucrt;C:\Program Files (x86)\Windows Kits\10\include\10.0.17763.0\shared;C:\Program Files (x86)\Windows Kits\10\include\10.0.17763.0\um;C:\Program Files (x86)\Windows Kits\10\include\10.0.17763.0\winrt;C:\Program Files (x86)\Windows Kits\10\include\10.0.17763.0\cppwinrt"/>
+		<var name="GTEST_HOME" value="C:\Users\jyoun\Projects\Libraries\googletest"/>
+		<var name="PATH" value="c:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.16.27023\bin\HostX86\x86;C:\Program Files (x86)\Windows Kits\10\bin\10.0.17763.0\x86;%PATH%"/>
 	</Env-vars>
 	<Configurations>
-		<Config name="Win32 Debug" active="yes"/>
-		<Config name="Win32 Release"/>
+		<Config name="Debug" active="yes"/>
+		<Config name="Release"/>
 	</Configurations>
-	<Tags enabled="yes" program="ctags" args="-R --c++-types=cdefglmnpstuvx src include src *.cpp *.h" auto="no" period="60" kbd-delay="5"/>
+	<Tags enabled="yes" program="ctags" args="-R --c++-types=cdefglmnpstuvx src include *.cpp *.h" auto="no" period="60" kbd-delay="5"/>
 	<ProjectTree>
 		<Branch name="MFCX" type="Title" expanded="yes" active="yes">
 			<Branch name="MFCXTest" type="Title" expanded="no" path="MFCXTest\MFCXTest.prj"/>
 			<Branch name="TestXList" type="Title" expanded="no" path="Test\TestXList\TestXList.prj"/>
 			<Branch name="TreeTest" type="Title" expanded="no" path="Test\TestXTree\TreeTest.prj"/>
-			<Branch name="doc" type="Heading" expanded="yes">
+			<Branch name="doc" type="Heading" expanded="no">
 				<Branch name="doxygen" type="Heading" expanded="yes">
 					<ProjectItem type="Relative Filename" name="dox.bat" path="doc\doxygen\dox.bat"/>
 					<ProjectItem type="Relative Filename" name="doxygen.css" path="doc\doxygen\doxygen.css"/>
@@ -79,7 +83,7 @@
 				<ProjectItem type="Relative Filename" name="XTime.h" path="include\XTime.h"/>
 				<ProjectItem type="Relative Filename" name="XTreeCtrl.h" path="include\XTreeCtrl.h"/>
 			</Branch>
-			<Branch name="src" type="Heading" expanded="yes">
+			<Branch name="src" type="Heading" expanded="no">
 				<ProjectItem type="Relative Filename" name="BrowseForFolder.cpp" path="src\BrowseForFolder.cpp"/>
 				<ProjectItem type="Relative Filename" name="ColourPicker.cpp" path="src\ColourPicker.cpp"/>
 				<ProjectItem type="Relative Filename" name="ColourPopup.cpp" path="src\ColourPopup.cpp"/>
@@ -116,7 +120,6 @@
 				<ProjectItem type="Relative Filename" name="VerInfo.cpp" path="src\VerInfo.cpp"/>
 				<ProjectItem type="Relative Filename" name="XListBox.cpp" path="src\XListBox.cpp"/>
 				<ProjectItem type="Relative Filename" name="XListCtrl.cpp" path="src\XListCtrl.cpp"/>
-				<ProjectItem type="Relative Filename" name="xml.cpp" path="src\xml.cpp"/>
 				<ProjectItem type="Relative Filename" name="XRecentFile.cpp" path="src\XRecentFile.cpp"/>
 				<ProjectItem type="Relative Filename" name="XScrollView.cpp" path="src\XScrollView.cpp"/>
 				<ProjectItem type="Relative Filename" name="XString.cpp" path="src\XString.cpp"/>
@@ -124,7 +127,10 @@
 				<ProjectItem type="Relative Filename" name="XTime.cpp" path="src\XTime.cpp"/>
 				<ProjectItem type="Relative Filename" name="XTreeCtrl.cpp" path="src\XTreeCtrl.cpp"/>
 			</Branch>
-			<Branch name="TEST" type="Heading" expanded="no">
+			<Branch name="test" type="Heading" expanded="yes">
+				<ProjectItem type="Relative Filename" name="MFCXTest.cpp" path="test\MFCXTest.cpp"/>
+				<ProjectItem type="Relative Filename" name="UnitTest.cpp" path="test\UnitTest.cpp"/>
+				<ProjectItem type="Relative Filename" name="XStringTest.cpp" path="test\XStringTest.cpp"/>
 			</Branch>
 			<ProjectItem type="Relative Filename" name=".gitignore" path=".gitignore"/>
 			<ProjectItem type="Relative Filename" name="Makefile" path="Makefile"/>

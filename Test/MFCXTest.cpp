@@ -2,9 +2,7 @@
 //
 
 #include "stdafx.h"
-#include "MFCXTest.h"
-#include "UnitTest.h"
-#include "XStringTest.h"
+#include "gtest/gtest.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -23,33 +21,8 @@ int _tmain(int argc, TCHAR* argv[], TCHAR* envp[])
 		fprintf (stderr, "Fatal Error: MFC initialization failed\n");
 		return 1;
 	}
-	else
-	{
-		printf ("Running MFCX tests...\n");
-		
-		CTestList tests;
-		
-		// TODO: Maybe replace this with an #include file which gets 
-		//       automatically filled by a script that scrapes the header 
-		//       files for all classes derived from CTest
-		// Add all the tests here:
-		tests.Add (new CXStringTest());
 
-          TRY
-          {	     
-     	     CUnitTester tester (tests);
-     		return tester.RunTests() ? 0 : 2;  // Why 2?
-          }
-          CATCH (CException, e)  // 
-          {
-               TCHAR   szErrorMessage[512];
-               UINT    nHelpContext;
-               
-               if ( e->GetErrorMessage(szErrorMessage, _countof(szErrorMessage), &nHelpContext))
-                    printf ("Exception '%s' (help context %d)\n", szErrorMessage, nHelpContext);
-
-               e->Delete();
-          }
-          END_CATCH
-	}
+     printf ("Running MFCX tests...\n");
+     testing::InitGoogleTest (&argc, argv);
+     return RUN_ALL_TESTS();
 }

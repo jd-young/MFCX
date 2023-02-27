@@ -477,7 +477,10 @@ int CDateParser::GetWeekDay (const TCHAR *s)
 // CXString class
 
 
-/** Chops any cr/lf pairs off the end of the string */
+/** Chops any cr/lf pairs off the end of the string.
+ *
+ * \return the length of the new string.
+ */
 int CXString::Chop()
 {
 	int	  nLen = _string.GetLength();
@@ -593,6 +596,7 @@ bool CXString::CalcStringEllipsis (HDC hdc, LPTSTR pszString, int nLen,
 	// but GetTextExtentPoint32() isn't implemented in Win32s.  Here we check
 	// our OS type and if we're on Win32s we degrade and use
 	// GetTextExtentPoint().
+     // TODO: Can we replace this with #ifdef?
 	if ( fOnce )
 	{
 		fOnce = false;
@@ -815,27 +819,27 @@ int CXString::Limit (int nChars)
 	return nSep == -1 || nSep == 0;
 }
 
-
-bool CXString::IsUpper() const
+// TODO: This looks the same as IsLower() - extract to method?
+/*static*/ bool CXString::IsUpper (const TCHAR* psz)
 {
-     int len = _string.GetLength();
-     if ( len == 0 )
+     const TCHAR* s = psz;
+     if ( ! *s )
           return false;
-
-     for (const TCHAR* s = (LPCTSTR) this; *s; s++)
+          
+     for ( ; *s; s++)
           if ( isalpha (*s) && !isupper (*s) )
                return false;
      
      return true;
 }
 
-bool CXString::IsLower() const
+/*static*/ bool PASCAL CXString::IsLower (const TCHAR* psz)
 {
-     int len = _string.GetLength();
-     if ( len == 0 )
+     const TCHAR* s = psz;
+     if ( ! *s )
           return false;
-
-     for (const TCHAR* s = (LPCTSTR) this; *s; s++)
+          
+     for ( ; *s; s++)
           if ( isalpha (*s) && !islower (*s) )
                return false;
      
@@ -848,13 +852,12 @@ bool CXString::IsLower() const
 
 \return   \b true if this string is capitalised, \b false otherwise.
 */
-bool CXString::IsCapitalised() const
+/*static*/ bool PASCAL CXString::IsCapitalised (const TCHAR* psz)
 {
-     int len = _string.GetLength();
-     if ( len == 0 )
+     const TCHAR* s = psz;
+     if ( ! *s )
           return false;
-
-     const TCHAR* s = (LPCTSTR) this;
+          
      const TCHAR* p = NULL;
      for (; *s; s++)
      {
@@ -872,17 +875,14 @@ bool CXString::IsCapitalised() const
 }
 
 
-
-
-
 /**	Returns a CTime from the string.  It uses the CDateParser::Parse() to do 
 	this.
 
 \return	A CTime object representation of the CXString objects date / time.
 */
-CTime CXString::GetTime()
+/*static*/ CTime CXString::GetTime (const TCHAR* psz)
 {
-	CDateParser dp (_string);
+	CDateParser dp (psz);
 	CTime time = dp.Parse();
 	return time;
 }
