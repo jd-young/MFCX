@@ -37,6 +37,10 @@ CPPCHECK_DIR   =    $(shell dirname "$(CPPCHECK_PATH)")
 CPPCHECK_HOME  =    $(shell cygpath -m "$(CPPCHECK_DIR)")
 CPPCHECK_HTMLREP=   $(CPPCHECK_HOME)/htmlreport/cppcheck-htmlreport
 
+GTEST_VER      = 1.13.0
+GTEST_BASE     = $(GTEST_HOME)/gtest-$(GTEST_VER)
+GTEST_INC      = $(GTEST_BASE)/include
+GTEST_LIB      = $(GTEST_BASE)/lib
 
 # SUBROUTINES
 
@@ -62,9 +66,9 @@ ifneq ($(MAKECMDGOALS), test)
 endif # goal = test
 
 # Configuration dependent settings...
-OUTDIR	= ../lib
-INTDIR	= ../builds/$(CFG)
-DEPDIR	= ../builds/dep
+OUTDIR	  = ../lib
+INTDIR	  =	../builds/$(CFG)
+DEPDIR	  =	../builds/dep
 TESTDIR   = ../builds/test
 CHECKDIR  = ../builds/cppcheck
 
@@ -82,19 +86,19 @@ CHECKDIR  = ../builds/cppcheck
 # - /Oy- : Disable frame-pointer omission.
 # - /W3  - level 3 warnings (production).
 # - /WX- - Treat all warnings as errors.
+# - /Zc:
+#     - wchar_t - wchar_t is a native type not a typedef.
+#     - inline  - Remove unreferenced functions.
+#     - forScope- Enforce C++ for scoping rules.
 # - /Zi  - Produce a separate PDB.
-
-# There is a dependency on expat.
-# Common
 CXX_CMN_FLAGS = -Gd -GS -analyze- -Oy- -W3 -Zc:wchar_t,inline,forScope \
                 -D "WIN32" -D "_WINDOWS" -D "MFCX_LOG_USELOG" \
-                -D "_VC80_UPGRADE=0x0600" -D "_MBCS" -D "_AFXDLL" -WX- \
-                -fp:precise -errorReport:prompt -EHsc -nologo \
-                -Fd"$(INTDIR)/" -FC \
-                -Fp"$(INTDIR)/$(PROGRAM).pch" -diagnostics:classic -c
+                -D "_MBCS" -D "_AFXDLL" -WX- -Zi -fp:precise \
+                -errorReport:prompt -EHsc -nologo \
+                -Fd"$(INTDIR)/$(PROGRAM).pdb" -Fp"$(INTDIR)/$(PROGRAM).pch" \
+                -diagnostics:classic -c
 
-RSC_CMN_FLAGS = -D "_VC80_UPGRADE=0x0600" -D "_AFXDLL" -l 0x0409 -nologo \
-                -fo"$(INTDIR)/$(PROGRAM).res" 
+RSC_CMN_FLAGS = -D "_AFXDLL" -l 0x0409 -nologo -fo"$(INTDIR)/$(PROGRAM).res" 
 
 DEPFLAGS	=	-q
 
@@ -106,8 +110,9 @@ ifeq ("$(CFG)", "Debug")
   # -Od   - disable optimisations.
   # -RTC1 - run-time error checking optimised for debugging.
   # -MDd  - use debug libraries.
-  CXXFLAGS  = $(CXX_CMN_FLAGS) -Gy -ZI -Gm- -Od -D "_DEBUG" -RTC1 -MDd \
+  CXXFLAGS  = $(CXX_CMN_FLAGS) -Od -D "_DEBUG" -RTC1 -MDd \
               -FR:"$(INTDIR)/" 
+         		# -Gy -Gm-
   RSC_FLAGS = $(RSC_CMN_FLAGS) -D "_DEBUG"
  
   BSC32_FLAGS=-nologo 
@@ -124,7 +129,7 @@ else ifeq ("$(CFG)", "Release")
   # -GF  : Eliminate Duplicate Strings
   # -WX- : Treat warnings as errors.
   # -MD  : Multithreaded DLLs.
-  CXXFLAGS  = $(CXX_CMN_FLAGS) -Zi -O2 -D "NDEBUG" -GF -MD
+  CXXFLAGS  = $(CXX_CMN_FLAGS) -O2 -D "NDEBUG" -GF -MD
   RSC_FLAGS = $(RSC_CMN_FLAGS) -D "NDEBUG" 
   BSC32_FLAGS=-o"$(OUTDIR)/MFCX.bsc" -nologo 
   LIB_FLAGS = -OUT:"$(OUTDIR)/MFCXs.lib" -NOLOGO 
@@ -135,8 +140,8 @@ CPPCHECK_FLAGS = --quiet \
                  --library="$(CPPCHECK_HOME)/cfg/mfc.cfg" \
                  --library="$(CPPCHECK_HOME)/cfg/windows.cfg" \
                  -D "WIN32" -D "_DEBUG" -D "_WINDOWS" -D "_AFXDLL" -D "_MBCS" \
-                 -D "__AFXWIN_H__" -U "NDEBUG" \
-                 --enable=all --platform=win64 --std=c++03 --inconclusive 
+                 -D "__AFXWIN_H__" -U "NDEBUG" -U "BETA" \
+                 --enable=all --platform=win64 --std=c++14 --inconclusive 
                  
 #--check-config
 
@@ -152,14 +157,14 @@ SBRS      =    $(addprefix $(INTDIR)/, StdAfx.sbr $(notdir $(OBJS:.obj=.sbr)))
 
 PCH       =    $(INTDIR)/$(PROGRAM).pch
 BSCFILE   =    $(OUTDIR)/$(PROGRAM).bsc 
-
+PDBFILE   =    $(OUTDIR)/$(PROGRAM).pdb
 
 # TARGETS
 
 ifeq ("$(CFG)", "Debug")
-build : $(TARGET) $(BSCFILE)
+  build   : $(TARGET) $(BSCFILE) $(PDBFILE)
 else
-build : $(TARGET)
+  build   : $(TARGET)
 endif
 
 cleanmost:
@@ -219,10 +224,13 @@ $(TARGET) : $(INTDIR)/StdAfx.obj $(OBJS) $(RES)
 	@mkdir -p "$(OUTDIR)"
 	@$(LIBEXE) $(LIB_FLAGS) $(INTDIR)/StdAfx.obj $(OBJS) $(RES)
 	
+	
 $(BSCFILE) : 
 	@echo Create browser information
 	@$(BSC32) $(BSC32_FLAGS) -o$(OUTDIR)/$(PROGRAM).bsc $(SBRS)
 
+$(PDBFILE) : 
+	@cp -p $(INTDIR)/$(PROGRAM).pdb $(OUTDIR)
 
 ## Testing below
 
@@ -234,9 +242,9 @@ TEST_TARGET    =  $(TESTDIR)/$(TEST_PROGRAM).exe
 # See https://docs.microsoft.com/en-us/cpp/build/reference/compiler-options-listed-alphabetically?view=vs-2019
 # for an explanation of the options.
 # Note, no space allowed between options and files. For example: '/Fp$(TEST_PCH)' works, '/Fp $(TEST_PCH)' doesn't. :-(
-CONSOLE_CXXFLAGS = -nologo -MDd -W3 -EHsc -GR -Zi -Od \
+CONSOLE_CXXFLAGS = -nologo -MDd -W3 -EHsc -GR -Zi -Od -I "$(GTEST_INC)" \
                    -D "WIN32" -D "_DEBUG" -D "_CONSOLE" -D "_MBCS" \
-                   -D "_AFXDLL" -D "UNIT_TEST" \
+                   -D "_AFXDLL"  \
                    -Fp$(TEST_PCH) -Fd"$(TESTDIR)/" -FD -RTC1 -c
 
 # NOTE: To find unresolved external symbols, navigate to the VC98/Lib directory and run this command...
@@ -244,13 +252,12 @@ CONSOLE_CXXFLAGS = -nologo -MDd -W3 -EHsc -GR -Zi -Od \
 CONSOLE_LINK_FLAGS= shlwapi.lib kernel32.lib user32.lib gdi32.lib winspool.lib \
                     comdlg32.lib advapi32.lib shell32.lib ole32.lib \
                     oleaut32.lib uuid.lib odbc32.lib odbccp32.lib version.lib \
-                    winmm.lib -nologo -subsystem:console \
+                    winmm.lib gtestsd.lib -nologo -subsystem:console \
                     -pdb:"$(TESTDIR)/$(TEST_PROGRAM).pdb" -debug \
-                    -machine:I386
+                    -libpath:"$(GTEST_LIB)" -machine:I386
 
 # Same as SCR but without all files that reference MFCX_DLL.cpp.
-UNITTEST_SRC  :=   $(wildcard ../test/*.cpp)
-TEST_SRC_DIRS :=   $(addprefix ../test/, $(SRC_DIRS))
+TEST_SRC_DIRS :=   $(addprefix ../test/, $(SRC_DIRS)) ../test/win32
 UNITTEST_SRC  :=   $(wildcard ../test/*.cpp) $(foreach dir,$(TEST_SRC_DIRS),$(wildcard $(dir)/*.cpp))
 
 UNITTEST_DEPS :=   $(UNITTEST_SRC:.cpp=.d)
@@ -271,18 +278,6 @@ TXT_PATH = ../builds/exp-deps
 DOS_PATH  = $(call dospath,$(TXT_PATH))
 UNIX_PATH = $(call unixpath,$(TXT_PATH))
 # ---------------------------------------
-
-
-
-debug:
-	@echo TEST_TARGET        =    $(TEST_TARGET)
-	@echo TEST_CPY_FILES     =    $(TEST_CPY_FILES)
-	@echo TEST_SRC_DIRS      =    $(TEST_SRC_DIRS)
-	@echo SRC                =    $(SRC)
-	@echo UNITTEST_SRC       =    $(UNITTEST_SRC)
-	@echo TEST_SRC           =    $(TEST_SRC)
-	@echo TEST_OBJS          =    $(TEST_OBJS)
-
 
 # Dependency files 
 $(TEST_DEPS)   :    $(DEPDIR)/%.d  :    ../test/%.cpp
@@ -311,7 +306,9 @@ $(TESTDIR)/$(TEST_PROGRAM).exe : $(TEST_OBJS)
 
 test : $(TEST_TARGET)
 	@echo Running unit tests
-	@$(TESTDIR)/$(TEST_PROGRAM).exe
+	@mkdir -p "$(TESTDIR)/results"
+	@$(TESTDIR)/$(TEST_PROGRAM).exe \
+	     --gtest_output="xml:$(TESTDIR)/results/$(PROGRAM)Test-results.xml"
 
 cleantest : 
 	@echo Cleaning test files
@@ -327,17 +324,17 @@ check-xml : ext-deps $(CHECKDIR)/cppcheck.xml
 check-html : check-xml
 	@echo Creating checks HTML
 	@"$(PYTHON)" "$(CPPCHECK_HTMLREP)" --file=$(CHECKDIR)/cppcheck.xml \
-	             --report-dir=$(CHECKDIR)/html --source-dir=.
+	             --report-dir=$(CHECKDIR)/html --source-dir=. \
+	             --title="$(PROGRAM)" --blame-options=w
 
 check     : check-html
 
-coverage: $(TEST_TARGET)
+coverage: $(TEST_TARGET) 
 	@echo Generating test coverage statistics...
 	@mkdir -p "../builds/coverage"
 	@"$(COVERAGE)" -v --config_file ../test/OpenCppCoverage.cfg -- \
 	               $(TESTDIR)/$(TEST_PROGRAM).exe \
 	               2> ../builds/coverage/OpenCppCoverage.err
-
 
 trace:
 	@echo CXXFLAGS   = $(CXXFLAGS)
@@ -352,8 +349,10 @@ trace:
 # INCLUDES
 ifneq ($(MAKECMDGOALS), clean)
   ifneq ($(MAKECMDGOALS), cleanmost)
-    ifneq ($(MAKECMDGOALS), trace)
-      -include $(DEPS)
+    ifneq ($(MAKECMDGOALS), cleantest)
+      ifneq ($(MAKECMDGOALS), trace)
+        -include $(DEPS)
+      endif
     endif
   endif
 endif

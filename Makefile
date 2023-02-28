@@ -34,10 +34,10 @@
 #    'cleanmost'    Cleans common files, but leaves some files intact (.pch, 
 #                   etc).
 #
-#    'lib'          Build the MFCX.lib file.
-#
 #    'help'         Prints the makefile's help - a brief, one-line description 
 #                   of each target.
+#
+#    'lib'          Build the MFCX.lib file.
 #
 #    'targets'      Prints out this page.
 #
@@ -84,12 +84,6 @@ SORT = sort.exe
 
 .PHONY: cleanmost clean cleanall help lib chm doc build deploy test
 
-ifeq ("$(CFG)", "")
-  ifeq ($(MAKECMDGOALS), package)
-    $(error No configuration specified. 'make package' should only build CFG=Release builds.)
-  endif
-endif
-
 # TARGETS
 
 targets: ## Prints a full description of the targets.
@@ -109,22 +103,14 @@ help: ## Prints out this help message
 cleanmost: ## Cleans most common files, but leaves rarely changed files (.pch, etc).
 	@cd src && $(MAKE) cleanmost
 
-#	@cd Setup && $(MAKE) clean
-
-
 clean: ## Cleans the project of intermediate files for a given configuration.
 	@cd src && $(MAKE) clean
-
-#	@cd Setup && $(MAKE) clean
-
 
 cleanall: ## Cleans all generated files and directories for Debug and Release builds.
 	@cd src && $(MAKE) clean CFG=Debug
 	@cd src && $(MAKE) clean CFG=Release
 	@rm -fr lib
 	@rm -fr builds
-	
-#	@cd Setup && $(MAKE) clean CFG=Release
 
 lib: ## Builds the MFCX.lib file.
 	@cd src && $(MAKE) build
@@ -134,9 +120,6 @@ lib: ## Builds the MFCX.lib file.
 
 doc:   ## Creates the documentation (including doxygen).
 	@cd doc && $(MAKE) doc
-
-#package: exe ## Creates the MFCX distribution package.
-#	@cd Setup && $(MAKE) package
 
 test: ## Runs all the unit tests for MFCX.
 	@cd src && $(MAKE) test

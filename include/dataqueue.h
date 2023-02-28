@@ -25,11 +25,13 @@ public:
 	/// Default queue constructor.
      CDataQueue();
      
-     /// Constructor.  Will notify the given window with the given messagen
+     // TODO: Remove this constructor, since it has MFC CWnd.
+     /// Constructor.  Will notify the given window with the given message
      /// when something is added.
+     [[deprecated]]  // Use CDataQueue(HWND, UINT) instead.
      CDataQueue (CWnd* pTo, UINT wmAddMsg);
 
-     /// Constructor.  Will notify the given window with the given messagen
+     /// Constructor.  Will notify the given window with the given message
      /// when something is added.
      CDataQueue (HWND hTo, UINT wmAddMsg);
 

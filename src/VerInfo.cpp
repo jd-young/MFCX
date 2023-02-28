@@ -21,11 +21,11 @@
        				VALUE "Author", "Written by John Young\0"
        				VALUE "FileDescription", "Some cool utility\0"
        				VALUE "InternalName", "CoolUtility\0"
-       				VALUE "LegalCopyright", "Copyright © 1996 John Young\0"
+       				VALUE "LegalCopyright", "Copyright (c) 1996 John Young\0"
        				VALUE "ProductName", "Cool utility\0"
        				VALUE "ProductVersion", "1,2,3,1441\0"
        				VALUE "BuildDate", "26-Feb-1996\0"
-       				VALUE "BetaBuild", "ß1\0"
+       				VALUE "BetaBuild", "B1\0"
        			END
        		END
        		BLOCK "VarFileInfo"

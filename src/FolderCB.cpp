@@ -5,9 +5,9 @@
 //   Young Associates
 //
 //   Based on code that was found on www.codeguru.com, and was 
-//   © 1999 Brigham W. Thorp
-//   © 1998 James R. Twine
-//   © 1997 Baldvin Hansson
+//   (c) 1999 Brigham W. Thorp
+//   (c) 1998 James R. Twine
+//   (c) 1997 Baldvin Hansson
 //
 //   Portions Copyright (c) 1999 - 2000 by PJ Naughter.  
 //   All rights reserved.

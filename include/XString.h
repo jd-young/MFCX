@@ -11,15 +11,15 @@ public:
 	// Constructors
 	
 	/// Constructs an empty CXString object.
-	CXString(){}
+	CXString() {}
 	
 	/// Copy constructor.  Creates a new CXString object and initialises it to 
 	/// the given value.
-	CXString (const TCHAR* str) : _string(str) {}
+	CXString (const TCHAR* str) : _string (str) {}
 	
 	/// Copy constructor.  Creates a new CXString object and initialises it to 
 	/// the given value.
-	CXString (const CString s) : _string(s) {}
+	CXString (const CString s) : _string (s) {}
 	
 // Assignment
 
@@ -122,7 +122,7 @@ public:
 	int Chomp() { return Chop(); };
 
      /// Limits the string to the given number of characters.
-	int Limit (int nChars);
+	int LimitPath (int nChars);
 
 	/// Puts commas into a number.
 	void Commatise();
@@ -148,35 +148,48 @@ public:
      static void ToggleCase (TCHAR* psz);    ///< Toggles the case.
      static void ToggleCase (CString& s);    ///< Toggles the case.
 
-	CTime GetTime();       ///< Parses a time.
+	/// Parses a time.
+	CTime GetTime() const { return GetTime ((const TCHAR*) _string); }
+
+	/// Parses a time.
+	static CTime GetTime (const TCHAR* psz);
 
      /// Returns true if the given string is made up of whitespace characters.
 	static bool PASCAL IsSpace (const TCHAR* s);
 
      /// Returns true if this string is made up of whitespace characters.
-	bool IsSpace() const { return IsSpace((LPCTSTR) _string); }
+	bool IsSpace() const 
+	     { return IsSpace (static_cast<const TCHAR*>(_string)); }
 
      /// Returns true if the string is composed entirely of digits.
 	static bool PASCAL IsDigit (const TCHAR* s);	
 	static bool PASCAL IsNumber (const TCHAR *s, 
 						    int cSeparator = ',',
 						    int cDecimalPoint = '.');
-	bool IsDigit() const { return IsDigit ((LPCTSTR) _string); }
+	bool IsDigit() const 
+	     { return IsDigit (static_cast<const TCHAR*>(_string)); }
 	bool IsNumber (int cSeparator = ',',
 				int cDecimalPoint = '.') const
 		{ return IsNumber (_string, cSeparator, cDecimalPoint); }
 
-     bool IsUpper() const;
-     bool IsLower() const;
-     bool IsCapitalised() const;
+     bool IsUpper() const 
+          { return IsUpper (static_cast<const TCHAR*>(_string)); }
+     bool IsLower() const 
+          { return IsLower (static_cast<const TCHAR*>(_string)); }
+     bool IsCapitalised() const 
+          { return IsCapitalised (static_cast<const TCHAR*>(_string)); }
+	static bool PASCAL IsUpper (const TCHAR* s);	
+	static bool PASCAL IsLower (const TCHAR* s);	
+	static bool PASCAL IsCapitalised (const TCHAR* s);	
 
-     int Find(LPCTSTR pszSub, int iStart = 0) const throw()
-          {  return _string.Find(pszSub, iStart); }
+     int Find (LPCTSTR pszSub, int iStart = 0) const throw()
+          {  return _string.Find (pszSub, iStart); }
 
 	bool FindReplace (const TCHAR* pszFind, const TCHAR* pszReplace);
 	bool FindReplace (int nIndex, int nLen, const TCHAR* pszReplace);
 
-     int  GetMaxLineLength() const { return GetMaxLineLength ((const TCHAR*) this); }
+     int  GetMaxLineLength() const { 
+          return GetMaxLineLength (static_cast<const TCHAR*>(_string)); }
      static int GetMaxLineLength (const TCHAR* psz);
 
      // Companions for LoadString (to get the first and second parts of the resource string).
@@ -188,6 +201,10 @@ public:
 	static void MakeSameCase (CString& sTarget, const CString& sSource);
 
 	static void ExpandEnvStr (CString& sEnv);
+	void ExpandMacroStr (const CMapStringToString& mapMacros,
+                          const TCHAR* pszStartDelim,
+                          const TCHAR* pszEndDelim = NULL)
+          { ExpandMacroStr (_string, mapMacros, pszStartDelim, pszEndDelim); }
 	static void ExpandMacroStr (CString sText, 
 						   const CMapStringToString& mapMacros,
 						   const TCHAR* pszStartDelim,

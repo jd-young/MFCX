@@ -477,7 +477,10 @@ int CDateParser::GetWeekDay (const TCHAR *s)
 // CXString class
 
 
-/** Chops any cr/lf pairs off the end of the string */
+/** Chops any cr/lf pairs off the end of the string.
+ *
+ * \return the length of the new string.
+ */
 int CXString::Chop()
 {
 	int	  nLen = _string.GetLength();
@@ -593,6 +596,7 @@ bool CXString::CalcStringEllipsis (HDC hdc, LPTSTR pszString, int nLen,
 	// but GetTextExtentPoint32() isn't implemented in Win32s.  Here we check
 	// our OS type and if we're on Win32s we degrade and use
 	// GetTextExtentPoint().
+     // TODO: Can we replace this with #ifdef?
 	if ( fOnce )
 	{
 		fOnce = false;
@@ -815,27 +819,27 @@ int CXString::Limit (int nChars)
 	return nSep == -1 || nSep == 0;
 }
 
-
-bool CXString::IsUpper() const
+// TODO: This looks the same as IsLower() - extract to method?
+/*static*/ bool CXString::IsUpper (const TCHAR* psz)
 {
-     int len = _string.GetLength();
-     if ( len == 0 )
+     const TCHAR* s = psz;
+     if ( ! *s )
           return false;
-
-     for (const TCHAR* s = (LPCTSTR) this; *s; s++)
+          
+     for ( ; *s; s++)
           if ( isalpha (*s) && !isupper (*s) )
                return false;
      
      return true;
 }
 
-bool CXString::IsLower() const
+/*static*/ bool PASCAL CXString::IsLower (const TCHAR* psz)
 {
-     int len = _string.GetLength();
-     if ( len == 0 )
+     const TCHAR* s = psz;
+     if ( ! *s )
           return false;
-
-     for (const TCHAR* s = (LPCTSTR) this; *s; s++)
+          
+     for ( ; *s; s++)
           if ( isalpha (*s) && !islower (*s) )
                return false;
      
@@ -848,13 +852,12 @@ bool CXString::IsLower() const
 
 \return   \b true if this string is capitalised, \b false otherwise.
 */
-bool CXString::IsCapitalised() const
+/*static*/ bool PASCAL CXString::IsCapitalised (const TCHAR* psz)
 {
-     int len = _string.GetLength();
-     if ( len == 0 )
+     const TCHAR* s = psz;
+     if ( ! *s )
           return false;
-
-     const TCHAR* s = (LPCTSTR) this;
+          
      const TCHAR* p = NULL;
      for (; *s; s++)
      {
@@ -872,17 +875,14 @@ bool CXString::IsCapitalised() const
 }
 
 
-
-
-
 /**	Returns a CTime from the string.  It uses the CDateParser::Parse() to do 
 	this.
 
 \return	A CTime object representation of the CXString objects date / time.
 */
-CTime CXString::GetTime()
+/*static*/ CTime CXString::GetTime (const TCHAR* psz)
 {
-	CDateParser dp (_string);
+	CDateParser dp (psz);
 	CTime time = dp.Parse();
 	return time;
 }
@@ -992,7 +992,13 @@ void CXString::Capitalise (CString& s)
      }
 }
 
-void CXString::ToggleCase (CString& s)
+
+void CXString::ToggleCase()
+{
+     ToggleCase (_string);
+}
+
+/*static*/ void CXString::ToggleCase (CString& s)
 {
 	int nLen = s.GetLength();
      ToggleCase (s.GetBuffer (0));
@@ -1018,16 +1024,17 @@ void CXString::ToggleCase (CString& s)
 }
 
 
-int CXString::Limit (int nChars)
+/*!	Limit a long pathname to the given number of characters.
+ *
+ *   e.g. c:\first\second\third\fourth\filename.ext ->
+ *		c:\first\...\fourth\filename.ext
+ *	or \\server_one\sys\archives\project5001\software\version1.00.4\config.zip ->
+ *	   \\server_one\...\version1.00.4\config.zip
+ *
+ * \return the number of characters in the string
+ */
+int CXString::LimitPath (int nChars)
 {
-	//	Limit a long pathname to the given number of characters.
-	//	e.g. c:\first\second\third\fourth\filename.ext ->
-	//		c:\first\...\fourth\filename.ext
-	//	or \\server_one\sys\archives\project5001\software\version1.00.4\config.zip ->
-	//	   \\server_one\...\version1.00.4\config.zip
-	//
-	//	Returns the number of characters in the string
-
 	int	nLen = _string.GetLength();
 	LPTSTR pszData = _string.GetBuffer (nLen);
 
@@ -1113,10 +1120,11 @@ bool CXString::FindReplace (const TCHAR* pszFind, const TCHAR* pszReplace)
 }
 
 /*!  Gets the maximum line length of the string passed to it.
-
-     \param    psz  The string to get the maximum line length from.
-     \return   The length of the longest line.
-*/
+ *
+ * \param psz       The string to get the maximum line length from.
+ *
+ * \return The length of the longest line.
+ */
 /*static*/ int CXString::GetMaxLineLength (const TCHAR* psz)
 {
      int max = 0;

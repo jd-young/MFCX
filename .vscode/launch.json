@@ -1,0 +1,26 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations":
+    [
+        {
+            "name": "MFCX Unit Test Launch",
+            "type": "cppvsdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/builds/test/MFCXTest.exe",
+            "args": ["--gtest_output=xml:${workspaceFolder}/builds/test/results/MFCXTest-results.xml"],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}/builds/test",
+            "environment": [ { "name" : " _DEBUG_VIEW", "value": "1" } ],
+            "console": "internalConsole",
+            "sourceFileMap": 
+            {
+                "d:\\agent\\_work\\1\\s\\src\\vctools\\vc7libs\\ship\\atlmfc":
+                    "C:\\Program Files (x86)\\Microsoft Visual Studio\\2017\\Community\\VC\\Tools\\MSVC\\14.16.27023\\atlmfc"
+            },
+            "symbolSearchPath": "C:\\Program Files (x86)\\Microsoft Visual Studio\\2017\\Community\\VC\\Tools\\MSVC\\14.16.27023\\lib\\x86;C:\\Program Files (x86)\\Microsoft Visual Studio\\2017\\Community\\VC\\Tools\\MSVC\\14.16.27023\\atlmfc\\lib\\x86;C:\\Users\\jyoun\\Documents\\Visual Studio 2017\\SymbolCache"
+        }
+    ]
+}

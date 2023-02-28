@@ -8,7 +8,7 @@
 //   function SetCallback() is also defined. This function can be used when you 
 //   want to use the default constructor for the CMyListCtrl class. 
 //
-//   Here’s a brief description of what the protected member variables are used
+//   Here's a brief description of what the protected member variables are used
 //   for. The m_bCheckForDrag flag is set true by the WM_LBUTTONDOWN handler
 //   only when the user presses the left mouse button over a column header. Its
 //   used by the WM_MOUSEMOVE handler to decide whether it should check for a
@@ -137,7 +137,7 @@ public:
 		TypeDateTime, 			///< Sort by date / time.
 		TypeNumber,			///< Sort numerically (ignoring any commas)
 		TypeCurrency			///< Sort as currency (ignore leading '$', or 
-							///< '£' signs).
+							///< other currency signs).
 	}	DataTypes;
 
 // Attributes
