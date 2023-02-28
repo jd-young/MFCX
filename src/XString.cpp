@@ -992,7 +992,13 @@ void CXString::Capitalise (CString& s)
      }
 }
 
-void CXString::ToggleCase (CString& s)
+
+void CXString::ToggleCase()
+{
+     ToggleCase (_string);
+}
+
+/*static*/ void CXString::ToggleCase (CString& s)
 {
 	int nLen = s.GetLength();
      ToggleCase (s.GetBuffer (0));
@@ -1018,16 +1024,17 @@ void CXString::ToggleCase (CString& s)
 }
 
 
-int CXString::Limit (int nChars)
+/*!	Limit a long pathname to the given number of characters.
+ *
+ *   e.g. c:\first\second\third\fourth\filename.ext ->
+ *		c:\first\...\fourth\filename.ext
+ *	or \\server_one\sys\archives\project5001\software\version1.00.4\config.zip ->
+ *	   \\server_one\...\version1.00.4\config.zip
+ *
+ * \return the number of characters in the string
+ */
+int CXString::LimitPath (int nChars)
 {
-	//	Limit a long pathname to the given number of characters.
-	//	e.g. c:\first\second\third\fourth\filename.ext ->
-	//		c:\first\...\fourth\filename.ext
-	//	or \\server_one\sys\archives\project5001\software\version1.00.4\config.zip ->
-	//	   \\server_one\...\version1.00.4\config.zip
-	//
-	//	Returns the number of characters in the string
-
 	int	nLen = _string.GetLength();
 	LPTSTR pszData = _string.GetBuffer (nLen);
 
@@ -1113,10 +1120,11 @@ bool CXString::FindReplace (const TCHAR* pszFind, const TCHAR* pszReplace)
 }
 
 /*!  Gets the maximum line length of the string passed to it.
-
-     \param    psz  The string to get the maximum line length from.
-     \return   The length of the longest line.
-*/
+ *
+ * \param psz       The string to get the maximum line length from.
+ *
+ * \return The length of the longest line.
+ */
 /*static*/ int CXString::GetMaxLineLength (const TCHAR* psz)
 {
      int max = 0;

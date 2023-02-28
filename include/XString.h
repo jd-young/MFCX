@@ -122,7 +122,7 @@ public:
 	int Chomp() { return Chop(); };
 
      /// Limits the string to the given number of characters.
-	int Limit (int nChars);
+	int LimitPath (int nChars);
 
 	/// Puts commas into a number.
 	void Commatise();
@@ -201,6 +201,10 @@ public:
 	static void MakeSameCase (CString& sTarget, const CString& sSource);
 
 	static void ExpandEnvStr (CString& sEnv);
+	void ExpandMacroStr (const CMapStringToString& mapMacros,
+                          const TCHAR* pszStartDelim,
+                          const TCHAR* pszEndDelim = NULL)
+          { ExpandMacroStr (_string, mapMacros, pszStartDelim, pszEndDelim); }
 	static void ExpandMacroStr (CString sText, 
 						   const CMapStringToString& mapMacros,
 						   const TCHAR* pszStartDelim,

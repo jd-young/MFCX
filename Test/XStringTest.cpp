@@ -81,12 +81,17 @@ TEST(CXStringTest, TestIsString)
 
 TEST(CXStringTest, TestIsDigit)
 {
+     ASSERT_FALSE (CXString::IsDigit (nullptr));
+     ASSERT_FALSE (CXString::IsDigit (""));
      ASSERT_TRUE (CXString::IsDigit ("1234567890"));
      ASSERT_FALSE (CXString::IsDigit ("0.1234567890"));
 }
 
 TEST(CXStringTest, TestIsNumber)
 {
+     ASSERT_FALSE (CXString::IsNumber (nullptr));
+     ASSERT_FALSE (CXString::IsNumber (""));
+     
      ASSERT_TRUE (CXString::IsNumber ("1234567890"));
      ASSERT_TRUE (CXString::IsNumber ("1,234,567,890"));
      ASSERT_TRUE (CXString::IsNumber ("0.1234567890"));
@@ -115,9 +120,159 @@ TEST(CXStringTest, TestIsLower)
      ASSERT_FALSE (CXString::IsLower ("Aabcdefghijklmopqrstuvxyz"));
 }
 
+TEST(CXStringTest, TestIsCapitalised)
+{
+     GTEST_SKIP() << "nullptr and separated words don't work - fix me!";
+     ASSERT_FALSE (CXString::IsCapitalised (nullptr));
+     ASSERT_FALSE (CXString::IsCapitalised (""));
+     ASSERT_TRUE (CXString::IsCapitalised ("Capital"));
+     ASSERT_FALSE (CXString::IsCapitalised ("capital"));
+     ASSERT_TRUE (CXString::IsCapitalised ("Capital City In Japan"));
+     ASSERT_FALSE (CXString::IsCapitalised ("Capital City in Japan"));
+}
+
 TEST(CXStringTest, TestGetTime)
 {
      GTEST_SKIP() << "GetTime() is buggy - fix me!";
      CXString sTime = "2023-02-27 17:51:45";
      ASSERT_TIME_EQ (2023, 2, 27, 17, 51, 45, sTime.GetTime());
+}
+
+void TestCommatise (const TCHAR* pszExp, const TCHAR* pszSource)
+{
+     CXString sTest = pszSource;
+     sTest.Commatise();
+     ASSERT_STREQ (pszExp, sTest);
+}
+
+TEST(CXStringTest, TestCommatise)
+{
+     TestCommatise ("1", "1");
+     TestCommatise ("12", "12");
+     TestCommatise ("123", "123");
+     TestCommatise ("1,234", "1234");
+     TestCommatise ("12,345", "12345");
+     TestCommatise ("123,456", "123456");
+     TestCommatise ("1,234,567", "1234567");
+     TestCommatise ("12,345,678", "12345678");
+     TestCommatise ("123,456,789", "123456789");
+}
+
+void TestDecommatise (const TCHAR* pszExp, const TCHAR* pszSource)
+{
+     CXString sTest = pszSource;
+     sTest.Decommatise();
+     ASSERT_STREQ (pszExp, sTest);
+}
+
+TEST(CXStringTest, TestDecommatise)
+{
+     TestDecommatise ("1", "1");
+     TestDecommatise ("12", "12");
+     TestDecommatise ("123", "123");
+     TestDecommatise ("1234", "1,234");
+     TestDecommatise ("12345", "12,345");
+     TestDecommatise ("123456", "123,456");
+     TestDecommatise ("1234567", "1,234,567");
+     TestDecommatise ("12345678", "12,345,678");
+     TestDecommatise ("123456789", "123,456,789");
+}
+
+void TestCapitalise (const TCHAR* pszExp, const TCHAR* pszSource)
+{
+     CXString sTest = pszSource;
+     sTest.Capitalise();
+     ASSERT_STREQ (pszExp, sTest);
+}
+
+TEST(CXStringTest, TestCapitalise)
+{
+     TestCapitalise ("Capital", "capital");
+     TestCapitalise ("Capital City", "capital city");
+}
+
+void TestToggleCase (const TCHAR* pszExp, const TCHAR* pszSource)
+{
+     CXString sTest = pszSource;
+     sTest.ToggleCase();
+     ASSERT_STREQ (pszExp, sTest);
+}
+
+TEST(CXStringTest, TestToggleCase)
+{
+     TestToggleCase ("CAPITAL", "capital");
+     TestToggleCase ("cAPITAL cITY", "Capital City");
+}
+
+
+TEST(CXStringTest, TestLimitPath)
+{
+     GTEST_SKIP() << "LimitPath() is buggy - fix me!";
+     CXString sTest;
+     sTest = "C:\\first\\second\\third\\fourth\\fifth\\filename.ext";
+
+     ASSERT_EQ (19, sTest.LimitPath(25));
+     ASSERT_STREQ ("C:\\...\\filename.ext", sTest);
+
+     ASSERT_EQ (19, sTest.LimitPath(55));
+     ASSERT_STREQ ("C:\\...\\fifth\\filename.ext", sTest);
+}
+
+TEST(CXStringTest, TestFindReplace)
+{
+     CXString sTest;
+     sTest = "This is a test";
+
+     ASSERT_TRUE (sTest.FindReplace ("test", "thing"));
+     ASSERT_STREQ ("This is a thing", sTest);
+
+     sTest = "This is a test";
+     ASSERT_FALSE (sTest.FindReplace ("tttt", "thing"));
+     ASSERT_STREQ ("This is a test", sTest);
+}
+
+TEST(CXStringTest, TestGetMaxLineLength)
+{
+//     GTEST_SKIP() << "GetMaxLineLength() is buggy - fix me!";
+     CXString sTest;
+     sTest = "This is a test\n"
+             "This is another longer line\n"
+             "And this the longest line of them all (and without an EOL marker)";
+
+     ASSERT_EQ (65, sTest.GetMaxLineLength());
+}
+
+TEST(CXStringTest, TestExpandMacroStr)
+{
+     GTEST_SKIP() << "ExpandMacroStr() is buggy - fix me!";
+
+     CXString sTest;
+     sTest = "A string containing a %MACRO% and another %NON-EXISTANT-ONE%";
+
+     CMapStringToString macros;
+     macros.SetAt ("MACRO", "replaced macro");
+     
+     sTest.ExpandMacroStr (macros, "%");
+     ASSERT_STREQ ("A string containing a replaced macro and another %NON-EXISTANT-ONE%",
+                   sTest);
+}
+
+TEST(CXStringTest, TestHexStr)
+{
+     CXString sTest = "A string";
+     ASSERT_STREQ ("4120737472696e67", sTest.HexStr());
+}
+
+TEST(CXStringTest, TestFromHex)
+{
+     CXString sTest = "4120737472696e67";
+     ASSERT_STREQ ("A string", sTest.FromHex());
+}
+
+TEST(CXStringTest, TestReverseFind)
+{
+     GTEST_SKIP() << "ReverseFind() is buggy - fix me!";
+
+     CXString sTest = "Find the last the the in this string";
+     ASSERT_EQ (18, sTest.ReverseFind ("the"));
 }
