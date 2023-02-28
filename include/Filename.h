@@ -50,6 +50,8 @@ public:
 
 	static bool GetFileTime (LPCTSTR pszPathName, CTime& time);
 
+     bool IsRelativePath() const { return IsRelativePath (m_sPath); }
+
 	/// Returns true if the given path is relative.
 	static bool IsRelativePath (const TCHAR* pszPath);
 

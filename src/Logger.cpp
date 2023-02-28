@@ -117,14 +117,6 @@ int CLogger::LogEvent (const TCHAR* format, ...)
      va_list arglist;
      va_start (arglist, format);
      int count = vfprintf (m_logfl, format, arglist);
-
-#ifdef    _DEBUG
-	int nBuf;
-	TCHAR szBuffer[512];
-	nBuf = _vsntprintf (szBuffer, (sizeof szBuffer) / (sizeof TCHAR), format, arglist);
-     TRACE0 (szBuffer);
-#endif
-
      va_end (arglist);
 
      fflush (m_logfl);
@@ -181,7 +173,6 @@ void  CLogger::PrintThreadID()
 
      CWinThread* pThread = AfxGetThread();
      fprintf (m_logfl, "%d-%d: ", _getpid(), pThread->m_nThreadID);
-     TRACE ("%d-%d: ", _getpid(), pThread->m_nThreadID);
 }
 
 #endif	// MFCX_LOG_USELOG

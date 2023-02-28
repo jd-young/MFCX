@@ -154,6 +154,11 @@ CString CFilename::GetBaseName()
 	return false;
 }
 
+
+/*!  Get the relative path of the given path from the given folder.
+ *
+ * \param sPath          The path to put the 
+ */
 /*static*/ bool CFilename::GetRelativePath (CString& sPath, const TCHAR* pszFolder)
 {
 	bool bRet = GetRelativePath (sPath.GetBuffer (_MAX_PATH), pszFolder);
@@ -183,14 +188,13 @@ CString CFilename::GetBaseName()
 
 
 /**  Returns the pathname for the given directory and filename.  It sorts out 
-     ny  problems with the slashes, etc.
-
-@param    pszDir         The directory where the file is.
-@param    pszFilename    The name of the file.
-
-@return   The full path of the file.
-
-*/
+ *   any  problems with the slashes, etc.
+ *
+ * \param pszDir         The directory where the file is.
+ * \param pszFilename    The name of the file.
+ *
+ * \return   The full path of the file.
+ */
 /*static*/ CString CFilename::GetFullPath (const TCHAR* pszDir, 
                                            const TCHAR* pszFilename)
 {

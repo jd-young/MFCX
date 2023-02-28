@@ -27,6 +27,14 @@
 \verbatim
      Match 1 is '1', Match 2 is '67890'
 \endverbatim
+
+TODO:
+     * Separate out compile and search so that we can get warning of bad 
+       patterns (for example, missing closing brace).  Provide some way to query
+       what was wrong with the pattern.
+     * Fix the operator[] to either return 0 as the whole string, or the docco
+       to reflect what it actually does.
+     * Store the start / end position of each match, not just the last one.
 */
 class CRegex
 {

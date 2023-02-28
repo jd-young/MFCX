@@ -128,7 +128,11 @@
 				<ProjectItem type="Relative Filename" name="XTreeCtrl.cpp" path="src\XTreeCtrl.cpp"/>
 			</Branch>
 			<Branch name="test" type="Heading" expanded="yes">
+				<ProjectItem type="Relative Filename" name="CryptTest.cpp" path="test\CryptTest.cpp"/>
+				<ProjectItem type="Relative Filename" name="FilenameTest.cpp" path="test\FilenameTest.cpp"/>
 				<ProjectItem type="Relative Filename" name="MFCXTest.cpp" path="test\MFCXTest.cpp"/>
+				<ProjectItem type="Relative Filename" name="OpenCppCoverage.cfg" path="test\OpenCppCoverage.cfg"/>
+				<ProjectItem type="Relative Filename" name="RegexTest.cpp" path="test\RegexTest.cpp"/>
 				<ProjectItem type="Relative Filename" name="UnitTest.cpp" path="test\UnitTest.cpp"/>
 				<ProjectItem type="Relative Filename" name="XStringTest.cpp" path="test\XStringTest.cpp"/>
 			</Branch>
