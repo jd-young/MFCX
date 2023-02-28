@@ -39,6 +39,9 @@
 #
 #    'lib'          Build the MFCX.lib file.
 #
+#    'package'      Build the MFCX.zip file, which contains the includes and 
+#                   libs.
+#
 #    'targets'      Prints out this page.
 #
 #    'trace'        Prints out information that is useful for debugging 
@@ -82,6 +85,9 @@ GREP = grep.exe
 SED  = sed.exe
 SORT = sort.exe
 
+7Z_VER = 22.01
+7Z     = $(7ZIP_HOME)/7-Zip-$(7Z_VER)/7z
+
 .PHONY: cleanmost clean cleanall help lib chm doc build deploy test
 
 # TARGETS
@@ -115,8 +121,8 @@ cleanall: ## Cleans all generated files and directories for Debug and Release bu
 lib: ## Builds the MFCX.lib file.
 	@cd src && $(MAKE) build
 
-#chm: ## Builds the MFCX.chm help file.
-#	@cd HTMLHelp && $(MAKE) chm
+package: lib
+	@"$(7Z)" a -tzip builds/mfcx.zip lib/* include/*
 
 doc:   ## Creates the documentation (including doxygen).
 	@cd doc && $(MAKE) doc
