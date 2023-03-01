@@ -75,6 +75,7 @@ void CRegexString::Copy(const CRegexString& from)
                for (s = s + iSlash + 1; *s; s++)       // Deal with any modifiers
                     switch ( tolower (*s) )
                     {
+                         // TODO: Multi and single are not mutually exclusive.
                          case 'm': m_bMultiline = true;     break;
                          case 's': m_bMultiline = false;    break;
                          case 'i': m_bIgnoreCase = true;    break;
