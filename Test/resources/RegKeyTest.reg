@@ -1,0 +1,17 @@
+Windows Registry Editor Version 5.00
+
+[HKEY_CURRENT_USER\Software\Thistle Software\MFCX-UnitTests]
+"Hex"=hex:01,03,01,01,bd,01,01,01,9c,05,01,03,69,02,00,00
+"dword"=dword:0123458c
+"string"="0 1 2 3"
+
+[HKEY_CURRENT_USER\Software\Thistle Software\MFCX-UnitTests\sub-dir]
+"Hex"=hex:02,03,02,02,bd,02,02,02,9c,05,02,02,69,02,02,00
+"dword"=dword:0234568c
+"string"="A test string"
+
+[HKEY_CURRENT_USER\Software\Thistle Software\MFCX-UnitTests\sub-dir\sub-dir1]
+"Hex"=hex:03,03,03,03,bd,03,03,03,9c,05,03,03,69,02,03,00
+"dword"=dword:0345678c
+"string"="Another test string"
+

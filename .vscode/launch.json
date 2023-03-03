@@ -12,7 +12,7 @@
             "program": "${workspaceFolder}/builds/test/MFCXTest.exe",
             "args": ["--gtest_output=xml:${workspaceFolder}/builds/test/results/MFCXTest-results.xml"],
             "stopAtEntry": false,
-            "cwd": "${workspaceFolder}/builds/test",
+            "cwd": "${workspaceFolder}/test",
             "environment": [ { "name" : " _DEBUG_VIEW", "value": "1" } ],
             "console": "internalConsole",
             "sourceFileMap": 

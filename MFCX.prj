@@ -128,12 +128,22 @@
 				<ProjectItem type="Relative Filename" name="XTreeCtrl.cpp" path="src\XTreeCtrl.cpp"/>
 			</Branch>
 			<Branch name="test" type="Heading" expanded="yes">
+				<Branch name="resources" type="Heading" expanded="no">
+					<ProjectItem type="Relative Filename" name="RegKeyTest.reg" path="test\resources\RegKeyTest.reg"/>
+					<ProjectItem type="Relative Filename" name="seed-reg.bat" path="test\resources\seed-reg.bat"/>
+				</Branch>
+				<Branch name="win32" type="Heading" expanded="no">
+					<ProjectItem type="Relative Filename" name="gtest-windows.cpp" path="test\win32\gtest-windows.cpp"/>
+				</Branch>
 				<ProjectItem type="Relative Filename" name="CryptTest.cpp" path="test\CryptTest.cpp"/>
 				<ProjectItem type="Relative Filename" name="FilenameTest.cpp" path="test\FilenameTest.cpp"/>
 				<ProjectItem type="Relative Filename" name="MFCXTest.cpp" path="test\MFCXTest.cpp"/>
 				<ProjectItem type="Relative Filename" name="OpenCppCoverage.cfg" path="test\OpenCppCoverage.cfg"/>
+				<ProjectItem type="Relative Filename" name="RegexStringTest.cpp" path="test\RegexStringTest.cpp"/>
 				<ProjectItem type="Relative Filename" name="RegexTest.cpp" path="test\RegexTest.cpp"/>
-				<ProjectItem type="Relative Filename" name="UnitTest.cpp" path="test\UnitTest.cpp"/>
+				<ProjectItem type="Relative Filename" name="RegKeyTest.cpp" path="test\RegKeyTest.cpp"/>
+				<ProjectItem type="Relative Filename" name="StringUtilTest.cpp" path="test\StringUtilTest.cpp"/>
+				<ProjectItem type="Relative Filename" name="UtilsTest.cpp" path="test\UtilsTest.cpp"/>
 				<ProjectItem type="Relative Filename" name="XStringTest.cpp" path="test\XStringTest.cpp"/>
 			</Branch>
 			<ProjectItem type="Relative Filename" name=".gitignore" path=".gitignore"/>

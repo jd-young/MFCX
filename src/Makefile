@@ -263,10 +263,12 @@ UNITTEST_SRC  :=   $(wildcard ../test/*.cpp) $(foreach dir,$(TEST_SRC_DIRS),$(wi
 UNITTEST_DEPS :=   $(UNITTEST_SRC:.cpp=.d)
 
 TEST_SRC      :=   $(UNITTEST_SRC) Crypt.cpp DataQueue.cpp Filename.cpp \
-                    Regex.cpp RegexString.cpp Utils.cpp XString.cpp \
-                    XStringList.cpp StringUtil.cpp XTime.cpp \
+                    Regex.cpp RegexString.cpp RegKey.cpp StringUtil.cpp \
+                    Utils.cpp XString.cpp XStringList.cpp XTime.cpp \
                     regex/pcre.cpp regex/chartables.cpp
-                         
+
+# TODO: The test objects look like this: ../builds/test/../test/CryptTest.obj, 
+#       that is, with that weird, redundant test/../test in the path.
 TEST_OBJS     :=   $(addprefix $(TESTDIR)/, $(TEST_SRC:.cpp=.obj))
 TEST_DEPS     :=   $(addprefix $(DEPDIR)/, $(notdir $(UNITTEST_DEPS)))
 
@@ -300,12 +302,12 @@ $(TEST_OBJS)	:	$(TESTDIR)/%.obj	:	%.cpp
 	@mkdir -p "$(@D)"
 	@$(CXX) $(CONSOLE_CXXFLAGS) -Yu"StdAfx.h" -Fo$@ $<
 
+# TODO: Can we remove the source objects and just link to the .lib file instead?
 $(TESTDIR)/$(TEST_PROGRAM).exe : $(TEST_OBJS)
 	@echo "Creating $@"
 	@$(LINK) $(CONSOLE_LINK_FLAGS) -out:$@ $(TESTDIR)/StdAfx.obj $(TEST_OBJS)
 
 test : $(TEST_TARGET)
-	@echo Running unit tests
 	@mkdir -p "$(TESTDIR)/results"
 	@$(TESTDIR)/$(TEST_PROGRAM).exe \
 	     --gtest_output="xml:$(TESTDIR)/results/$(PROGRAM)Test-results.xml"
@@ -339,7 +341,7 @@ coverage: $(TEST_TARGET)
 trace:
 	@echo CXXFLAGS   = $(CXXFLAGS)
 	@echo SRC        = $(SRC)
-	@echo OBJS       = $(OBJS)
+	@echo TEST_OBJS  = $(TEST_OBJS)
 	@echo SBRS       = $(SBRS)
 	@echo LIBEXE     = $(LIBEXE)
 	@echo LIB_FLAGS  = $(LIB_FLAGS)

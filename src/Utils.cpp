@@ -5,6 +5,8 @@
      \date     circa 1999
      
      Copyright (c) 1999 Young Associates
+
+TODO: Split this into getargs() and CFontUtils.
 */
 
 #include "stdafx.h"
@@ -27,6 +29,9 @@ static char THIS_FILE[] = __FILE__;
                          to create.  If this is exceeded, then the rest are 
                          ignored.
 */
+// TODO: This doesn't appear to be used anywhere and causes an SEH exception
+//       when called from the UtilsTest unit test.  Delete?
+/*static*/ 
 void CUtils::getargs (char *command_line, int *argc, char *argv[], int max_args)
 {
 	char *cptr;
@@ -85,7 +90,8 @@ void CUtils::getargs (char *command_line, int *argc, char *argv[], int max_args)
 
 \return   The point size.
 */
-int CUtils::GetPointSize (const LOGFONT& lf, CDC* pDC /*= NULL*/)
+/*static*/ 
+ int CUtils::GetPointSize (const LOGFONT& lf, CDC* pDC /*= NULL*/)
 {
      return GetPointSize (&lf, pDC);
 }
@@ -100,6 +106,7 @@ int CUtils::GetPointSize (const LOGFONT& lf, CDC* pDC /*= NULL*/)
 
 \return   The point size.
 */
+/*static*/ 
 int CUtils::GetPointSize (const LOGFONT* lf, CDC* pDC /*= NULL*/)
 {
      if ( lf == NULL )

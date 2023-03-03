@@ -4,6 +4,9 @@
      \date     16-Dec-99
 
      Copyright (c) 1999, Young Associates
+
+TODO: This is not really general purpose.  It's a thread that can send messages
+      to other windows, and so doesn't really belong here.     
 */
 
 #include "stdafx.h"
