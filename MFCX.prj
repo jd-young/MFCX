@@ -22,16 +22,28 @@
 			<Branch name="MFCXTest" type="Title" expanded="no" path="MFCXTest\MFCXTest.prj"/>
 			<Branch name="TestXList" type="Title" expanded="no" path="Test\TestXList\TestXList.prj"/>
 			<Branch name="TreeTest" type="Title" expanded="no" path="Test\TestXTree\TreeTest.prj"/>
-			<Branch name="doc" type="Heading" expanded="no">
+			<Branch name="doc" type="Heading" expanded="yes">
 				<Branch name="doxygen" type="Heading" expanded="yes">
-					<ProjectItem type="Relative Filename" name="dox.bat" path="doc\doxygen\dox.bat"/>
 					<ProjectItem type="Relative Filename" name="doxygen.css" path="doc\doxygen\doxygen.css"/>
 					<ProjectItem type="Relative Filename" name="History.html" path="doc\doxygen\History.html"/>
+					<ProjectItem type="Relative Filename" name="Makefile" path="doc\doxygen\Makefile"/>
+					<ProjectItem type="Relative Filename" name="MFCX-dox.err" path="doc\doxygen\MFCX-dox.err"/>
+					<ProjectItem type="Relative Filename" name="MFCX-dox.log" path="doc\doxygen\MFCX-dox.log"/>
 					<ProjectItem type="Relative Filename" name="MFCX-MainPage.dox" path="doc\doxygen\MFCX-MainPage.dox"/>
 					<ProjectItem type="Relative Filename" name="MFCX.dox" path="doc\doxygen\MFCX.dox"/>
+					<ProjectItem type="Relative Filename" name="MFCX.gif" path="doc\doxygen\MFCX.gif"/>
 					<ProjectItem type="Relative Filename" name="MFCXFooter.html" path="doc\doxygen\MFCXFooter.html"/>
 					<ProjectItem type="Relative Filename" name="MFCXHeader.html" path="doc\doxygen\MFCXHeader.html"/>
 				</Branch>
+				<Branch name="stylesheets" type="Heading" expanded="yes">
+					<ProjectItem type="Relative Filename" name="Docco.css" path="doc\stylesheets\Docco.css"/>
+				</Branch>
+				<ProjectItem type="Relative Filename" name="CDragMultiTree.html" path="doc\CDragMultiTree.html"/>
+				<ProjectItem type="Relative Filename" name="CMultiTree.html" path="doc\CMultiTree.html"/>
+				<ProjectItem type="Relative Filename" name="CXString.htm" path="doc\CXString.htm"/>
+				<ProjectItem type="Relative Filename" name="CXTreeCtrl.html" path="doc\CXTreeCtrl.html"/>
+				<ProjectItem type="Relative Filename" name="Makefile" path="doc\Makefile"/>
+				<ProjectItem type="Relative Filename" name="mfcx.html" path="doc\mfcx.html"/>
 				<ProjectItem type="Relative Filename" name="To-Do.txt" path="doc\To-Do.txt"/>
 			</Branch>
 			<Branch name="includes" type="Heading" expanded="no">
@@ -113,6 +125,7 @@
 				<ProjectItem type="Relative Filename" name="Sound.cpp" path="src\Sound.cpp"/>
 				<ProjectItem type="Relative Filename" name="Splasher.cpp" path="src\Splasher.cpp"/>
 				<ProjectItem type="Relative Filename" name="StdAfx.cpp" path="src\StdAfx.cpp"/>
+				<ProjectItem type="Relative Filename" name="StringUtil.cpp" path="src\StringUtil.cpp"/>
 				<ProjectItem type="Relative Filename" name="SysImageList.cpp" path="src\SysImageList.cpp"/>
 				<ProjectItem type="Relative Filename" name="Thread.cpp" path="src\Thread.cpp"/>
 				<ProjectItem type="Relative Filename" name="Time.cpp" path="src\Time.cpp"/>
