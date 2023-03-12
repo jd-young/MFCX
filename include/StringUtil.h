@@ -34,14 +34,17 @@ public:
      static vector<string> StrTok (TCHAR* str, const TCHAR* pszDelims);
      
      /// Split the given text into a list of strings by the given delimiter.
-     static vector<string> Split (const string& sText, string delimiter, 
+     static vector<string> Split (const string& sText, string sDelim, 
                                   DWORD dwFlags = 0);
 
      /// Join the given string list into a single string.
-     static CString Join (const CStringList& lstStrs, const TCHAR* pSep = ",");
+     static CString Join (const CStringList& lstStrs, const TCHAR* pszSep = ",");
      
      /// Copy a CStringList to another.
-     static void CopyFrom (const CStringList& lstFrom, CStringList& lstTo);
+     static void CopyFrom (const CStringList& from, CStringList& to);
+     
+     /// Return a string with the given format (see printf for details).
+     static std::string __stdcall Format (const TCHAR* fmt, ...);
 };
 
 }    // namespace MFCX
