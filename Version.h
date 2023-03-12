@@ -12,10 +12,10 @@
 //
 
 // Version numbers below here get updated by the tag-build.sh script - DO NOT EDIT
-#define   VER_MAJOR      0
-#define   VER_MINOR      1
+#define   VER_MAJOR      3
+#define   VER_MINOR      3
 #define   VER_REVISION   0
-#define   VER_BUILD      4
-#define   VER_STRING     "0, 1, 0, 4\0"
-#define   VER_BUILDDATE  " 3 March 2023\0"
-#define   VER_BUILDINFO  "jyoung@WOOSTER 21:50  3-Mar-2023\0"
+#define   VER_BUILD      5
+#define   VER_STRING     "3, 3, 0, 5\0"
+#define   VER_BUILDDATE  "12 March 2023\0"
+#define   VER_BUILDINFO  "jyoun@GANDALF 16:14 12-Mar-2023\0"
