@@ -312,6 +312,8 @@ test : $(TEST_TARGET)
 	@$(TESTDIR)/$(TEST_PROGRAM).exe \
 	     --gtest_output="xml:$(TESTDIR)/results/$(PROGRAM)Test-results.xml"
 
+#	     --gtest_filter="CStringUtilTest.TestSplitStdString"
+
 cleantest : 
 	@echo Cleaning test files
 	@rm -fr "$(TESTDIR)"
