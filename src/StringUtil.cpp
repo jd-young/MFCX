@@ -1,5 +1,5 @@
 /**
- *   StringUtil.cpp           A string utilities class
+ *   \file     StringUtil.cpp      A string utilities class
  *
  *   \author   John Young
  *   \date     20 October 2020
@@ -13,12 +13,12 @@
 namespace MFCX {
 
 /*!  Checks whether the given character is printable or not.
-
-     I use this routine rather than the standard isxxxx() routines because I 
-     sometimes want to print characters that are not in the range 0..127.
-
-\param    c         The character to check.
-\return   \b true if the character is printable, \b false otherwise.
+ *
+ *   Use this function rather than the standard isxxxx() routines if you want to
+ *   check characters that are not in the range 0..127.
+ *
+ * \param ch        The character to check.
+ * \return \b true if the character is printable, \b false otherwise.
 */
 /*static*/ bool CStringUtil::IsPrintable (TCHAR ch)
 {
@@ -43,11 +43,11 @@ vector<string> CStringUtil::StrTok (TCHAR* str, const TCHAR* pszDelims)
      return arr;
 }
 
-/*!  Split a string  into a list of strings with the given delimiter.
+/*!  Split a string  into a list of strings with the given delimiters.
 
 \param arr          The resultant string array.
 \param sText        The text to split.
-\param pszDelimiter The list of delimiter characters used to split the list.  
+\param pszDelims    The list of delimiter characters used to split the list.  
                     This is the same as what is used by strtok(), which is used
                     internally.
 */
@@ -58,7 +58,6 @@ vector<string> CStringUtil::StrTok (TCHAR* str, const TCHAR* pszDelims)
      arr.RemoveAll();
 
      CString sBuf = sText;
-     TCHAR* s = sBuf.GetBuffer (0);
      vector<string> tmp = StrTok (sBuf.GetBuffer (0), pszDelims);
      sBuf.ReleaseBuffer();
 
@@ -68,18 +67,27 @@ vector<string> CStringUtil::StrTok (TCHAR* str, const TCHAR* pszDelims)
           arr.Add ((*it).c_str());
 }
 
+
+/*! Splits the given string into a list of tokens with the given delimiter.
+ *
+ * \param sText     The text to split.
+ * \param sDelim    The delimiter to split the text.
+ * \param dwFlags   If set to SPLIT_REMOVE_EMPTY, then all empty string tokens
+ *                  are ignored and not returned in the token string.
+ * \return a list of tokens.
+ */
 /*static*/
-vector<string> CStringUtil::Split (const string& sText, string delims, 
-                                   DWORD dwFlags /*= DELIM_MULTI | DELIM_COLLAPSE*/)
+vector<string> CStringUtil::Split (const string& sText, string sDelim, 
+                                   DWORD dwFlags /*= 0 */)
 {
      vector<string> arr;
-     int start, end = -1 * delims.size();
+     int end = -1 * sDelim.size();
      do
      {
-          start = end + delims.size();
-          end = sText.find (delims, start);
+          int start = end + sDelim.size();
+          end = sText.find (sDelim, start);
           string token = sText.substr (start, end - start);
-          if ( (dwFlags & SPLIT_REMOVE_EMPTY) && token.size() == 0 )
+          if ( (dwFlags & SPLIT_REMOVE_EMPTY       ) && token.size() == 0 )
                continue;
           arr.push_back (token);
      }
@@ -99,19 +107,26 @@ vector<string> CStringUtil::Split (const string& sText, string delims,
 */
 /*static*/
 CString CStringUtil::Join (const CStringList& lstStrs, 
-                           const TCHAR* pSep /*= ","*/)
+                           const TCHAR* pszSep /*= ","*/)
 {
      CString sJoined;
      for (POSITION pos = lstStrs.GetHeadPosition(); pos; )
      {
           CString sStr = lstStrs.GetNext (pos);
-          if ( !sJoined.IsEmpty() ) sJoined += pSep;
+          if ( !sJoined.IsEmpty() ) sJoined += pszSep;
           sJoined += sStr;
      }
      return sJoined;
 }
 
-
+/*!  Copies from one list to another.
+ *
+ * Note that the destination list is not cleared, so the entries in the from 
+ * list are actually appended to the destination list.
+ * 
+ * \param from      The source list.
+ * \param to        The destination list.
+ */
 void CStringUtil::CopyFrom (const CStringList& from, CStringList& to)
 {
      for (POSITION pos = from.GetHeadPosition(); pos; )
