@@ -42,6 +42,9 @@ public:
      
      /// Copy a CStringList to another.
      static void CopyFrom (const CStringList& lstFrom, CStringList& lstTo);
+     
+     /// Return a string with the given format (see printf for details).
+     static std::string __stdcall Format (const TCHAR* fmt, ...);
 };
 
 }    // namespace MFCX

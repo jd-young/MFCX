@@ -143,3 +143,14 @@ TEST(CStringUtilTest, TestCopyFrom)
      EXPECT_STREQ ("text",      (const TCHAR*) GetListStr (lstTarget, 3));
      EXPECT_STREQ ("example",   (const TCHAR*) GetListStr (lstTarget, 4));
 }
+
+
+TEST(CStringUtilTest, TestFormat)
+{
+     EXPECT_STREQ ("This is an integer: 12345", 
+                   CStringUtil::Format ("This is an integer: %d", 12345).c_str());
+     EXPECT_STREQ ("This is a float %f: 1.234500", 
+                   CStringUtil::Format ("This is a float: %f", 1.2345).c_str());
+     EXPECT_STREQ ("This is hex: 0x3039", 
+                   CStringUtil::Format ("This is hex: 0x%x", 12345).c_str());
+}

@@ -136,4 +136,36 @@ void CStringUtil::CopyFrom (const CStringList& from, CStringList& to)
      }
 }
 
+/**
+ *   Format a string from the given format string.
+ *
+ * @param fmt       The format string as per printf.
+ * @return a string.
+ */
+/*static*/
+std::string __stdcall CStringUtil::Format (const TCHAR* fmt, ...)
+{
+     int nSize = strlen (fmt) * 2 + 50;
+     std::string str;
+     va_list ap;
+     while (1)  // Maximum two passes on a POSIX system...
+     {
+          str.resize (nSize);
+          va_start (ap, fmt);
+          int n = vsnprintf ((TCHAR *) str.data(), nSize, fmt, ap);
+          va_end(ap);
+          if ( n > -1 && n < nSize )     // Everything worked
+          {
+               str.resize (n);
+               return str;
+          }
+          
+          if ( n > -1 )  // Needed size returned
+               nSize = n + 1; // For null char
+          else
+               nSize *= 2;    // Guess at a larger size (OS specific)
+     }
+     return str;
+}
+
 } // namespace MFCX
