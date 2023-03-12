@@ -1,18 +1,19 @@
 /**
 
 \mainpage MFCX Software Documentation
+
+_When all else fails, read the manual_
  
 \section intro Introduction
-  
-     This document is a feeble attempt to document Thistle Software's MFCX 
-     library, a libary of MFC extensions and utility classes that will allow 
-     the MFC programmer access to a much richer functionality with the minimum
-     of ease.
-     
-     Copyright &copy; 1998 ~ 2004 Thistle Software
-  
-     If you find any broken links, odd looking documentation or just want to 
-     make a suggestion, then email me on jyoung@thistlesoft.com.
+
+The MFCX library is a collection of MFX eXtension classes designed to be 
+reused in many projects. This is a living document and will be updated 
+(hopefully) anytime that I change something in the library.
+
+If anyone finds any mistakes, has any comments, then please let me know.
+
+If you find any broken links, odd looking documentation or just want to 
+make a suggestion, then email me on jyoung@thistlesoft.com.
   
 \section overview Overview
 
@@ -70,6 +71,7 @@ Manual
 	- GMouse.cpp
 	- Logger.cpp
 	- Sound.cpp
+	- StringUtil.cpp
 	- Utils.cpp
 	- VerInfo.cpp
 	- XRecentFile.cpp
@@ -97,7 +99,7 @@ Manual
 \section	history History
 
 
-[History]</a>(History.html)
+[History](History.html)
 
 
 */

@@ -18,6 +18,7 @@ namespace MFCX
 class CStringUtil
 {
 public:
+     /// Used by Split() to remove empty tokens.
      static const int SPLIT_REMOVE_EMPTY = 1;
 
      /// Returns \b true if the given character is printable.
@@ -29,6 +30,9 @@ public:
                         const CString& sText, 
                         const TCHAR* pszDelims);
 
+     /// Split the given text into a list of string by the given delimiters.
+     static vector<string> StrTok (TCHAR* str, const TCHAR* pszDelims);
+     
      /// Split the given text into a list of strings by the given delimiter.
      static vector<string> Split (const string& sText, string delimiter, 
                                   DWORD dwFlags = 0);
@@ -38,9 +42,6 @@ public:
      
      /// Copy a CStringList to another.
      static void CopyFrom (const CStringList& lstFrom, CStringList& lstTo);
-
-private:
-     static vector<string> StrTok (TCHAR* str, const TCHAR* pszDelims);
 };
 
 }    // namespace MFCX
