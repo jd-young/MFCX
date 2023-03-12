@@ -76,6 +76,7 @@
 #include "SBDestination.h"	// Folder picker
 #include "Sound.h"			// Sound manipulation
 #include "Splasher.h"		// A splasher screen
+#include "StringUtil.h"		// A string utility
 #include "TArray.h"			// Any array template
 #include "TList.h"			// A list template
 #include "TMap.h"			// A map template
