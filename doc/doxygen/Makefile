@@ -49,9 +49,19 @@ else
 endif
 
 #$(DOXYFILE) : ../../src/Version.h
+SRC_DIR   =    ../../src
+SRC       =    $(filter-out MFCX_DLL.cpp, $(wildcard $(SRC_DIR)/*.cpp)) \
+               $(wildcard $(SCR_DIR)/regex/*.cpp)
 
-doxygen : $(DOXYFILE)
+DOXYFILES = $(DOXYFILE) doxygen.css History.html MFCX-MainPage.dox \
+            MFCXHeader.html MFCXFooter.html
+
+$(HTML_DIR)/index.html : $(DOXYFILES) $(SRCS)
+
+doxygen : $(HTML_DIR)/index.html
 	@echo "Running doxygen ($(FORMAT)) for $(PROGRAM)"
+	@mkdir -p $(HTML_DIR)
+	@cp -p History.html $(HTML_DIR)/
 	@echo "See $(LOG) for messages"
 	@echo "See $(ERR) for errors"
 	@$(DOX) $(DOXYFILE) > $(LOG) 2> $(ERR)
