@@ -1,5 +1,0 @@
-class CXTreeCtrl
-CXTreeCtrl();
-virtual ~CXTreeCtrl();
-void SetMenuID (UINT id);
-
