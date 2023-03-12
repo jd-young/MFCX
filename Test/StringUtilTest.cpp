@@ -17,6 +17,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
+using MFCX::CStringUtil;
+
 TEST(CStringUtilTest, TestIsPrintable)
 {
      // TODO: I18n?
@@ -38,7 +40,7 @@ TEST(CStringUtilTest, TestIsPrintable)
      }
 }
 
-TEST(CStringUtilTest, TestSplit)
+TEST(CStringUtilTest, TestSplitCString)
 {
      CStringArray result;
 
@@ -53,7 +55,7 @@ TEST(CStringUtilTest, TestSplit)
      EXPECT_STREQ ("example", result.GetAt (4));
 
      // Two delimiters, and a trailing delimiter (which should be ignored).
-     sText = "A;comma,separated;text;example;";
+     sText = ";A;comma,separated;text;example;";
      CStringUtil::Split (result, sText, ",;");
      ASSERT_EQ (5, result.GetSize());
      EXPECT_STREQ ("A", result.GetAt (0));
@@ -62,6 +64,45 @@ TEST(CStringUtilTest, TestSplit)
      EXPECT_STREQ ("text", result.GetAt (3));
      EXPECT_STREQ ("example", result.GetAt (4));
 }
+
+TEST(CStringUtilTest, TestSplitStdString)
+{
+     vector<string> result;
+
+     // Single delimiter
+     string sText = "A,comma,;;separated,text,,example";
+
+     result = CStringUtil::Split (sText, ",");
+     ASSERT_EQ (6, result.size());
+     EXPECT_STREQ ("A", result[0].c_str());
+     EXPECT_STREQ ("comma", result[1].c_str());
+     EXPECT_STREQ (";;separated", result[2].c_str());
+     EXPECT_STREQ ("text", result[3].c_str());
+     EXPECT_STREQ ("", result[4].c_str());
+     EXPECT_STREQ ("example", result[5].c_str());
+
+     result = CStringUtil::Split (sText, ",", CStringUtil::SPLIT_REMOVE_EMPTY);
+     ASSERT_EQ (5, result.size());
+     EXPECT_STREQ ("A", result[0].c_str());
+     EXPECT_STREQ ("comma", result[1].c_str());
+     EXPECT_STREQ (";;separated", result[2].c_str());
+     EXPECT_STREQ ("text", result[3].c_str());
+     EXPECT_STREQ ("example", result[4].c_str());
+
+     // Two delimiters, and a trailing delimiter (which should be ignored).
+     sText = "\nA\n\ncomma\nseparated\ntext\nexample;";
+     result = CStringUtil::Split (sText, "\n");
+     ASSERT_EQ (7, result.size());
+     EXPECT_STREQ ("", result[0].c_str());
+     EXPECT_STREQ ("A", result[1].c_str());
+     EXPECT_STREQ ("", result[2].c_str());
+     EXPECT_STREQ ("comma", result[3].c_str());
+     EXPECT_STREQ ("separated", result[4].c_str());
+     EXPECT_STREQ ("text", result[5].c_str());
+     EXPECT_STREQ ("example;", result[6].c_str());
+}
+
+
 
 TEST(CStringUtilTest, TestJoin)
 {
