@@ -61,7 +61,7 @@ $(HTML_DIR)/index.html : $(DOXYFILES) $(SRCS)
 doxygen : $(HTML_DIR)/index.html
 	@echo "Running doxygen ($(FORMAT)) for $(PROGRAM)"
 	@mkdir -p $(HTML_DIR)
-	@cp -p History.html $(HTML_DIR)/
+	@cp -p History.html $(HTML_DIR)
 	@echo "See $(LOG) for messages"
 	@echo "See $(ERR) for errors"
 	@$(DOX) $(DOXYFILE) > $(LOG) 2> $(ERR)

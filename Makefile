@@ -108,13 +108,16 @@ help: ## Prints out this help message
 
 cleanmost: ## Cleans most common files, but leaves rarely changed files (.pch, etc).
 	@cd src && $(MAKE) cleanmost
+	@cd doc && $(MAKE) clean
 
 clean: ## Cleans the project of intermediate files for a given configuration.
 	@cd src && $(MAKE) clean
+	@cd doc && $(MAKE) clean
 
 cleanall: ## Cleans all generated files and directories for Debug and Release builds.
 	@cd src && $(MAKE) clean CFG=Debug
 	@cd src && $(MAKE) clean CFG=Release
+	@cd doc && $(MAKE) clean
 	@rm -fr lib
 	@rm -fr builds
 
