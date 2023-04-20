@@ -7,6 +7,8 @@
 
 #include "DataQueue.h"
 
+// TODO: This is not really an MFCX class because of m_idxTool.  That's app
+//       related.
 class CThread
 {
 public:

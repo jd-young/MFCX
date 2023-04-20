@@ -13,40 +13,36 @@
 #include <sys/stat.h>
 #include "../include/Directory.h"
 
-
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #undef THIS_FILE
 static char THIS_FILE[] = __FILE__;
 #endif
 
-
-
-
 /*!  Called to set the working directory to that of the given file name.
 
 \param    pszPath   The path of a file, or the sub-directory to change to.
 */
-void CDirectory::SetCurrentDir (const TCHAR* pszPath)
+bool CDirectory::SetCurrentDir (const TCHAR* pszPath)
 {
-	char szDrive [_MAX_DRIVE];
-	char szDir [_MAX_DIR];
+ 	struct _stat stat;
+	if ( _stat (pszPath, &stat) != 0 )
+	     return false;  // Doesn't exist.
+     
+     if ( (stat.st_mode & S_IFDIR) == 0 )
+     {
+          // It's a file - extract the directory name.
+     	char szDrive [_MAX_DRIVE];
+     	char szDir [_MAX_DIR];
+     
+     	_tsplitpath (pszPath, szDrive, szDir, nullptr, nullptr);
 
-	_splitpath (pszPath, szDrive, szDir, NULL, NULL);
-	if ( szDrive [0] == '\0' && szDir [0] == '\0' )
-	{
-          // relative path?
-          ::SetCurrentDirectory (pszPath);
-	}
-	else
-	{
 		CString sCwd (szDrive);
 		sCwd += szDir;
-		chdir (sCwd);
-	}
+		return _tchdir (sCwd) == 0;
+     }
+     return _tchdir (pszPath) == 0;
 }
-
-
 
 /*static*/ bool CDirectory::CreateDir (const TCHAR* pszPath)
 {
@@ -59,14 +55,12 @@ void CDirectory::SetCurrentDir (const TCHAR* pszPath)
 	return true;	// Already exists
 }
 
-
 /*static*/ CString CDirectory::GetCurrentDir()
 {
 	char szDir [_MAX_PATH];
      ::GetCurrentDirectory (sizeof szDir - 1, szDir);
      return szDir;
 }
-
 
 /*! 	Adds a trailing slash if there is none, except if the sDir parameter is 
 	empty.

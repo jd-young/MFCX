@@ -141,7 +141,8 @@ CPPCHECK_FLAGS = --quiet \
                  --library="$(CPPCHECK_HOME)/cfg/windows.cfg" \
                  -D "WIN32" -D "_DEBUG" -D "_WINDOWS" -D "_AFXDLL" -D "_MBCS" \
                  -D "__AFXWIN_H__" -U "NDEBUG" -U "BETA" \
-                 --enable=all --platform=win64 --std=c++14 --inconclusive 
+                 --enable=all --platform=win64 --std=c++14 --inconclusive \
+                 --inline-suppr --suppress=unusedFunction
                  
 #--check-config
 
@@ -262,7 +263,8 @@ UNITTEST_SRC  :=   $(wildcard ../test/*.cpp) $(foreach dir,$(TEST_SRC_DIRS),$(wi
 
 UNITTEST_DEPS :=   $(UNITTEST_SRC:.cpp=.d)
 
-TEST_SRC      :=   $(UNITTEST_SRC) Crypt.cpp DataQueue.cpp Filename.cpp \
+TEST_SRC      :=   $(UNITTEST_SRC) Crypt.cpp Directory.cpp DataQueue.cpp \
+                    Filename.cpp \
                     Regex.cpp RegexString.cpp RegKey.cpp StringUtil.cpp \
                     Utils.cpp XString.cpp XStringList.cpp XTime.cpp \
                     regex/pcre.cpp regex/chartables.cpp
@@ -310,9 +312,8 @@ $(TESTDIR)/$(TEST_PROGRAM).exe : $(TEST_OBJS)
 test : $(TEST_TARGET)
 	@mkdir -p "$(TESTDIR)/results"
 	@$(TESTDIR)/$(TEST_PROGRAM).exe \
-	     --gtest_output="xml:$(TESTDIR)/results/$(PROGRAM)Test-results.xml"
-
-#	     --gtest_filter="CStringUtilTest.TestSplitStdString"
+	     --gtest_output="xml:$(TESTDIR)/results/$(PROGRAM)Test-results.xml" \
+	     --gtest_filter="DirTest*"
 
 cleantest : 
 	@echo Cleaning test files
