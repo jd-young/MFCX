@@ -4,12 +4,12 @@
 		<ToolCmd menu="&amp;Build" cmd="make" args="CFG=%C build" dir="src" file-regex="\s*(.*?)\(" line-regex="\((\d*)" use-output-window="Yes" prompt-for-args="No" close-on-exit="No" accels="MainFrame:F7"  />
 		<ToolCmd menu="&amp;Rebuild" cmd="make" args="CFG=%C clean build" dir="" file-regex="\s*(.*?)\(" line-regex="\((\d*)" use-output-window="Yes" prompt-for-args="No" close-on-exit="No"  />
 		<ToolCmd menu="C&amp;lean" cmd="make" args="CFG=&quot;%C&quot; clean" dir="src" file-regex="" line-regex="" use-output-window="Yes" prompt-for-args="No" close-on-exit="No"  />
-		<ToolCmd menu="&amp;Test" cmd="make" args="CFG=%C test" dir="src" file-regex="\s*(.*?)\(" line-regex="\((\d*)" use-output-window="Yes" prompt-for-args="No" close-on-exit="No" accels="MainFrame:Ctrl+F7"  />
+		<ToolCmd menu="&amp;Test" cmd="make" args="CFG=%C test" dir="src" file-regex="\s*(.*?)\(" line-regex="\((\d*)" use-output-window="Yes" prompt-for-args="No" close-on-exit="No" accels="MainFrame:F5"  />
 	</ToolsCmds>
 	<Env-vars>
-		<var name="LIB" value="c:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.16.27023\ATLMFC\lib\x86;c:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.16.27023\lib\x86;C:\Program Files (x86)\Windows Kits\NETFXSDK\4.6.1\lib\um\x86;C:\Program Files (x86)\Windows Kits\10\lib\10.0.17763.0\ucrt\x86;C:\Program Files (x86)\Windows Kits\10\lib\10.0.17763.0\um\x86"/>
-		<var name="INCLUDE" value="c:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.16.27023\ATLMFC\include;c:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.16.27023\include;C:\Program Files (x86)\Windows Kits\NETFXSDK\4.6.1\include\um;C:\Program Files (x86)\Windows Kits\10\include\10.0.17763.0\ucrt;C:\Program Files (x86)\Windows Kits\10\include\10.0.17763.0\shared;C:\Program Files (x86)\Windows Kits\10\include\10.0.17763.0\um;C:\Program Files (x86)\Windows Kits\10\include\10.0.17763.0\winrt;C:\Program Files (x86)\Windows Kits\10\include\10.0.17763.0\cppwinrt"/>
 		<var name="GTEST_HOME" value="C:\Users\jyoun\Projects\Libraries\googletest"/>
+		<var name="INCLUDE" value="c:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.16.27023\ATLMFC\include;c:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.16.27023\include;C:\Program Files (x86)\Windows Kits\NETFXSDK\4.6.1\include\um;C:\Program Files (x86)\Windows Kits\10\include\10.0.17763.0\ucrt;C:\Program Files (x86)\Windows Kits\10\include\10.0.17763.0\shared;C:\Program Files (x86)\Windows Kits\10\include\10.0.17763.0\um;C:\Program Files (x86)\Windows Kits\10\include\10.0.17763.0\winrt;C:\Program Files (x86)\Windows Kits\10\include\10.0.17763.0\cppwinrt"/>
+		<var name="LIB" value="c:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.16.27023\ATLMFC\lib\x86;c:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.16.27023\lib\x86;C:\Program Files (x86)\Windows Kits\NETFXSDK\4.6.1\lib\um\x86;C:\Program Files (x86)\Windows Kits\10\lib\10.0.17763.0\ucrt\x86;C:\Program Files (x86)\Windows Kits\10\lib\10.0.17763.0\um\x86"/>
 		<var name="PATH" value="c:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.16.27023\bin\HostX86\x86;C:\Program Files (x86)\Windows Kits\10\bin\10.0.17763.0\x86;%PATH%"/>
 	</Env-vars>
 	<Configurations>
@@ -22,7 +22,7 @@
 			<Branch name="MFCXTest" type="Title" expanded="no" path="MFCXTest\MFCXTest.prj"/>
 			<Branch name="TestXList" type="Title" expanded="no" path="Test\TestXList\TestXList.prj"/>
 			<Branch name="TreeTest" type="Title" expanded="no" path="Test\TestXTree\TreeTest.prj"/>
-			<Branch name="doc" type="Heading" expanded="yes">
+			<Branch name="doc" type="Heading" expanded="no">
 				<Branch name="doxygen" type="Heading" expanded="yes">
 					<ProjectItem type="Relative Filename" name="doxygen.css" path="doc\doxygen\doxygen.css"/>
 					<ProjectItem type="Relative Filename" name="History.html" path="doc\doxygen\History.html"/>
@@ -84,7 +84,6 @@
 				<ProjectItem type="Relative Filename" name="TMap.h" path="include\TMap.h"/>
 				<ProjectItem type="Relative Filename" name="Utils.h" path="include\Utils.h"/>
 				<ProjectItem type="Relative Filename" name="VerInfo.h" path="include\VerInfo.h"/>
-				<ProjectItem type="Relative Filename" name="XComboBox.h" path="include\XComboBox.h"/>
 				<ProjectItem type="Relative Filename" name="XListBox.h" path="include\XListBox.h"/>
 				<ProjectItem type="Relative Filename" name="XListCtrl.h" path="include\XListCtrl.h"/>
 				<ProjectItem type="Relative Filename" name="xml.h" path="include\xml.h"/>
