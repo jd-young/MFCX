@@ -86,7 +86,6 @@
 #include "VerInfo.h"		// Version information
 #include "XListBox.h"		// An extended list box
 #include "XRecentFile.h"		// An extended recent files class
-#include "XScrollView.h"		// A scroll view that gets round the 32,768 limit
 #include "XString.h"         	// Extended string
 #include "XStringList.h"		// Extended string list that can be sorted
 #include "XTreeCtrl.h"        // Extended tree control 
