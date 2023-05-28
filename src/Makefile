@@ -312,8 +312,10 @@ $(TESTDIR)/$(TEST_PROGRAM).exe : $(TEST_OBJS)
 test : $(TEST_TARGET)
 	@mkdir -p "$(TESTDIR)/results"
 	@$(TESTDIR)/$(TEST_PROGRAM).exe \
-	     --gtest_output="xml:$(TESTDIR)/results/$(PROGRAM)Test-results.xml" \
-	     --gtest_filter="DirTest*"
+	     --gtest_output="xml:$(TESTDIR)/results/$(PROGRAM)Test-results.xml" 
+
+#     \
+#	     --gtest_filter="DirTest*"
 
 cleantest : 
 	@echo Cleaning test files
