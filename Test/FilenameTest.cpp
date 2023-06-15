@@ -17,7 +17,7 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-TEST(CFilenameTest, TestGetFileName)
+TEST(FilenameTest, TestGetFileName)
 {
      CFilename sWindows ("C:\\first\\second\\third.ext");
      ASSERT_STREQ ("third.ext", sWindows.GetFileName());
@@ -29,20 +29,22 @@ TEST(CFilenameTest, TestGetFileName)
      ASSERT_STREQ ("third.ext", sLinux.GetFileName());
 }
 
-TEST(CFilenameTest, TestGetFolderName)
+TEST(FilenameTest, TestGetFolderName)
 {
-     // TODO: Update GetFolderName() to remove the trailing slash.
      CFilename sWindows ("C:\\first\\second\\third.ext");
-     ASSERT_STREQ ("C:\\first\\second\\", sWindows.GetFolderName());
+     ASSERT_STREQ ("C:\\first\\second", sWindows.GetFolderName());
 
      CFilename sRelative ("second\\third.ext");
-     ASSERT_STREQ ("second\\", sRelative.GetFolderName());
+     ASSERT_STREQ ("second", sRelative.GetFolderName());
 
      CFilename sLinux ("C:/first/second/third.ext");
-     ASSERT_STREQ ("C:/first/second/", sLinux.GetFolderName());
+     ASSERT_STREQ ("C:/first/second", sLinux.GetFolderName());
+
+     CFilename sEmpty;
+     ASSERT_STREQ ("", sEmpty.GetFolderName()); 
 }
 
-TEST(CFilenameTest, TestGetFileExt)
+TEST(FilenameTest, TestGetFileExt)
 {
      CFilename sWindows ("C:\\first\\second\\third.ext");
      ASSERT_STREQ (".ext", sWindows.GetFileExt());
@@ -54,7 +56,7 @@ TEST(CFilenameTest, TestGetFileExt)
      ASSERT_STREQ (".ext", sLinux.GetFileExt());
 }
 
-TEST(CFilenameTest, TestGetBaseName)
+TEST(FilenameTest, TestGetBaseName)
 {
      CFilename sWindows ("C:\\first\\second\\third.ext");
      ASSERT_STREQ ("third", sWindows.GetBaseName());
@@ -66,7 +68,7 @@ TEST(CFilenameTest, TestGetBaseName)
      ASSERT_STREQ ("third", sLinux.GetBaseName());
 }
 
-TEST(CFilenameTest, TestIsRelativePath)
+TEST(FilenameTest, TestIsRelativePath)
 {
      CFilename sWindows ("C:\\first\\second\\third.ext");
      ASSERT_FALSE (sWindows.IsRelativePath());
@@ -78,7 +80,7 @@ TEST(CFilenameTest, TestIsRelativePath)
      ASSERT_FALSE (sLinux.IsRelativePath());
 }
 
-TEST(CFilenameTest, TestGetRelativePath)
+TEST(FilenameTest, TestGetRelativePath)
 {
      CString sCWD ("C:\\first\\second");
      CString sWindows ("C:\\first\\second\\third.ext");

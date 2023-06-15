@@ -76,7 +76,17 @@ CString CFilename::GetFolderName() const
      TCHAR szDrive [_MAX_DRIVE];
      TCHAR szDir [_MAX_DIR];
      _splitpath (pszPathname, szDrive, szDir, NULL, NULL);
-     return CString (szDrive) + szDir;
+     CString sFolder = CString (szDrive) + szDir;
+
+     int nLen = sFolder.GetLength();
+     if ( nLen > 0 )
+     {
+          // Remove trailing slash if necessary.
+          TCHAR cLast = sFolder [nLen - 1];
+          if ( cLast == '\\' || cLast == '/' )
+               return sFolder.Left (nLen - 1);
+     }
+     return sFolder;
 }
 
 
