@@ -4,7 +4,7 @@
 		<ToolCmd menu="&amp;Build" cmd="make" args="CFG=%C build" dir="src" file-regex="\s*(.*?)\(" line-regex="\((\d*)" use-output-window="Yes" prompt-for-args="No" close-on-exit="No" accels="MainFrame:F7"  />
 		<ToolCmd menu="&amp;Rebuild" cmd="make" args="CFG=%C clean build" dir="" file-regex="\s*(.*?)\(" line-regex="\((\d*)" use-output-window="Yes" prompt-for-args="No" close-on-exit="No"  />
 		<ToolCmd menu="C&amp;lean" cmd="make" args="CFG=&quot;%C&quot; clean" dir="src" file-regex="" line-regex="" use-output-window="Yes" prompt-for-args="No" close-on-exit="No"  />
-		<ToolCmd menu="&amp;Test" cmd="make" args="CFG=%C test" dir="src" file-regex="\s*(.*?)\(" line-regex="\((\d*)" use-output-window="Yes" prompt-for-args="No" close-on-exit="No" accels="MainFrame:F5"  />
+		<ToolCmd menu="&amp;Test" cmd="make" args="CFG=%C test" dir="src" file-regex="\s*(\S+?)\(" line-regex="\((\d*)\)" use-output-window="Yes" prompt-for-args="No" close-on-exit="No" accels="MainFrame:F5"  />
 	</ToolsCmds>
 	<Env-vars>
 		<var name="GTEST_HOME" value="C:\Users\jyoun\Projects\Libraries\googletest"/>
@@ -94,7 +94,7 @@
 				<ProjectItem type="Relative Filename" name="XTime.h" path="include\XTime.h"/>
 				<ProjectItem type="Relative Filename" name="XTreeCtrl.h" path="include\XTreeCtrl.h"/>
 			</Branch>
-			<Branch name="src" type="Heading" expanded="no">
+			<Branch name="src" type="Heading" expanded="yes">
 				<ProjectItem type="Relative Filename" name="BrowseForFolder.cpp" path="src\BrowseForFolder.cpp"/>
 				<ProjectItem type="Relative Filename" name="ColourPicker.cpp" path="src\ColourPicker.cpp"/>
 				<ProjectItem type="Relative Filename" name="ColourPopup.cpp" path="src\ColourPopup.cpp"/>
