@@ -313,7 +313,7 @@ test : $(TEST_TARGET)
 	@mkdir -p "$(TESTDIR)/results"
 	@$(TESTDIR)/$(TEST_PROGRAM).exe \
 	     --gtest_output="xml:$(TESTDIR)/results/$(PROGRAM)Test-results.xml" \
-	     --gtest_filter="DirTest*"
+	     --gtest_filter="FilenameTest*"
 
 cleantest : 
 	@echo Cleaning test files
