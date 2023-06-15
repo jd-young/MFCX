@@ -21,8 +21,8 @@ static char THIS_FILE[] = __FILE__;
 
 
 CFilename::CFilename (const TCHAR* pszPath)
+ :   m_sPath (pszPath)
 {
-     m_sPath = pszPath;
 }
 
 CFilename::~CFilename()
@@ -76,7 +76,17 @@ CString CFilename::GetFolderName() const
      TCHAR szDrive [_MAX_DRIVE];
      TCHAR szDir [_MAX_DIR];
      _splitpath (pszPathname, szDrive, szDir, NULL, NULL);
-     return CString (szDrive) + szDir;
+     CString sFolder = CString (szDrive) + szDir;
+
+     int nLen = sFolder.GetLength();
+     if ( nLen > 0 )
+     {
+          // Remove trailing slash if necessary.
+          TCHAR cLast = sFolder [nLen - 1];
+          if ( cLast == '\\' || cLast == '/' )
+               return sFolder.Left (nLen - 1);
+     }
+     return sFolder;
 }
 
 
@@ -198,18 +208,33 @@ CString CFilename::GetBaseName()
 /*static*/ CString CFilename::GetFullPath (const TCHAR* pszDir, 
                                            const TCHAR* pszFilename)
 {
-     CString sDir (pszDir);
-	if ( sDir.GetLength() && 
+     CString sDir (pszDir ? pszDir : "");
+     CString sFilename (pszFilename ? pszFilename : "");
+	if ( sDir.GetLength() && sFilename.GetLength() &&
 		sDir [sDir.GetLength() - 1] != '\\' )
 		sDir += '\\';
-	CString sFilename = sDir + pszFilename;
-	return CanonPath (sFilename);
+	CString sFullPath = sDir + sFilename;
+	return CanonPath (sFullPath);
 }
 
 
-/*!	
+void CFilename::ReplaceAll (CString& str, const TCHAR* pszOld, const TCHAR* pszNew)
+{
+     while (str.Replace (pszOld, pszNew))
+          /*do nothing*/;
+}
 
-*/
+/*!	Canonicalisates the given path.
+ *
+ *   That means:
+ *   - Make the drive letter (if given) uppercase.
+ *   - Convert '/' to '\'.
+ *   - Remove repeated slashes.
+ *   - Remove ./.
+ *   - Remove xxx/../
+ *
+ * \param pszFilename         The file name to canonicalise. 
+ */
 /*static*/ CString CFilename::CanonPath (const TCHAR* pszFilename)
 {
 	CString sFilename = pszFilename;
@@ -218,25 +243,28 @@ CString CFilename::GetBaseName()
 	if ( nLen )
 	{
 		// Drive letter -> uppercase
-		TCHAR drive = sFilename [0];
-		if ( islower (drive) )
-			sFilename.SetAt (0, toupper (drive));
-		
+		if ( nLen >= 2 && sFilename [1] == ':' )
+		{
+		     TCHAR drive = sFilename [0];
+		     if ( islower (drive) )
+			     sFilename.SetAt (0, toupper (drive));
+		}
+
 		// '/' -> '\'
 		sFilename.Replace ('/', '\\');	
 
-		// xx\\\\xx -> xx\xx
+		// xx\\\\xx -> xx\xx - but watch out for UNC filenames.
 		if ( nLen > 2 && strncmp (sFilename, "\\\\", 2) == 0 )
 		{
 			sFilename = sFilename.Mid (2);
-			sFilename.Replace ("\\\\", "\\");
+			ReplaceAll (sFilename, "\\\\", "\\");
 			sFilename = "\\\\" + sFilename;
 		}
-		else	sFilename.Replace ("\\\\", "\\");
+		else ReplaceAll (sFilename, "\\\\", "\\");
 		
 		
 		// xx/././xx -> xx/xx
-		sFilename.Replace ("\\.\\", "\\");
+		ReplaceAll (sFilename, "\\.\\", "\\");
 
 		// ./xx -> xx (unless path is ".\"
 		if ( nLen > 2 && strncmp (sFilename, ".\\", 2) == 0 )
@@ -247,7 +275,7 @@ CString CFilename::GetBaseName()
 		while ( (i = sFilename.Find ("\\..\\")) != -1 )
 		{
 			int end = i + 4;	// '\..\'
-			const TCHAR* s = ((const TCHAR*) sFilename) + i;
+			const TCHAR* s = (static_cast<const TCHAR*>(sFilename)) + i;
 			while ( i > 0 )
 				if ( *--s != '\\' )
 					i--;
@@ -258,25 +286,18 @@ CString CFilename::GetBaseName()
 	return sFilename;
 }
 
-
-
-
-
-
-
-
 /*!	Extracts the filename (plus extension if present) from the 
-	given path.
-     
-     Thus this method, when given \c c:\\Apps\\Utilities\\flib.exe will return
-     \c flib.exe.
-
-\param    pszPathName    The path name.
-\param    pszFilename    The file name part.
-\param    nMax           The maximum length of pszFilename.
-\return   The length of the filename.  If the pszFilename paramater is NULL then 
-          no copying is done.
-*/
+ *	given path.
+ *   
+ *   Thus this method, when given \c c:\\Apps\\Utilities\\flib.exe will return
+ *   \c flib.exe.
+ *
+ * \param    pszPathName    The path name.
+ * \param    pszFilename    The file name part.
+ * \param    nMax           The maximum length of pszFilename.
+ * \return   The length of the filename.  If the pszFilename paramater is NULL then 
+ *           no copying is done.
+ */
 /*static*/ UINT CFilename::ExtractFileName (const TCHAR* pszPathName, 
                                             TCHAR* pszFilename, 
                                             UINT nMax)
@@ -326,7 +347,7 @@ CString CFilename::GetBaseName()
 */
 /*static*/ void CFilename::AbbreviatePath (TCHAR* pszCanon, 
                	                       int nChars, 
-			                            bool bAtLeastName /*=TRUE*/)
+			                            bool bAtLeastName /*=true*/)
 {
 	int cchFullPath, cchFileName, cchVolName;
 	const TCHAR* pszCur;
@@ -335,6 +356,7 @@ CString CFilename::GetBaseName()
 
 	pszBase = pszCanon;
 	cchFullPath = strlen (pszCanon);
+
 
 	cchFileName = ExtractFileName (pszCanon, NULL, 0);
 	pszFileName = pszBase + (cchFullPath-cchFileName);

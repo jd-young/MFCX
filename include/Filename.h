@@ -13,7 +13,7 @@
 class CFilename
 {
 public:
-     CFilename (const TCHAR* pszPath = NULL);
+     explicit CFilename (const TCHAR* pszPath = NULL);
      ~CFilename();
 
      /// Gets the filename from the file.
@@ -56,7 +56,7 @@ public:
 	static bool IsRelativePath (const TCHAR* pszPath);
 
 	/// Gets the path relative to the current directory.
-     static bool GetRelativePath (TCHAR* sPath);
+     static bool GetRelativePath (TCHAR* pszPath);
      
      /// Gets the path relative to the given directory.
      static bool GetRelativePath (TCHAR* pszPath, const TCHAR* pszFolder);
@@ -66,13 +66,15 @@ public:
 
 	/// Abreviates the given path to the given number of characters by 
 	/// inserting an ellipsis.
-     static void AbbreviatePath (TCHAR* pszCanon, int nChars, bool bAtLeastName);
+     static void AbbreviatePath (TCHAR* pszCanon, 
+                                 int nChars, 
+                                 bool bAtLeastName = true);
      static bool IsInPath (const TCHAR* pszExe);
-     static int  ParseFileName (const TCHAR* psz, CStringArray& arrFilename);
+     static int  ParseFileName (const TCHAR* psz, CStringArray& arrFilenames);
      static bool GetIncludeName (const TCHAR* pszName, 
                                  CString& sPath, 
                                  const CStringArray& sIncludePaths);
-     static int GetFilterIndex (const TCHAR* pszFilters, const TCHAR* pExt);
+     static int GetFilterIndex (const TCHAR* pszFilters, const TCHAR* pszExt);
      static CString GetCmdPathName (const TCHAR* pszExe);
      static bool IsConsoleCmd (const TCHAR* pszCmd);
 
@@ -89,6 +91,8 @@ public:
 
 protected:
      CString m_sPath;
+     
+     static void ReplaceAll (CString& str, const TCHAR* pszOld, const TCHAR* pszNew);
 };
 
 #endif    // __MFCX_FILENAME_H
