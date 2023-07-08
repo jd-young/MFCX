@@ -309,10 +309,17 @@ $(TESTDIR)/$(TEST_PROGRAM).exe : $(TEST_OBJS)
 	@echo "Creating $@"
 	@$(LINK) $(CONSOLE_LINK_FLAGS) -out:$@ $(TESTDIR)/StdAfx.obj $(TEST_OBJS)
 
+ifeq "$(tests)" ''
+     tests_filter :=
+else
+     tests_filter :=  --gtest_filter=$(tests)
+endif
+
 test : $(TEST_TARGET)
 	@mkdir -p "$(TESTDIR)/results"
 	@$(TESTDIR)/$(TEST_PROGRAM).exe \
-	     --gtest_output="xml:$(TESTDIR)/results/$(PROGRAM)Test-results.xml" 
+	     --gtest_output="xml:$(TESTDIR)/results/$(PROGRAM)Test-results.xml" \
+	     $(tests_filter)
 
 cleantest : 
 	@echo Cleaning test files
@@ -337,7 +344,7 @@ coverage: $(TEST_TARGET)
 	@echo Generating test coverage statistics...
 	@mkdir -p "../builds/coverage"
 	@"$(COVERAGE)" -v --config_file ../test/OpenCppCoverage.cfg -- \
-	               $(TESTDIR)/$(TEST_PROGRAM).exe \
+	               $(TESTDIR)/$(TEST_PROGRAM).exe $(tests_filter) \
 	               2> ../builds/coverage/OpenCppCoverage.err
 
 trace:

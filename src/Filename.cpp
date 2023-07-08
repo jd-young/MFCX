@@ -224,7 +224,7 @@ void CFilename::ReplaceAll (CString& str, const TCHAR* pszOld, const TCHAR* pszN
           /*do nothing*/;
 }
 
-/*!	Canonicalisates the given path.
+/*!	Canonicalises the given path.
  *
  *   That means:
  *   - Make the drive letter (if given) uppercase.

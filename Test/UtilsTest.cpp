@@ -17,7 +17,7 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-TEST(CUtilsTest, TestIsPrintable)
+TEST(CUtilsTest, TestGetArgs)
 {
      GTEST_SKIP() << "SEH exception thrown in this test - fix me, or delete getargs()";
      int argc;
