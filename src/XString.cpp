@@ -855,19 +855,22 @@ int CXString::Limit (int nChars)
 /*static*/ bool PASCAL CXString::IsCapitalised (const TCHAR* psz)
 {
      const TCHAR* s = psz;
-     if ( ! *s )
+     if ( !s || !*s )
           return false;
           
      const TCHAR* p = NULL;
      for (; *s; s++)
      {
-          if ( p == NULL || isspace (*p) )
+          if ( !isspace (*s) )
           {
-               if ( !isupper (*s) )
-                    return false;
+               if ( p == NULL || isspace (*p) )
+               {
+                    if ( !isupper (*s) )
+                         return false;
+               }
+               else if ( !islower (*s) )
+                         return false;
           }
-          else if ( !islower (*s) )
-                    return false;
           p = s;
      }
      
@@ -1384,7 +1387,7 @@ CString CXString::FromHex (const TCHAR* pszHex)
 int CXString::ReverseFind (const CString& sTarget) const
 {
      int nLen = sTarget.GetLength();
-     const TCHAR* s = (LPCTSTR) this;
+     const TCHAR* s = (LPCTSTR) _string;
      for (const TCHAR* p = s + _string.GetLength() - nLen; p >= s; p--)
      {
           if ( strncmp (p, sTarget, nLen) == 0 )

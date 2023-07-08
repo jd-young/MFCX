@@ -21,34 +21,34 @@ static char THIS_FILE[] = __FILE__;
 TEST(CXStringTest, TestChop)
 {
      CXString sTest = "This is a test\n\r\n\n\n";
-     ASSERT_EQ (14, sTest.Chop());       
-     ASSERT_STREQ ("This is a test", sTest);
+     EXPECT_EQ (14, sTest.Chop());       
+     EXPECT_STREQ ("This is a test", sTest);
 
      CXString sNoChange = "This is a \ntest";
-     ASSERT_EQ (15, sNoChange.Chop());
-     ASSERT_STREQ ("This is a \ntest", sNoChange);
+     EXPECT_EQ (15, sNoChange.Chop());
+     EXPECT_STREQ ("This is a \ntest", sNoChange);
 }
 
 TEST(CXStringTest, TestChomp)
 {
      CXString sTest = "This is a test\n\r\n\n\n";
-     ASSERT_EQ (14, sTest.Chomp());       
-     ASSERT_STREQ ("This is a test", sTest);
+     EXPECT_EQ (14, sTest.Chomp());       
+     EXPECT_STREQ ("This is a test", sTest);
 
      CXString sNoChange = "This is a \ntest";
-     ASSERT_EQ (15, sNoChange.Chomp());
-     ASSERT_STREQ ("This is a \ntest", sNoChange);
+     EXPECT_EQ (15, sNoChange.Chomp());
+     EXPECT_STREQ ("This is a \ntest", sNoChange);
 }
 
 TEST(CXStringTest, TestChopToLength)
 {
      CXString sElipsis = "This is a test string";
-     ASSERT_EQ (17, sElipsis.Chop (17, true));
-     ASSERT_STREQ ("This is a test...", sElipsis);
+     EXPECT_EQ (17, sElipsis.Chop (17, true));
+     EXPECT_STREQ ("This is a test...", sElipsis);
 
      CXString sTest = "This is a test string";
-     ASSERT_EQ (17, sTest.Chop (17, false));
-     ASSERT_STREQ ("This is a test st", sTest);
+     EXPECT_EQ (17, sTest.Chop (17, false));
+     EXPECT_STREQ ("This is a test st", sTest);
 }
 
 #if 0
@@ -62,87 +62,87 @@ TEST(CXStringTest, TestChopToWidth)
 {
      MockDB mockDC;
      CXString sTest = "This a test string";
-     ASSERT_EQ (17, sTest.Chop (17, true));
-     ASSERT_STREQ ("This is a test...", sTest);
+     EXPECT_EQ (17, sTest.Chop (17, true));
+     EXPECT_STREQ ("This is a test...", sTest);
 
      CXString sTest = "This a test string";
-     ASSERT_EQ (17, sTest.Chop (17, false));
-     ASSERT_STREQ ("This is a test st", sTest);
+     EXPECT_EQ (17, sTest.Chop (17, false));
+     EXPECT_STREQ ("This is a test st", sTest);
 }
 #endif
 
 
 TEST(CXStringTest, TestIsString)
 {
-     ASSERT_TRUE (CXString::IsSpace (" \t   \r\n    "));
-     ASSERT_FALSE (CXString::IsSpace ("    .    "));
+     EXPECT_TRUE (CXString::IsSpace (" \t   \r\n    "));
+     EXPECT_FALSE (CXString::IsSpace ("    .    "));
 }
 
 
 TEST(CXStringTest, TestIsDigit)
 {
-     ASSERT_FALSE (CXString::IsDigit (nullptr));
-     ASSERT_FALSE (CXString::IsDigit (""));
-     ASSERT_TRUE (CXString::IsDigit ("1234567890"));
-     ASSERT_FALSE (CXString::IsDigit ("0.1234567890"));
+     EXPECT_FALSE (CXString::IsDigit (nullptr));
+     EXPECT_FALSE (CXString::IsDigit (""));
+     EXPECT_TRUE (CXString::IsDigit ("1234567890"));
+     EXPECT_FALSE (CXString::IsDigit ("0.1234567890"));
 }
 
 TEST(CXStringTest, TestIsNumber)
 {
-     ASSERT_FALSE (CXString::IsNumber (nullptr));
-     ASSERT_FALSE (CXString::IsNumber (""));
+     EXPECT_FALSE (CXString::IsNumber (nullptr));
+     EXPECT_FALSE (CXString::IsNumber (""));
      
-     ASSERT_TRUE (CXString::IsNumber ("1234567890"));
-     ASSERT_TRUE (CXString::IsNumber ("1,234,567,890"));
-     ASSERT_TRUE (CXString::IsNumber ("0.1234567890"));
-     ASSERT_FALSE (CXString::IsNumber ("1,23,45"));
+     EXPECT_TRUE (CXString::IsNumber ("1234567890"));
+     EXPECT_TRUE (CXString::IsNumber ("1,234,567,890"));
+     EXPECT_TRUE (CXString::IsNumber ("0.1234567890"));
+     EXPECT_FALSE (CXString::IsNumber ("1,23,45"));
      
      // European
-     ASSERT_TRUE (CXString::IsNumber ("1.234.567", '.', ','));
-     ASSERT_TRUE (CXString::IsNumber ("1,234567", '.', ','));
+     EXPECT_TRUE (CXString::IsNumber ("1.234.567", '.', ','));
+     EXPECT_TRUE (CXString::IsNumber ("1,234567", '.', ','));
 }
 
 TEST(CXStringTest, TestIsUpper)
 {
      // TODO: I18N?
-     ASSERT_TRUE (CXString::IsUpper ("ABCDEFGHIJKLMOPQRSTUVXYZ"));
-     ASSERT_TRUE (CXString::IsUpper ("ABCD EFGH IJKLM OP Q RSTUV XYZ"));
-     ASSERT_FALSE (CXString::IsUpper ("ABCDEFGHIJKLMOPQRSTUVXYZz"));
-     ASSERT_FALSE (CXString::IsUpper ("aABCDEFGHIJKLMOPQRSTUVXYZ"));
+     EXPECT_TRUE (CXString::IsUpper ("ABCDEFGHIJKLMOPQRSTUVXYZ"));
+     EXPECT_TRUE (CXString::IsUpper ("ABCD EFGH IJKLM OP Q RSTUV XYZ"));
+     EXPECT_FALSE (CXString::IsUpper ("ABCDEFGHIJKLMOPQRSTUVXYZz"));
+     EXPECT_FALSE (CXString::IsUpper ("aABCDEFGHIJKLMOPQRSTUVXYZ"));
 }
 
 TEST(CXStringTest, TestIsLower)
 {
      // TODO: I18N?
-     ASSERT_TRUE (CXString::IsLower ("abcdefghijklmopqrstuvxyz"));
-     ASSERT_TRUE (CXString::IsLower ("abcd efgh ijklm op q rstuv xyz"));
-     ASSERT_FALSE (CXString::IsLower ("abcdefghijklmopqrstuvxyzZ"));
-     ASSERT_FALSE (CXString::IsLower ("Aabcdefghijklmopqrstuvxyz"));
+     EXPECT_TRUE (CXString::IsLower ("abcdefghijklmopqrstuvxyz"));
+     EXPECT_TRUE (CXString::IsLower ("abcd efgh ijklm op q rstuv xyz"));
+     EXPECT_FALSE (CXString::IsLower ("abcdefghijklmopqrstuvxyzZ"));
+     EXPECT_FALSE (CXString::IsLower ("Aabcdefghijklmopqrstuvxyz"));
 }
 
 TEST(CXStringTest, TestIsCapitalised)
 {
-     GTEST_SKIP() << "nullptr and separated words don't work - fix me!";
-     ASSERT_FALSE (CXString::IsCapitalised (nullptr));
-     ASSERT_FALSE (CXString::IsCapitalised (""));
-     ASSERT_TRUE (CXString::IsCapitalised ("Capital"));
-     ASSERT_FALSE (CXString::IsCapitalised ("capital"));
-     ASSERT_TRUE (CXString::IsCapitalised ("Capital City In Japan"));
-     ASSERT_FALSE (CXString::IsCapitalised ("Capital City in Japan"));
+     EXPECT_FALSE (CXString::IsCapitalised (nullptr));
+     EXPECT_FALSE (CXString::IsCapitalised (""));
+     EXPECT_TRUE (CXString::IsCapitalised ("Capital"));
+     EXPECT_FALSE (CXString::IsCapitalised ("capital"));
+     EXPECT_TRUE (CXString::IsCapitalised ("Capital City In Japan"));
+     EXPECT_FALSE (CXString::IsCapitalised ("Capital City in Japan"));
+     EXPECT_FALSE (CXString::IsCapitalised ("Capital City IN Japan"));
+     EXPECT_TRUE (CXString::IsCapitalised ("    Capital City In Japan"));
 }
 
 TEST(CXStringTest, TestGetTime)
 {
-     GTEST_SKIP() << "GetTime() is buggy - fix me!";
-     CXString sTime = "2023-02-27 17:51:45";
-     ASSERT_TIME_EQ (2023, 2, 27, 17, 51, 45, sTime.GetTime());
+     CXString sTime = "17:51:45 27/2/2023";
+     EXPECT_TIME_EQ (2023, 2, 27, 17, 51, 45, sTime.GetTime());
 }
 
 void TestCommatise (const TCHAR* pszExp, const TCHAR* pszSource)
 {
      CXString sTest = pszSource;
      sTest.Commatise();
-     ASSERT_STREQ (pszExp, sTest);
+     EXPECT_STREQ (pszExp, sTest);
 }
 
 TEST(CXStringTest, TestCommatise)
@@ -162,7 +162,7 @@ void TestDecommatise (const TCHAR* pszExp, const TCHAR* pszSource)
 {
      CXString sTest = pszSource;
      sTest.Decommatise();
-     ASSERT_STREQ (pszExp, sTest);
+     EXPECT_STREQ (pszExp, sTest);
 }
 
 TEST(CXStringTest, TestDecommatise)
@@ -182,7 +182,7 @@ void TestCapitalise (const TCHAR* pszExp, const TCHAR* pszSource)
 {
      CXString sTest = pszSource;
      sTest.Capitalise();
-     ASSERT_STREQ (pszExp, sTest);
+     EXPECT_STREQ (pszExp, sTest);
 }
 
 TEST(CXStringTest, TestCapitalise)
@@ -195,7 +195,7 @@ void TestToggleCase (const TCHAR* pszExp, const TCHAR* pszSource)
 {
      CXString sTest = pszSource;
      sTest.ToggleCase();
-     ASSERT_STREQ (pszExp, sTest);
+     EXPECT_STREQ (pszExp, sTest);
 }
 
 TEST(CXStringTest, TestToggleCase)
@@ -211,11 +211,11 @@ TEST(CXStringTest, TestLimitPath)
      CXString sTest;
      sTest = "C:\\first\\second\\third\\fourth\\fifth\\filename.ext";
 
-     ASSERT_EQ (19, sTest.LimitPath(25));
-     ASSERT_STREQ ("C:\\...\\filename.ext", sTest);
+     EXPECT_EQ (19, sTest.LimitPath(25));
+     EXPECT_STREQ ("C:\\...\\filename.ext", sTest);
 
-     ASSERT_EQ (19, sTest.LimitPath(55));
-     ASSERT_STREQ ("C:\\...\\fifth\\filename.ext", sTest);
+     EXPECT_EQ (19, sTest.LimitPath(55));
+     EXPECT_STREQ ("C:\\...\\fifth\\filename.ext", sTest);
 }
 
 TEST(CXStringTest, TestFindReplace)
@@ -223,23 +223,22 @@ TEST(CXStringTest, TestFindReplace)
      CXString sTest;
      sTest = "This is a test";
 
-     ASSERT_TRUE (sTest.FindReplace ("test", "thing"));
-     ASSERT_STREQ ("This is a thing", sTest);
+     EXPECT_TRUE (sTest.FindReplace ("test", "thing"));
+     EXPECT_STREQ ("This is a thing", sTest);
 
      sTest = "This is a test";
-     ASSERT_FALSE (sTest.FindReplace ("tttt", "thing"));
-     ASSERT_STREQ ("This is a test", sTest);
+     EXPECT_FALSE (sTest.FindReplace ("tttt", "thing"));
+     EXPECT_STREQ ("This is a test", sTest);
 }
 
 TEST(CXStringTest, TestGetMaxLineLength)
 {
-//     GTEST_SKIP() << "GetMaxLineLength() is buggy - fix me!";
      CXString sTest;
      sTest = "This is a test\n"
              "This is another longer line\n"
              "And this the longest line of them all (and without an EOL marker)";
 
-     ASSERT_EQ (65, sTest.GetMaxLineLength());
+     EXPECT_EQ (65, sTest.GetMaxLineLength());
 }
 
 TEST(CXStringTest, TestExpandMacroStr)
@@ -253,26 +252,38 @@ TEST(CXStringTest, TestExpandMacroStr)
      macros.SetAt ("MACRO", "replaced macro");
      
      sTest.ExpandMacroStr (macros, "%");
-     ASSERT_STREQ ("A string containing a replaced macro and another %NON-EXISTANT-ONE%",
+     EXPECT_STREQ ("A string containing a replaced macro and another %NON-EXISTANT-ONE%",
                    sTest);
 }
 
 TEST(CXStringTest, TestHexStr)
 {
      CXString sTest = "A string";
-     ASSERT_STREQ ("4120737472696e67", sTest.HexStr());
+     EXPECT_STREQ ("4120737472696e67", sTest.HexStr());
 }
 
 TEST(CXStringTest, TestFromHex)
 {
      CXString sTest = "4120737472696e67";
-     ASSERT_STREQ ("A string", sTest.FromHex());
+     EXPECT_STREQ ("A string", sTest.FromHex());
 }
 
-TEST(CXStringTest, TestReverseFind)
+TEST(CXStringTest, TestReverseFindString)
 {
-     GTEST_SKIP() << "ReverseFind() is buggy - fix me!";
-
      CXString sTest = "Find the last the the in this string";
-     ASSERT_EQ (18, sTest.ReverseFind ("the"));
+     EXPECT_EQ (18, sTest.ReverseFind ("the"));
+     EXPECT_EQ (33, sTest.ReverseFind ("ing"));
+     EXPECT_EQ (0, sTest.ReverseFind ("Find"));
+     EXPECT_EQ (-1, sTest.ReverseFind ("x"));
+     EXPECT_EQ (0, sTest.ReverseFind ("Find the last the the in this string"));
+}
+
+TEST(CXStringTest, TestReverseFindChar)
+{
+     CXString sTest = "Find the last the the in this string";
+     EXPECT_EQ (35, sTest.ReverseFind ('g'));
+     EXPECT_EQ (30, sTest.ReverseFind ('s'));
+     EXPECT_EQ (20, sTest.ReverseFind ('e'));
+     EXPECT_EQ (0, sTest.ReverseFind ('F'));
+     EXPECT_EQ (-1, sTest.ReverseFind ('x'));
 }
