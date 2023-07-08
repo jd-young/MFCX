@@ -134,8 +134,7 @@ TEST(CXStringTest, TestIsCapitalised)
 
 TEST(CXStringTest, TestGetTime)
 {
-     GTEST_SKIP() << "GetTime() is buggy - fix me!";
-     CXString sTime = "2023-02-27 17:51:45";
+     CXString sTime = "17:51:45 27/2/2023";
      EXPECT_TIME_EQ (2023, 2, 27, 17, 51, 45, sTime.GetTime());
 }
 
