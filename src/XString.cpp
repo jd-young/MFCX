@@ -1384,7 +1384,7 @@ CString CXString::FromHex (const TCHAR* pszHex)
 int CXString::ReverseFind (const CString& sTarget) const
 {
      int nLen = sTarget.GetLength();
-     const TCHAR* s = (LPCTSTR) this;
+     const TCHAR* s = (LPCTSTR) _string;
      for (const TCHAR* p = s + _string.GetLength() - nLen; p >= s; p--)
      {
           if ( strncmp (p, sTarget, nLen) == 0 )
