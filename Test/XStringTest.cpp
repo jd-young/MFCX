@@ -128,6 +128,8 @@ TEST(CXStringTest, TestIsCapitalised)
      EXPECT_FALSE (CXString::IsCapitalised ("capital"));
      EXPECT_TRUE (CXString::IsCapitalised ("Capital City In Japan"));
      EXPECT_FALSE (CXString::IsCapitalised ("Capital City in Japan"));
+     EXPECT_FALSE (CXString::IsCapitalised ("Capital City IN Japan"));
+     EXPECT_TRUE (CXString::IsCapitalised ("    Capital City In Japan"));
 }
 
 TEST(CXStringTest, TestGetTime)
