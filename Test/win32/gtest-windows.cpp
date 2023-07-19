@@ -1,7 +1,7 @@
 /*!
-     \file     WorkspaceTest.cpp
+     \file     gtest-windows.cpp
      \author   John Young
-     \date     22 August 2021
+     \date     May 2023
      
      Copyright (c) 2019 Thistle Software.
 */

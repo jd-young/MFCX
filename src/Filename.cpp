@@ -76,8 +76,10 @@ CString CFilename::GetFolderName() const
      TCHAR szDrive [_MAX_DRIVE];
      TCHAR szDir [_MAX_DIR];
      _splitpath (pszPathname, szDrive, szDir, NULL, NULL);
+     if ( strlen (szDir) == 0 )
+          return "";  // We were passed 'C:' for the pathname. 
+          
      CString sFolder = CString (szDrive) + szDir;
-
      int nLen = sFolder.GetLength();
      if ( nLen > 0 )
      {

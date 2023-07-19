@@ -42,6 +42,12 @@ TEST(FilenameTest, TestGetFolderName)
 
      CFilename sEmpty;
      EXPECT_STREQ ("", sEmpty.GetFolderName()); 
+
+     CFilename sUsers ("C:\\Users");
+     EXPECT_STREQ ("C:", sUsers.GetFolderName());
+
+     CFilename sC ("C:");
+     EXPECT_STREQ ("", sC.GetFolderName());
 }
 
 TEST(FilenameTest, TestGetFileExt)

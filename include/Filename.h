@@ -19,7 +19,7 @@ public:
      /// Gets the filename from the file.
      CString GetFileName() const;
      
-     /// Gets the filename from the given file.
+     /// Gets the filename (include extension) from the given file path.
      static CString GetFileName (const TCHAR* pszPathName);
 
      /// Gets the folder name of the file.
