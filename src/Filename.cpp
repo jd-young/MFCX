@@ -157,7 +157,7 @@ CString CFilename::GetBaseName()
 
 \param	pszPath		The path to examine.
 \return	\b true if the path is relative, \b false if not (or if pszPath is 
-		NULL).
+		nullptr).
 */
 /*static*/ bool CFilename::IsRelativePath (const TCHAR* pszPath)
 {

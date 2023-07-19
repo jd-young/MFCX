@@ -1,7 +1,7 @@
 /*!
      \file	Filename.h
      
-     JY's filename manipulation routines
+     MFCX's filename manipulation routines
  */
 
 #ifndef	__MFCX__FILENAME_H
@@ -13,6 +13,7 @@
 class CFilename
 {
 public:
+     /// Construct a CFilename object
      explicit CFilename (const TCHAR* pszPath = NULL);
      ~CFilename();
 
@@ -42,14 +43,17 @@ public:
 	/// extension).
 	static CString GetBaseName (const TCHAR* pszPathname);
 
-
+     /// Returns the full path of this object.
      CString GetPath() const { return m_sPath; }
 
+     /// Gets the latest modified time of the file. 
 	bool GetFileTime (CTime& time)
 		{	return GetFileTime (m_sPath, time);  }
 
+     /// Gets the latest modified time of the given filenamd.
 	static bool GetFileTime (LPCTSTR pszPathName, CTime& time);
 
+     /// Returns true or false if this object is a relative filename.
      bool IsRelativePath() const { return IsRelativePath (m_sPath); }
 
 	/// Returns true if the given path is relative.
@@ -69,7 +73,11 @@ public:
      static void AbbreviatePath (TCHAR* pszCanon, 
                                  int nChars, 
                                  bool bAtLeastName = true);
+     
+     /// Returns true if the given executable is in the PATH.
      static bool IsInPath (const TCHAR* pszExe);
+     
+     /// 
      static int  ParseFileName (const TCHAR* psz, CStringArray& arrFilenames);
      static bool GetIncludeName (const TCHAR* pszName, 
                                  CString& sPath, 

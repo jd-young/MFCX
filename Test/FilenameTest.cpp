@@ -84,6 +84,8 @@ TEST(FilenameTest, TestIsRelativePath)
 
      CFilename sLinux ("C:/first/second/third.ext");
      EXPECT_FALSE (sLinux.IsRelativePath());
+     
+     EXPECT_FALSE (CFilename::IsRelativePath (nullptr));
 }
 
 TEST(FilenameTest, TestGetRelativePath)
