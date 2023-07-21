@@ -325,6 +325,17 @@ void CFilename::ReplaceAll (CString& str, const TCHAR* pszOld, const TCHAR* pszN
 }
 
 
+const TCHAR* SkipTo (const TCHAR* psz, TCHAR ch)
+{
+	do
+	{
+		psz = _tcsinc(psz);
+		ASSERT(*psz != '\0');
+	}
+	while (*psz != '\\');
+
+	return psz;
+}
 
 /*!  Abbreviates the given file name to the given number of characters.
 
@@ -344,24 +355,19 @@ void CFilename::ReplaceAll (CString& str, const TCHAR* pszOld, const TCHAR* pszN
 
 \param    pszCanon       The path name to abbreviate.
 \param    nChars         The number of characters to abbreviate to.
-\param    bAtLeastName   If \b true, then all the filename will ber returned,
+\param    bAtLeastName   If \b true, then all the filename will be returned,
                          even if it is longer than nChars.
 */
 /*static*/ void CFilename::AbbreviatePath (TCHAR* pszCanon, 
                	                       int nChars, 
 			                            bool bAtLeastName /*=true*/)
 {
-	int cchFullPath, cchFileName, cchVolName;
-	const TCHAR* pszCur;
-	const TCHAR* pszBase;
-	const TCHAR* pszFileName;
-
-	pszBase = pszCanon;
-	cchFullPath = strlen (pszCanon);
+	const TCHAR* pszBase = pszCanon;
+	int cchFullPath = strlen (pszCanon);
 
 
-	cchFileName = ExtractFileName (pszCanon, NULL, 0);
-	pszFileName = pszBase + (cchFullPath-cchFileName);
+	int cchFileName = ExtractFileName (pszCanon, NULL, 0);
+	const TCHAR* pszFileName = pszBase + (cchFullPath-cchFileName);
 
 	// If nChars is more than enough to hold the full path name, we're done.
 	// This is probably a pretty common case, so we'll put it first.
@@ -382,32 +388,20 @@ void CFilename::ReplaceAll (CString& str, const TCHAR* pszOld, const TCHAR* pszN
 	// If nChars isn't enough to hold at least <volume_name>\...\<base_name>, the
 	// result is the base filename.
 
-	pszCur = pszBase + 2;                 // Skip "C:" or leading "\\"
+	const TCHAR* pszCur = pszBase + 2;                 // Skip "C:" or leading "\\" (UNC)
 
 	if (pszBase[0] == '\\' && pszBase[1] == '\\') // UNC pathname
 	{
-		// First skip to the '\' between the server name and the share name,
-		while (*pszCur != '\\')
-		{
-			pszCur = _tcsinc(pszCur);
-			ASSERT(*pszCur != '\0');
-		}
+		// UNC - skip the UNC and share name.
+		pszCur = SkipTo (pszCur, '\\');
+		pszCur = SkipTo (pszCur, '\\');
 	}
+	
 	// if a UNC get the share name, if a drive get at least one directory
 	ASSERT(*pszCur == '\\');
-	// make sure there is another directory, not just c:\filename.ext
-	if ( cchFullPath - cchFileName > 3 )
-	{
-		pszCur = _tcsinc(pszCur);
-		while (*pszCur != '\\')
-		{
-			pszCur = _tcsinc(pszCur);
-			ASSERT(*pszCur != '\0');
-		}
-	}
-	ASSERT(*pszCur == '\\');
-
-	cchVolName = pszCur - pszBase;
+	
+	int cchVolName = pszCur - pszBase;
+	// '\...\' between the starting 'c:\' and the rest is 5 characters.
 	if ( nChars < cchVolName + 5 + cchFileName )
 	{
 		lstrcpy(pszCanon, pszFileName);
@@ -420,15 +414,10 @@ void CFilename::ReplaceAll (CString& str, const TCHAR* pszOld, const TCHAR* pszN
 	// Assert that the whole filename doesn't fit -- this should have been
 	// handled earlier.
 
-	ASSERT (cchVolName + (int)lstrlen(pszCur) > nChars);
-	while ( cchVolName + 4 + (int)lstrlen(pszCur) > nChars )
+	ASSERT (cchVolName + (int)lstrlen (pszCur) > nChars);
+	while ( cchVolName + 4 + (int)lstrlen (pszCur) > nChars )
 	{
-		do
-		{
-			pszCur = _tcsinc(pszCur);
-			ASSERT(*pszCur != '\0');
-		}
-		while (*pszCur != '\\');
+	     pszCur = SkipTo (pszCur, '\\');
 	}
 
 	// Form the resultant string and we're done.

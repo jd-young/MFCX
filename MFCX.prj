@@ -4,7 +4,7 @@
 		<ToolCmd menu="&amp;Build" cmd="make" args="CFG=%C build" dir="src" file-regex="\s*(.*?)\(" line-regex="\((\d*)" use-output-window="Yes" prompt-for-args="No" close-on-exit="No" accels="MainFrame:F7"  />
 		<ToolCmd menu="&amp;Rebuild" cmd="make" args="CFG=%C clean build" dir="" file-regex="\s*(.*?)\(" line-regex="\((\d*)" use-output-window="Yes" prompt-for-args="No" close-on-exit="No"  />
 		<ToolCmd menu="C&amp;lean" cmd="make" args="CFG=&quot;%C&quot; clean" dir="src" file-regex="" line-regex="" use-output-window="Yes" prompt-for-args="No" close-on-exit="No"  />
-		<ToolCmd menu="&amp;Test" cmd="make" args="CFG=%C test" dir="src" file-regex="\s*(\S+?)\(" line-regex="\((\d*)\)" use-output-window="Yes" prompt-for-args="No" close-on-exit="No" accels="MainFrame:F5"  />
+		<ToolCmd menu="&amp;Test" cmd="make" args="CFG=%C test tests=FilenameTest*" dir="src" file-regex="\s*(\S+?)\(" line-regex="\((\d*)\)" use-output-window="Yes" prompt-for-args="No" close-on-exit="No" accels="MainFrame:F5"  />
 	</ToolsCmds>
 	<Env-vars>
 		<var name="GTEST_HOME" value="C:\Users\jyoun\Projects\Libraries\googletest"/>
@@ -18,13 +18,12 @@
 	</Configurations>
 	<Tags enabled="yes" program="ctags" args="-R --c++-types=cdefglmnpstuvx src include *.cpp *.h" auto="no" period="60" kbd-delay="5"/>
 	<ProjectTree>
-		<Branch name="MFCX" type="Title" expanded="no">
+		<Branch name="MFCX" type="Title" expanded="yes" active="yes">
 			<Branch name="MFCXTest" type="Title" expanded="no" path="MFCXTest\MFCXTest.prj"/>
 			<Branch name="TestXList" type="Title" expanded="no" path="Test\TestXList\TestXList.prj"/>
 			<Branch name="TreeTest" type="Title" expanded="no" path="Test\TestXTree\TreeTest.prj"/>
 			<Branch name="doc" type="Heading" expanded="no">
 				<Branch name="doxygen" type="Heading" expanded="yes">
-					<ProjectItem type="Relative Filename" name="dox.bat" path="doc\doxygen\dox.bat"/>
 					<ProjectItem type="Relative Filename" name="doxygen.css" path="doc\doxygen\doxygen.css"/>
 					<ProjectItem type="Relative Filename" name="History.html" path="doc\doxygen\History.html"/>
 					<ProjectItem type="Relative Filename" name="MFCX-MainPage.dox" path="doc\doxygen\MFCX-MainPage.dox"/>
