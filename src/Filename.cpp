@@ -535,24 +535,34 @@ CString CFilename::GetCmdPathName (const TCHAR* pszExe,
 
 
 
-/*!  Attempts to get a filename from the given string.  It looks at all the
-     quoted strings in the string and puts them into the array of filenames.
-
-\param    psz            The string to parse.
-\param    arrFilenames   Array of potential filenames.
-\return   Number of files found.
-*/
-/*static*/ int CFilename::ParseFileName (const TCHAR* psz, CStringArray& arrFilenames)
+/*!  Attempts to get a filename from the given string.  
+ *   
+ *   It looks at all the  quoted strings in the string and puts them into the 
+ *   array of filenames.
+ *
+ * \param psz            The string to parse.
+ * \param arrFilenames   Array of potential filenames.
+ * \return Number of files found.
+ */
+[[ deprecated("Too C/C++ specific - this will be removed in a future release")]]
+/*static*/ 
+int CFilename::ParseFileName (const TCHAR* psz, CStringArray& arrFilenames)
 {
+     arrFilenames.RemoveAll();
+
+     if ( strchr (psz, '<') == nullptr && 
+          strchr (psz, '"') == nullptr )
+          return 0;      // No quoted string.
+     
      CString sCopy = psz;
      TCHAR* s = sCopy.GetBuffer(0);
      
-     arrFilenames.RemoveAll();
      s = strtok (s, "\"<");
      while ( s )
      {
-          arrFilenames.Add (s);
           s = strtok (NULL, "\">");
+          if ( s )
+               arrFilenames.Add (s);
      }
      sCopy.ReleaseBuffer();
      return arrFilenames.GetSize();

@@ -77,7 +77,7 @@ public:
      /// Returns true if the given executable is in the PATH.
      static bool IsInPath (const TCHAR* pszExe);
      
-     /// 
+     /// Parses a line for an include (TODO: This is too C/C++ centric - shouldn't be here).
      static int  ParseFileName (const TCHAR* psz, CStringArray& arrFilenames);
      static bool GetIncludeName (const TCHAR* pszName, 
                                  CString& sPath, 
@@ -89,14 +89,18 @@ public:
      static CString GetCmdPathName (const TCHAR* pszExe);
      static bool IsConsoleCmd (const TCHAR* pszCmd);
 
-     
+     /// Extracts the filename (and extension) - deprecated - use GetFileName() instead. 
      static UINT ExtractFileName (const TCHAR* pszPathName, 
 						    TCHAR* pszFilename, 
                                   UINT nMax);
 
      /// Joins the given directory and filename and returns a canonicalised path.
 	static CString GetFullPath (const TCHAR* pszDir, const TCHAR* pszFilename);
+
+     /// Canonicalises the given path.
 	static CString CanonPath (const TCHAR* pszFilename);
+	
+     /// Canonicalises this pathname.	
 	void CanonPath()
 		{	m_sPath = CanonPath (m_sPath); }
 

@@ -280,3 +280,15 @@ TEST(FilenameTest, TestGetCmdPathName)
      EXPECT_STREQ ("", CFilename::GetCmdPathName ("OnPath2.xxx", &FileExists, &GetEnvVar));
      EXPECT_STREQ ("", CFilename::GetCmdPathName ("CurrentDir.xxx", &FileExists, &GetEnvVar));
 }
+
+TEST(FilenameTest, TestParseFileName)
+{
+     CStringArray arrFiles;
+     EXPECT_EQ (0, CFilename::ParseFileName ("#define SOME_DEF", arrFiles));
+     
+     EXPECT_EQ (1, CFilename::ParseFileName ("#include \"SomeFile.h\"", arrFiles));
+     EXPECT_STREQ ("SomeFile.h", arrFiles[0]);     
+     
+     EXPECT_EQ (1, CFilename::ParseFileName ("#include <SomeFile.h>", arrFiles));
+     EXPECT_STREQ ("SomeFile.h", arrFiles[0]);     
+}
