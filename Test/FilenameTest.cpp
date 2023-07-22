@@ -216,3 +216,67 @@ TEST(FilenameTest, TestAbbreviatePath)
      EXPECT_STREQ ("\\\\UNC\\SHARE\\MYAPP\\DEBUGS\\C\\TESWIN.C", TestAbbreviatePath (pszUNCPath, 100, false));
 }
 
+
+bool FileExists (const TCHAR* pszPath)
+{
+     static const TCHAR* pPath1 = "C:\\Path1\\OnPath1.exe";
+     static const TCHAR* pPath2 = "C:\\Path2\\OnPath2.cmd";
+     
+     // Checks that if a file with an invalid extension exists, it is not chosen.
+     static const TCHAR* pPath1xxx = "C:\\Path1\\OnPath1.xxx";
+     static const TCHAR* pPath2xxx = "C:\\Path2\\OnPath2.xxx";
+     
+     static const TCHAR* pCurrentDir = "CurrentDir.bat";
+     static const TCHAR* pCurrentDirxxx = "CurrentDir.xxx";
+
+     return strcmp (pszPath, pPath1) == 0 ||
+            strcmp (pszPath, pPath1xxx) == 0 ||
+            strcmp (pszPath, pPath2) == 0 ||
+            strcmp (pszPath, pPath2xxx) == 0 ||
+            strcmp (pszPath, pCurrentDir) == 0 ||
+            strcmp (pszPath, pCurrentDirxxx) == 0;
+}
+
+CString GetEnvVar (const TCHAR* pszEnv)
+{
+     return "C:\\Path1;C:\\Path2";
+}
+
+TEST(FilenameTest, TestGetCmdPathName)
+{
+     // No extension
+     EXPECT_STREQ ("", CFilename::GetCmdPathName ("NotOnPath", &FileExists, &GetEnvVar));
+     EXPECT_STREQ ("C:\\Path1\\OnPath1.exe", CFilename::GetCmdPathName ("OnPath1", &FileExists, &GetEnvVar));
+     EXPECT_STREQ ("C:\\Path2\\OnPath2.cmd", CFilename::GetCmdPathName ("OnPath2", &FileExists, &GetEnvVar));
+     EXPECT_STREQ ("CurrentDir.bat", CFilename::GetCmdPathName ("CurrentDir", &FileExists, &GetEnvVar));
+
+     // .exe
+     EXPECT_STREQ ("", CFilename::GetCmdPathName ("NotOnPath.exe", &FileExists, &GetEnvVar));
+     EXPECT_STREQ ("C:\\Path1\\OnPath1.exe", CFilename::GetCmdPathName ("OnPath1.exe", &FileExists, &GetEnvVar));
+     EXPECT_STREQ ("", CFilename::GetCmdPathName ("OnPath2.exe", &FileExists, &GetEnvVar));
+     EXPECT_STREQ ("", CFilename::GetCmdPathName ("CurrentDir.exe", &FileExists, &GetEnvVar));
+
+     // .com
+     EXPECT_STREQ ("", CFilename::GetCmdPathName ("NotOnPath.com", &FileExists, &GetEnvVar));
+     EXPECT_STREQ ("", CFilename::GetCmdPathName ("OnPath1.com", &FileExists, &GetEnvVar));
+     EXPECT_STREQ ("", CFilename::GetCmdPathName ("OnPath2.com", &FileExists, &GetEnvVar));
+     EXPECT_STREQ ("", CFilename::GetCmdPathName ("CurrentDir.com", &FileExists, &GetEnvVar));
+
+     // .cmd
+     EXPECT_STREQ ("", CFilename::GetCmdPathName ("NotOnPath.cmd", &FileExists, &GetEnvVar));
+     EXPECT_STREQ ("", CFilename::GetCmdPathName ("OnPath1.cmd", &FileExists, &GetEnvVar));
+     EXPECT_STREQ ("C:\\Path2\\OnPath2.cmd", CFilename::GetCmdPathName ("OnPath2.cmd", &FileExists, &GetEnvVar));
+     EXPECT_STREQ ("", CFilename::GetCmdPathName ("CurrentDir.cmd", &FileExists, &GetEnvVar));
+
+     // .bat
+     EXPECT_STREQ ("", CFilename::GetCmdPathName ("NotOnPath.bat", &FileExists, &GetEnvVar));
+     EXPECT_STREQ ("", CFilename::GetCmdPathName ("OnPath1.bat", &FileExists, &GetEnvVar));
+     EXPECT_STREQ ("", CFilename::GetCmdPathName ("OnPath2.bat", &FileExists, &GetEnvVar));
+     EXPECT_STREQ ("CurrentDir.bat", CFilename::GetCmdPathName ("CurrentDir.bat", &FileExists, &GetEnvVar));
+
+     // .xxx
+     EXPECT_STREQ ("", CFilename::GetCmdPathName ("NotOnPath.xxx", &FileExists, &GetEnvVar));
+     EXPECT_STREQ ("", CFilename::GetCmdPathName ("OnPath1.xxx", &FileExists, &GetEnvVar));
+     EXPECT_STREQ ("", CFilename::GetCmdPathName ("OnPath2.xxx", &FileExists, &GetEnvVar));
+     EXPECT_STREQ ("", CFilename::GetCmdPathName ("CurrentDir.xxx", &FileExists, &GetEnvVar));
+}

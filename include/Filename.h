@@ -83,24 +83,39 @@ public:
                                  CString& sPath, 
                                  const CStringArray& sIncludePaths);
      static int GetFilterIndex (const TCHAR* pszFilters, const TCHAR* pszExt);
+     
+     /// Gets the full path of the give command in the current directory, or in
+     /// the path.
      static CString GetCmdPathName (const TCHAR* pszExe);
      static bool IsConsoleCmd (const TCHAR* pszCmd);
 
+     
      static UINT ExtractFileName (const TCHAR* pszPathName, 
 						    TCHAR* pszFilename, 
                                   UINT nMax);
 
-     /// 
+     /// Joins the given directory and filename and returns a canonicalised path.
 	static CString GetFullPath (const TCHAR* pszDir, const TCHAR* pszFilename);
 	static CString CanonPath (const TCHAR* pszFilename);
 	void CanonPath()
 		{	m_sPath = CanonPath (m_sPath); }
 
-
+#ifndef   GTEST     // To let unit tests access protected members.
 protected:
+#endif
      CString m_sPath;
      
      static void ReplaceAll (CString& str, const TCHAR* pszOld, const TCHAR* pszNew);
+     
+     /// Returns true if the given path exists.
+     static bool FileExists (const TCHAR* pszPath);
+     
+     /// Returns the value of the given environment variable.
+     static CString GetEnvVar (const TCHAR* pszEnt);
+
+     static CString GetCmdPathName (const TCHAR* pszExe,
+                                    bool (*FileExists)(const TCHAR*),
+                                    CString (*GetEnvVar)(const TCHAR*));
 };
 
 #endif    // __MFCX_FILENAME_H

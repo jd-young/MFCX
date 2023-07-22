@@ -300,6 +300,7 @@ void CFilename::ReplaceAll (CString& str, const TCHAR* pszOld, const TCHAR* pszN
  * \return   The length of the filename.  If the pszFilename paramater is NULL then 
  *           no copying is done.
  */
+[[deprecated( "This function can easily cause NPE's if improperly used - Use GetFileName() instead" )]]	
 /*static*/ UINT CFilename::ExtractFileName (const TCHAR* pszPathName, 
                                             TCHAR* pszFilename, 
                                             UINT nMax)
@@ -431,6 +432,19 @@ const TCHAR* SkipTo (const TCHAR* psz, TCHAR ch)
      return !GetCmdPathName (pszExe).IsEmpty();
 }
 
+/*static*/ bool CFilename::FileExists (const TCHAR* pszPath)
+{
+	struct stat statBuf;
+     return stat (pszPath, &statBuf) != -1;
+}
+
+
+/*static*/ CString CFilename::GetEnvVar (const TCHAR* pszEnv)
+{
+     return ::getenv (pszEnv);
+}
+
+
 /*!  Searches for the given exe in all the usual places, the current working 
      directory, and then the search path.  If the given file name doesn't have 
      one of the default filename extensions (.EXE, .COM, .BAT, .CMD) then the 
@@ -441,69 +455,77 @@ const TCHAR* SkipTo (const TCHAR* psz, TCHAR ch)
 */
 /*static*/ CString CFilename::GetCmdPathName (const TCHAR* pszExe)
 {
-     static TCHAR *szDefExt[] = { ".exe", ".com", ".bat", ".cmd" };
+     return GetCmdPathName (pszExe, FileExists, GetEnvVar);
+}
+
+static TCHAR *szDefExt[] = { ".exe", ".com", ".bat", ".cmd" };
+
+/// Checks that the given path has a valid extension.
+bool HasValidCmdExt (const TCHAR* pszPath)
+{
+     CString sExt = CFilename::GetFileExt (pszPath);
+     sExt.MakeLower();
+     for (int i = 0; i < SIZEOF_ARRAY (szDefExt); i++)
+     {
+          if ( sExt == szDefExt [i] )
+               return true;
+     }
+     return false;     // The extension is not one of the required four.
+}
+
+/// Checks that the given file exists in the given directory.
+CString CheckFileExists (const TCHAR* pszDir, const CString& sCmd, bool bHasExt,
+                         bool (*FileExists)(const TCHAR*))
+{
+     CString sPath = pszDir;
+     if ( !sPath.IsEmpty() && sPath [sPath.GetLength() - 1] != '\\' )
+          sPath += '\\';
+
+     sPath += sCmd;
+     if ( bHasExt )
+     {
+     	if ( FileExists (sPath) )
+     	     return sPath;
+     }
+     else
+          for (int i = 0; i < SIZEOF_ARRAY (szDefExt); i++)
+          {
+               CString sFullPath = sPath + szDefExt [i];
+               if ( FileExists (sFullPath) )
+                    return sFullPath;
+          }
+     return "";
+}
+
+/*static*/ 
+CString CFilename::GetCmdPathName (const TCHAR* pszExe,
+                                   bool (*FileExists)(const TCHAR*),
+                                   CString (*GetEnvVar)(const TCHAR*))
+{
      
      // Check if the given command has one of the default extensions...
      CString sCmd = pszExe;
      sCmd.TrimLeft();
      sCmd.TrimRight();
 
-     int nExt = sCmd.ReverseFind ('.');
+     bool bHasExt = sCmd.ReverseFind ('.') != -1;
+     if ( bHasExt && !HasValidCmdExt (pszExe) )
+          return "";
 
-     bool bHasExt = false;
-     if ( nExt == -1 )
-          bHasExt = false;
-     else
-          for (int i = 0; i < SIZEOF_ARRAY (szDefExt); i++)
-          {
-               CString sExt = sCmd.Right (sCmd.GetLength() - nExt);
-               sExt.MakeLower();
-               if ( sExt == szDefExt [i] )
-               {
-                    bHasExt = true;
-                    break;
-               }
-          }
-     
-	struct stat statBuf;
-	
 	// Check the local directory...
-	if ( bHasExt )
-	{
-     	if ( stat (sCmd, &statBuf) != -1 )
-     	     return sCmd;
-     }
-     else
-          for (int i = 0; i < SIZEOF_ARRAY (szDefExt); i++)
-          {
-               CString sPath = sCmd + szDefExt [i];
-          	if ( stat (sPath, &statBuf) != -1 )
-          	     return sPath;
-          }
-     
-     CString sSearchPath = getenv ("path");
+	CString sPath = CheckFileExists ("", sCmd, bHasExt, FileExists);
+	if ( !sPath.IsEmpty() )
+          return sPath;
+	
+     CString sSearchPath = GetEnvVar ("path");
      TCHAR* s = sSearchPath.GetBuffer (0);
      if ( (s = strtok (s, ";")) )
      {
           do
           {
-               CString sPath = s;
-               if ( sPath [sPath.GetLength() - 1] != '\\' )
-                    sPath += '\\';
-
-               sPath += sCmd;
-          	if ( bHasExt )
-          	{
-               	if ( stat (sPath, &statBuf) != -1 )
-               	     return sPath;
-               }
-               else
-                    for (int i = 0; i < SIZEOF_ARRAY (szDefExt); i++)
-                    {
-                         CString sFullPath = sPath + szDefExt [i];
-                    	if ( stat (sFullPath, &statBuf) != -1 )
-                    	     return sFullPath;
-                    }
+          	sPath = CheckFileExists (s, sCmd, bHasExt, FileExists);
+          	if ( !sPath.IsEmpty() )
+                    return sPath;
           }
           while ( (s = strtok (NULL, ";")) && *s );
      }
