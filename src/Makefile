@@ -245,7 +245,7 @@ TEST_TARGET    =  $(TESTDIR)/$(TEST_PROGRAM).exe
 # Note, no space allowed between options and files. For example: '/Fp$(TEST_PCH)' works, '/Fp $(TEST_PCH)' doesn't. :-(
 CONSOLE_CXXFLAGS = -nologo -MDd -W3 -EHsc -GR -Zi -Od -I "$(GTEST_INC)" \
                    -D "WIN32" -D "_DEBUG" -D "_CONSOLE" -D "_MBCS" \
-                   -D "_AFXDLL"  \
+                   -D "_AFXDLL"  -D "GTEST" \
                    -Fp$(TEST_PCH) -Fd"$(TESTDIR)/" -FD -RTC1 -c
 
 # NOTE: To find unresolved external symbols, navigate to the VC98/Lib directory and run this command...

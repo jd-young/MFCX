@@ -1,7 +1,7 @@
 /*!
      \file	Filename.h
      
-     JY's filename manipulation routines
+     MFCX's filename manipulation routines
  */
 
 #ifndef	__MFCX__FILENAME_H
@@ -13,13 +13,14 @@
 class CFilename
 {
 public:
+     /// Construct a CFilename object
      explicit CFilename (const TCHAR* pszPath = NULL);
      ~CFilename();
 
      /// Gets the filename from the file.
      CString GetFileName() const;
      
-     /// Gets the filename from the given file.
+     /// Gets the filename (include extension) from the given file path.
      static CString GetFileName (const TCHAR* pszPathName);
 
      /// Gets the folder name of the file.
@@ -42,14 +43,17 @@ public:
 	/// extension).
 	static CString GetBaseName (const TCHAR* pszPathname);
 
-
+     /// Returns the full path of this object.
      CString GetPath() const { return m_sPath; }
 
+     /// Gets the latest modified time of the file. 
 	bool GetFileTime (CTime& time)
 		{	return GetFileTime (m_sPath, time);  }
 
+     /// Gets the latest modified time of the given filenamd.
 	static bool GetFileTime (LPCTSTR pszPathName, CTime& time);
 
+     /// Returns true or false if this object is a relative filename.
      bool IsRelativePath() const { return IsRelativePath (m_sPath); }
 
 	/// Returns true if the given path is relative.
@@ -69,30 +73,53 @@ public:
      static void AbbreviatePath (TCHAR* pszCanon, 
                                  int nChars, 
                                  bool bAtLeastName = true);
+     
+     /// Returns true if the given executable is in the PATH.
      static bool IsInPath (const TCHAR* pszExe);
+     
+     /// Parses a line for an include (TODO: This is too C/C++ centric - shouldn't be here).
      static int  ParseFileName (const TCHAR* psz, CStringArray& arrFilenames);
      static bool GetIncludeName (const TCHAR* pszName, 
                                  CString& sPath, 
                                  const CStringArray& sIncludePaths);
      static int GetFilterIndex (const TCHAR* pszFilters, const TCHAR* pszExt);
+     
+     /// Gets the full path of the give command in the current directory, or in
+     /// the path.
      static CString GetCmdPathName (const TCHAR* pszExe);
      static bool IsConsoleCmd (const TCHAR* pszCmd);
 
+     /// Extracts the filename (and extension) - deprecated - use GetFileName() instead. 
      static UINT ExtractFileName (const TCHAR* pszPathName, 
 						    TCHAR* pszFilename, 
                                   UINT nMax);
 
-     /// 
+     /// Joins the given directory and filename and returns a canonicalised path.
 	static CString GetFullPath (const TCHAR* pszDir, const TCHAR* pszFilename);
+
+     /// Canonicalises the given path.
 	static CString CanonPath (const TCHAR* pszFilename);
+	
+     /// Canonicalises this pathname.	
 	void CanonPath()
 		{	m_sPath = CanonPath (m_sPath); }
 
-
+#ifndef   GTEST     // To let unit tests access protected members.
 protected:
+#endif
      CString m_sPath;
      
      static void ReplaceAll (CString& str, const TCHAR* pszOld, const TCHAR* pszNew);
+     
+     /// Returns true if the given path exists.
+     static bool FileExists (const TCHAR* pszPath);
+     
+     /// Returns the value of the given environment variable.
+     static CString GetEnvVar (const TCHAR* pszEnt);
+
+     static CString GetCmdPathName (const TCHAR* pszExe,
+                                    bool (*FileExists)(const TCHAR*),
+                                    CString (*GetEnvVar)(const TCHAR*));
 };
 
 #endif    // __MFCX_FILENAME_H

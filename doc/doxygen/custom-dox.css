@@ -1,0 +1,33 @@
+/* Custom CSS for PrEditor (doxygen 1.9.5)*/
+
+body, table, div, p, dl
+{
+	font: 12px/1.6em tahoma,verdana,sans-serif;
+}
+
+h1,h2,h3,h4,h5,h6
+{
+	text-shadow: #a0a0a0 0.2em 0.2em 0.6em;
+}
+
+/* @group Heading Levels */
+
+.title
+{
+	font-size: 130%;
+}
+
+h1,h2,h3,h4,h5,h6
+{
+     font-size: 150%
+}
+
+h1.groupheader
+{
+	font-size: 130%;
+}
+
+h2.groupheader
+{
+	font-size: 130%;
+}

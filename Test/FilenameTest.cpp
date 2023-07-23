@@ -42,6 +42,12 @@ TEST(FilenameTest, TestGetFolderName)
 
      CFilename sEmpty;
      EXPECT_STREQ ("", sEmpty.GetFolderName()); 
+
+     CFilename sUsers ("C:\\Users");
+     EXPECT_STREQ ("C:", sUsers.GetFolderName());
+
+     CFilename sC ("C:");
+     EXPECT_STREQ ("", sC.GetFolderName());
 }
 
 TEST(FilenameTest, TestGetFileExt)
@@ -78,6 +84,8 @@ TEST(FilenameTest, TestIsRelativePath)
 
      CFilename sLinux ("C:/first/second/third.ext");
      EXPECT_FALSE (sLinux.IsRelativePath());
+     
+     EXPECT_FALSE (CFilename::IsRelativePath (nullptr));
 }
 
 TEST(FilenameTest, TestGetRelativePath)
@@ -133,61 +141,154 @@ TEST(FilenameTest, TestCanonPath)
 }
 
 
-
-// These must match the TestWithParam tuples.
-#define IDX_ORIG_PATH    0
-#define IDX_NR_CHARS     1
-#define IDX_EXP_PATH     2
-
-class CFilenameTester : public ::testing::TestWithParam<std::tuple<
-          /*0*/     const TCHAR*,  // Original path
-          /*1*/     int,           // Number of characters.
-          /*2*/     const TCHAR*   // Expected abbreviated path.
-          >>      
+CString TestAbbreviatePath (const TCHAR* pszPath, int nChars, bool bAtLeastName)
 {
-public:
-     CFilenameTester() {}; 
-     virtual ~CFilenameTester() {};
-};
-
-
-#if 0
-// TODO: AbbreviatePath() doesn't appear to be used in PrEditor.
-static const TCHAR* pszLongPath = "c:/first/second/third/fourth/fifth/file.ext";
-
-TEST_P(CFilenameTester, TestAbbreviatePath)
-{
-     CString sPath (std::get<IDX_ORIG_PATH>(GetParam()));
-     int nChars = std::get<IDX_NR_CHARS>(GetParam());
-     const TCHAR* pszExp = std::get<IDX_EXP_PATH>(GetParam());
-
-     CFilename::AbbreviatePath (sPath.GetBuffer(), nChars);
-     sPath.ReleaseBuffer();
-     EXPECT_STREQ (pszExp, sPath);
+     CString sTest = pszPath;
+     CFilename::AbbreviatePath (sTest.GetBuffer(MAX_PATH), nChars, bAtLeastName);
+     sTest.ReleaseBuffer();
+     return sTest;
 }
 
-INSTANTIATE_TEST_CASE_P(FilenameTest, CFilenameTester, 
-                        ::testing::Values(
-/*0*/     std::make_tuple(pszLongPath, 4, "file.ext"),
-/*1*/     std::make_tuple(pszLongPath, 5, "file.ext"),
-/*2*/     std::make_tuple(pszLongPath, 6, "file.ext"),
-/*3*/     std::make_tuple(pszLongPath, 7, "file.ext"),
-/*4*/     std::make_tuple(pszLongPath, 8, "file.ext"),
-/*5*/     std::make_tuple(pszLongPath, 9, "file.ext"),
-/*6*/     std::make_tuple(pszLongPath, 10, "file.ext"),
-/*7*/     std::make_tuple(pszLongPath, 11, "file.ext"),
-/*8*/     std::make_tuple(pszLongPath, 12, "file.ext"),
-/*9*/     std::make_tuple(pszLongPath, 13, "file.ext"),
-/*10*/    std::make_tuple(pszLongPath, 14, "file.ext"),
-/*11*/    std::make_tuple(pszLongPath, 15, "file.ext"),
-/*12*/    std::make_tuple(pszLongPath, 16, "file.ext"),
-/*13*/    std::make_tuple(pszLongPath, 17, "file.ext"),
-/*14*/    std::make_tuple(pszLongPath, 18, "file.ext"),
-/*15*/    std::make_tuple(pszLongPath, 19, "file.ext"),
-/*16*/    std::make_tuple(pszLongPath, 20, "file.ext"),
-/*17*/    std::make_tuple(pszLongPath, 21, "file.ext"),
-/*18*/    std::make_tuple(pszLongPath, 22, "file.ext"),
-/*19*/    std::make_tuple(pszLongPath, 20, "file.ext")
-));
+TEST(FilenameTest, TestAbbreviatePath)
+{
+// C:\MYAPP\DEBUGS\C\TESWIN.C
+//
+//     nChars   b   Result
+//     ------   -   ---------
+//      1- 7    F   \<empty\>
+//      1- 7    T   TESWIN.C
+//      8-14    x   TESWIN.C
+//     15-16    x   C:\...\TESWIN.C
+//     17-23    x   C:\...\C\TESWIN.C
+//     24-25    x   C:\...\DEBUGS\C\TESWIN.C
+//     26+      x   C:\MYAPP\DEBUGS\C\TESWIN.C
 
-#endif
+     const TCHAR* pszLocalPath = "C:\\MYAPP\\DEBUGS\\C\\TESWIN.C";
+     EXPECT_STREQ ("", TestAbbreviatePath (pszLocalPath, 1, false));
+     EXPECT_STREQ ("", TestAbbreviatePath (pszLocalPath, 6, false));
+     EXPECT_STREQ ("", TestAbbreviatePath (pszLocalPath, 7, false));
+
+     EXPECT_STREQ ("TESWIN.C", TestAbbreviatePath (pszLocalPath, 1, true));
+     EXPECT_STREQ ("TESWIN.C", TestAbbreviatePath (pszLocalPath, 7, true));
+     
+     EXPECT_STREQ ("TESWIN.C", TestAbbreviatePath (pszLocalPath, 8, false));
+     EXPECT_STREQ ("TESWIN.C", TestAbbreviatePath (pszLocalPath, 14, false));
+     
+     EXPECT_STREQ ("C:\\...\\TESWIN.C", TestAbbreviatePath (pszLocalPath, 15, false));
+     EXPECT_STREQ ("C:\\...\\TESWIN.C", TestAbbreviatePath (pszLocalPath, 16, false));
+     
+     EXPECT_STREQ ("C:\\...\\C\\TESWIN.C", TestAbbreviatePath (pszLocalPath, 17, false));
+     EXPECT_STREQ ("C:\\...\\C\\TESWIN.C", TestAbbreviatePath (pszLocalPath, 23, false));
+     EXPECT_STREQ ("C:\\...\\DEBUGS\\C\\TESWIN.C", TestAbbreviatePath (pszLocalPath, 24, false));
+     EXPECT_STREQ ("C:\\...\\DEBUGS\\C\\TESWIN.C", TestAbbreviatePath (pszLocalPath, 25, false));
+     EXPECT_STREQ ("C:\\MYAPP\\DEBUGS\\C\\TESWIN.C", TestAbbreviatePath (pszLocalPath, 26, false));
+     EXPECT_STREQ ("C:\\MYAPP\\DEBUGS\\C\\TESWIN.C", TestAbbreviatePath (pszLocalPath, 27, false));
+     EXPECT_STREQ ("C:\\MYAPP\\DEBUGS\\C\\TESWIN.C", TestAbbreviatePath (pszLocalPath, 100, false));
+
+// \\UNC\SHARE\MYAPP\DEBUGS\C\TESWIN.C
+//
+//     nChars   b   Result
+//     ------   -   ---------
+//      1 - 7   F   \<empty\>
+//      1 - 7   T   TESWIN.C
+//      8 - 23  x   TESWIN.C
+//     24 - 25  x   \\UNC\SHARE\...\TESWIN.C      
+//     26 - 32  x   \\UNC\SHARE\...\C\TESWIN.C
+//     33 - 34  x   \\UNC\SHARE\...\DEBUGS\C\TESWIN.C
+//     35+      x   \\UNC\SHARE\MYAPP\DEBUGS\C\TESWIN.C
+
+     const TCHAR* pszUNCPath = "\\\\UNC\\SHARE\\MYAPP\\DEBUGS\\C\\TESWIN.C";
+     EXPECT_STREQ ("", TestAbbreviatePath (pszUNCPath, 1, false));
+     EXPECT_STREQ ("", TestAbbreviatePath (pszUNCPath, 7, false));
+
+     EXPECT_STREQ ("TESWIN.C", TestAbbreviatePath (pszUNCPath, 1, true));
+     EXPECT_STREQ ("TESWIN.C", TestAbbreviatePath (pszUNCPath, 7, true));
+     
+     EXPECT_STREQ ("TESWIN.C", TestAbbreviatePath (pszUNCPath, 8, false));
+     EXPECT_STREQ ("TESWIN.C", TestAbbreviatePath (pszUNCPath, 23, false));
+     EXPECT_STREQ ("\\\\UNC\\SHARE\\...\\TESWIN.C", TestAbbreviatePath (pszUNCPath, 24, false));
+     EXPECT_STREQ ("\\\\UNC\\SHARE\\...\\TESWIN.C", TestAbbreviatePath (pszUNCPath, 25, false));
+     EXPECT_STREQ ("\\\\UNC\\SHARE\\...\\C\\TESWIN.C", TestAbbreviatePath (pszUNCPath, 26, false));
+     EXPECT_STREQ ("\\\\UNC\\SHARE\\...\\C\\TESWIN.C", TestAbbreviatePath (pszUNCPath, 32, false));
+     EXPECT_STREQ ("\\\\UNC\\SHARE\\...\\DEBUGS\\C\\TESWIN.C", TestAbbreviatePath (pszUNCPath, 33, false));
+     EXPECT_STREQ ("\\\\UNC\\SHARE\\...\\DEBUGS\\C\\TESWIN.C", TestAbbreviatePath (pszUNCPath, 34, false));
+     EXPECT_STREQ ("\\\\UNC\\SHARE\\MYAPP\\DEBUGS\\C\\TESWIN.C", TestAbbreviatePath (pszUNCPath, 35, false));
+     EXPECT_STREQ ("\\\\UNC\\SHARE\\MYAPP\\DEBUGS\\C\\TESWIN.C", TestAbbreviatePath (pszUNCPath, 100, false));
+}
+
+
+bool FileExists (const TCHAR* pszPath)
+{
+     static const TCHAR* pPath1 = "C:\\Path1\\OnPath1.exe";
+     static const TCHAR* pPath2 = "C:\\Path2\\OnPath2.cmd";
+     
+     // Checks that if a file with an invalid extension exists, it is not chosen.
+     static const TCHAR* pPath1xxx = "C:\\Path1\\OnPath1.xxx";
+     static const TCHAR* pPath2xxx = "C:\\Path2\\OnPath2.xxx";
+     
+     static const TCHAR* pCurrentDir = "CurrentDir.bat";
+     static const TCHAR* pCurrentDirxxx = "CurrentDir.xxx";
+
+     return strcmp (pszPath, pPath1) == 0 ||
+            strcmp (pszPath, pPath1xxx) == 0 ||
+            strcmp (pszPath, pPath2) == 0 ||
+            strcmp (pszPath, pPath2xxx) == 0 ||
+            strcmp (pszPath, pCurrentDir) == 0 ||
+            strcmp (pszPath, pCurrentDirxxx) == 0;
+}
+
+CString GetEnvVar (const TCHAR* pszEnv)
+{
+     return "C:\\Path1;C:\\Path2";
+}
+
+TEST(FilenameTest, TestGetCmdPathName)
+{
+     // No extension
+     EXPECT_STREQ ("", CFilename::GetCmdPathName ("NotOnPath", &FileExists, &GetEnvVar));
+     EXPECT_STREQ ("C:\\Path1\\OnPath1.exe", CFilename::GetCmdPathName ("OnPath1", &FileExists, &GetEnvVar));
+     EXPECT_STREQ ("C:\\Path2\\OnPath2.cmd", CFilename::GetCmdPathName ("OnPath2", &FileExists, &GetEnvVar));
+     EXPECT_STREQ ("CurrentDir.bat", CFilename::GetCmdPathName ("CurrentDir", &FileExists, &GetEnvVar));
+
+     // .exe
+     EXPECT_STREQ ("", CFilename::GetCmdPathName ("NotOnPath.exe", &FileExists, &GetEnvVar));
+     EXPECT_STREQ ("C:\\Path1\\OnPath1.exe", CFilename::GetCmdPathName ("OnPath1.exe", &FileExists, &GetEnvVar));
+     EXPECT_STREQ ("", CFilename::GetCmdPathName ("OnPath2.exe", &FileExists, &GetEnvVar));
+     EXPECT_STREQ ("", CFilename::GetCmdPathName ("CurrentDir.exe", &FileExists, &GetEnvVar));
+
+     // .com
+     EXPECT_STREQ ("", CFilename::GetCmdPathName ("NotOnPath.com", &FileExists, &GetEnvVar));
+     EXPECT_STREQ ("", CFilename::GetCmdPathName ("OnPath1.com", &FileExists, &GetEnvVar));
+     EXPECT_STREQ ("", CFilename::GetCmdPathName ("OnPath2.com", &FileExists, &GetEnvVar));
+     EXPECT_STREQ ("", CFilename::GetCmdPathName ("CurrentDir.com", &FileExists, &GetEnvVar));
+
+     // .cmd
+     EXPECT_STREQ ("", CFilename::GetCmdPathName ("NotOnPath.cmd", &FileExists, &GetEnvVar));
+     EXPECT_STREQ ("", CFilename::GetCmdPathName ("OnPath1.cmd", &FileExists, &GetEnvVar));
+     EXPECT_STREQ ("C:\\Path2\\OnPath2.cmd", CFilename::GetCmdPathName ("OnPath2.cmd", &FileExists, &GetEnvVar));
+     EXPECT_STREQ ("", CFilename::GetCmdPathName ("CurrentDir.cmd", &FileExists, &GetEnvVar));
+
+     // .bat
+     EXPECT_STREQ ("", CFilename::GetCmdPathName ("NotOnPath.bat", &FileExists, &GetEnvVar));
+     EXPECT_STREQ ("", CFilename::GetCmdPathName ("OnPath1.bat", &FileExists, &GetEnvVar));
+     EXPECT_STREQ ("", CFilename::GetCmdPathName ("OnPath2.bat", &FileExists, &GetEnvVar));
+     EXPECT_STREQ ("CurrentDir.bat", CFilename::GetCmdPathName ("CurrentDir.bat", &FileExists, &GetEnvVar));
+
+     // .xxx
+     EXPECT_STREQ ("", CFilename::GetCmdPathName ("NotOnPath.xxx", &FileExists, &GetEnvVar));
+     EXPECT_STREQ ("", CFilename::GetCmdPathName ("OnPath1.xxx", &FileExists, &GetEnvVar));
+     EXPECT_STREQ ("", CFilename::GetCmdPathName ("OnPath2.xxx", &FileExists, &GetEnvVar));
+     EXPECT_STREQ ("", CFilename::GetCmdPathName ("CurrentDir.xxx", &FileExists, &GetEnvVar));
+}
+
+TEST(FilenameTest, TestParseFileName)
+{
+     CStringArray arrFiles;
+     EXPECT_EQ (0, CFilename::ParseFileName ("#define SOME_DEF", arrFiles));
+     
+     EXPECT_EQ (1, CFilename::ParseFileName ("#include \"SomeFile.h\"", arrFiles));
+     EXPECT_STREQ ("SomeFile.h", arrFiles[0]);     
+     
+     EXPECT_EQ (1, CFilename::ParseFileName ("#include <SomeFile.h>", arrFiles));
+     EXPECT_STREQ ("SomeFile.h", arrFiles[0]);     
+}

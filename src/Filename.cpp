@@ -76,8 +76,10 @@ CString CFilename::GetFolderName() const
      TCHAR szDrive [_MAX_DRIVE];
      TCHAR szDir [_MAX_DIR];
      _splitpath (pszPathname, szDrive, szDir, NULL, NULL);
+     if ( strlen (szDir) == 0 )
+          return "";  // We were passed 'C:' for the pathname. 
+          
      CString sFolder = CString (szDrive) + szDir;
-
      int nLen = sFolder.GetLength();
      if ( nLen > 0 )
      {
@@ -155,7 +157,7 @@ CString CFilename::GetBaseName()
 
 \param	pszPath		The path to examine.
 \return	\b true if the path is relative, \b false if not (or if pszPath is 
-		NULL).
+		nullptr).
 */
 /*static*/ bool CFilename::IsRelativePath (const TCHAR* pszPath)
 {
@@ -298,6 +300,7 @@ void CFilename::ReplaceAll (CString& str, const TCHAR* pszOld, const TCHAR* pszN
  * \return   The length of the filename.  If the pszFilename paramater is NULL then 
  *           no copying is done.
  */
+[[deprecated( "This function can easily cause NPE's if improperly used - Use GetFileName() instead" )]]	
 /*static*/ UINT CFilename::ExtractFileName (const TCHAR* pszPathName, 
                                             TCHAR* pszFilename, 
                                             UINT nMax)
@@ -323,6 +326,17 @@ void CFilename::ReplaceAll (CString& str, const TCHAR* pszOld, const TCHAR* pszN
 }
 
 
+const TCHAR* SkipTo (const TCHAR* psz, TCHAR ch)
+{
+	do
+	{
+		psz = _tcsinc(psz);
+		ASSERT(*psz != '\0');
+	}
+	while (*psz != '\\');
+
+	return psz;
+}
 
 /*!  Abbreviates the given file name to the given number of characters.
 
@@ -342,24 +356,19 @@ void CFilename::ReplaceAll (CString& str, const TCHAR* pszOld, const TCHAR* pszN
 
 \param    pszCanon       The path name to abbreviate.
 \param    nChars         The number of characters to abbreviate to.
-\param    bAtLeastName   If \b true, then all the filename will ber returned,
+\param    bAtLeastName   If \b true, then all the filename will be returned,
                          even if it is longer than nChars.
 */
 /*static*/ void CFilename::AbbreviatePath (TCHAR* pszCanon, 
                	                       int nChars, 
 			                            bool bAtLeastName /*=true*/)
 {
-	int cchFullPath, cchFileName, cchVolName;
-	const TCHAR* pszCur;
-	const TCHAR* pszBase;
-	const TCHAR* pszFileName;
-
-	pszBase = pszCanon;
-	cchFullPath = strlen (pszCanon);
+	const TCHAR* pszBase = pszCanon;
+	int cchFullPath = strlen (pszCanon);
 
 
-	cchFileName = ExtractFileName (pszCanon, NULL, 0);
-	pszFileName = pszBase + (cchFullPath-cchFileName);
+	int cchFileName = ExtractFileName (pszCanon, NULL, 0);
+	const TCHAR* pszFileName = pszBase + (cchFullPath-cchFileName);
 
 	// If nChars is more than enough to hold the full path name, we're done.
 	// This is probably a pretty common case, so we'll put it first.
@@ -380,32 +389,20 @@ void CFilename::ReplaceAll (CString& str, const TCHAR* pszOld, const TCHAR* pszN
 	// If nChars isn't enough to hold at least <volume_name>\...\<base_name>, the
 	// result is the base filename.
 
-	pszCur = pszBase + 2;                 // Skip "C:" or leading "\\"
+	const TCHAR* pszCur = pszBase + 2;                 // Skip "C:" or leading "\\" (UNC)
 
 	if (pszBase[0] == '\\' && pszBase[1] == '\\') // UNC pathname
 	{
-		// First skip to the '\' between the server name and the share name,
-		while (*pszCur != '\\')
-		{
-			pszCur = _tcsinc(pszCur);
-			ASSERT(*pszCur != '\0');
-		}
+		// UNC - skip the UNC and share name.
+		pszCur = SkipTo (pszCur, '\\');
+		pszCur = SkipTo (pszCur, '\\');
 	}
+	
 	// if a UNC get the share name, if a drive get at least one directory
 	ASSERT(*pszCur == '\\');
-	// make sure there is another directory, not just c:\filename.ext
-	if ( cchFullPath - cchFileName > 3 )
-	{
-		pszCur = _tcsinc(pszCur);
-		while (*pszCur != '\\')
-		{
-			pszCur = _tcsinc(pszCur);
-			ASSERT(*pszCur != '\0');
-		}
-	}
-	ASSERT(*pszCur == '\\');
-
-	cchVolName = pszCur - pszBase;
+	
+	int cchVolName = pszCur - pszBase;
+	// '\...\' between the starting 'c:\' and the rest is 5 characters.
 	if ( nChars < cchVolName + 5 + cchFileName )
 	{
 		lstrcpy(pszCanon, pszFileName);
@@ -418,15 +415,10 @@ void CFilename::ReplaceAll (CString& str, const TCHAR* pszOld, const TCHAR* pszN
 	// Assert that the whole filename doesn't fit -- this should have been
 	// handled earlier.
 
-	ASSERT (cchVolName + (int)lstrlen(pszCur) > nChars);
-	while ( cchVolName + 4 + (int)lstrlen(pszCur) > nChars )
+	ASSERT (cchVolName + (int)lstrlen (pszCur) > nChars);
+	while ( cchVolName + 4 + (int)lstrlen (pszCur) > nChars )
 	{
-		do
-		{
-			pszCur = _tcsinc(pszCur);
-			ASSERT(*pszCur != '\0');
-		}
-		while (*pszCur != '\\');
+	     pszCur = SkipTo (pszCur, '\\');
 	}
 
 	// Form the resultant string and we're done.
@@ -440,6 +432,19 @@ void CFilename::ReplaceAll (CString& str, const TCHAR* pszOld, const TCHAR* pszN
      return !GetCmdPathName (pszExe).IsEmpty();
 }
 
+/*static*/ bool CFilename::FileExists (const TCHAR* pszPath)
+{
+	struct stat statBuf;
+     return stat (pszPath, &statBuf) != -1;
+}
+
+
+/*static*/ CString CFilename::GetEnvVar (const TCHAR* pszEnv)
+{
+     return ::getenv (pszEnv);
+}
+
+
 /*!  Searches for the given exe in all the usual places, the current working 
      directory, and then the search path.  If the given file name doesn't have 
      one of the default filename extensions (.EXE, .COM, .BAT, .CMD) then the 
@@ -450,69 +455,77 @@ void CFilename::ReplaceAll (CString& str, const TCHAR* pszOld, const TCHAR* pszN
 */
 /*static*/ CString CFilename::GetCmdPathName (const TCHAR* pszExe)
 {
-     static TCHAR *szDefExt[] = { ".exe", ".com", ".bat", ".cmd" };
+     return GetCmdPathName (pszExe, FileExists, GetEnvVar);
+}
+
+static TCHAR *szDefExt[] = { ".exe", ".com", ".bat", ".cmd" };
+
+/// Checks that the given path has a valid extension.
+bool HasValidCmdExt (const TCHAR* pszPath)
+{
+     CString sExt = CFilename::GetFileExt (pszPath);
+     sExt.MakeLower();
+     for (int i = 0; i < SIZEOF_ARRAY (szDefExt); i++)
+     {
+          if ( sExt == szDefExt [i] )
+               return true;
+     }
+     return false;     // The extension is not one of the required four.
+}
+
+/// Checks that the given file exists in the given directory.
+CString CheckFileExists (const TCHAR* pszDir, const CString& sCmd, bool bHasExt,
+                         bool (*FileExists)(const TCHAR*))
+{
+     CString sPath = pszDir;
+     if ( !sPath.IsEmpty() && sPath [sPath.GetLength() - 1] != '\\' )
+          sPath += '\\';
+
+     sPath += sCmd;
+     if ( bHasExt )
+     {
+     	if ( FileExists (sPath) )
+     	     return sPath;
+     }
+     else
+          for (int i = 0; i < SIZEOF_ARRAY (szDefExt); i++)
+          {
+               CString sFullPath = sPath + szDefExt [i];
+               if ( FileExists (sFullPath) )
+                    return sFullPath;
+          }
+     return "";
+}
+
+/*static*/ 
+CString CFilename::GetCmdPathName (const TCHAR* pszExe,
+                                   bool (*FileExists)(const TCHAR*),
+                                   CString (*GetEnvVar)(const TCHAR*))
+{
      
      // Check if the given command has one of the default extensions...
      CString sCmd = pszExe;
      sCmd.TrimLeft();
      sCmd.TrimRight();
 
-     int nExt = sCmd.ReverseFind ('.');
+     bool bHasExt = sCmd.ReverseFind ('.') != -1;
+     if ( bHasExt && !HasValidCmdExt (pszExe) )
+          return "";
 
-     bool bHasExt = false;
-     if ( nExt == -1 )
-          bHasExt = false;
-     else
-          for (int i = 0; i < SIZEOF_ARRAY (szDefExt); i++)
-          {
-               CString sExt = sCmd.Right (sCmd.GetLength() - nExt);
-               sExt.MakeLower();
-               if ( sExt == szDefExt [i] )
-               {
-                    bHasExt = true;
-                    break;
-               }
-          }
-     
-	struct stat statBuf;
-	
 	// Check the local directory...
-	if ( bHasExt )
-	{
-     	if ( stat (sCmd, &statBuf) != -1 )
-     	     return sCmd;
-     }
-     else
-          for (int i = 0; i < SIZEOF_ARRAY (szDefExt); i++)
-          {
-               CString sPath = sCmd + szDefExt [i];
-          	if ( stat (sPath, &statBuf) != -1 )
-          	     return sPath;
-          }
-     
-     CString sSearchPath = getenv ("path");
+	CString sPath = CheckFileExists ("", sCmd, bHasExt, FileExists);
+	if ( !sPath.IsEmpty() )
+          return sPath;
+	
+     CString sSearchPath = GetEnvVar ("path");
      TCHAR* s = sSearchPath.GetBuffer (0);
      if ( (s = strtok (s, ";")) )
      {
           do
           {
-               CString sPath = s;
-               if ( sPath [sPath.GetLength() - 1] != '\\' )
-                    sPath += '\\';
-
-               sPath += sCmd;
-          	if ( bHasExt )
-          	{
-               	if ( stat (sPath, &statBuf) != -1 )
-               	     return sPath;
-               }
-               else
-                    for (int i = 0; i < SIZEOF_ARRAY (szDefExt); i++)
-                    {
-                         CString sFullPath = sPath + szDefExt [i];
-                    	if ( stat (sFullPath, &statBuf) != -1 )
-                    	     return sFullPath;
-                    }
+          	sPath = CheckFileExists (s, sCmd, bHasExt, FileExists);
+          	if ( !sPath.IsEmpty() )
+                    return sPath;
           }
           while ( (s = strtok (NULL, ";")) && *s );
      }
@@ -522,24 +535,34 @@ void CFilename::ReplaceAll (CString& str, const TCHAR* pszOld, const TCHAR* pszN
 
 
 
-/*!  Attempts to get a filename from the given string.  It looks at all the
-     quoted strings in the string and puts them into the array of filenames.
-
-\param    psz            The string to parse.
-\param    arrFilenames   Array of potential filenames.
-\return   Number of files found.
-*/
-/*static*/ int CFilename::ParseFileName (const TCHAR* psz, CStringArray& arrFilenames)
+/*!  Attempts to get a filename from the given string.  
+ *   
+ *   It looks at all the  quoted strings in the string and puts them into the 
+ *   array of filenames.
+ *
+ * \param psz            The string to parse.
+ * \param arrFilenames   Array of potential filenames.
+ * \return Number of files found.
+ */
+[[ deprecated("Too C/C++ specific - this will be removed in a future release")]]
+/*static*/ 
+int CFilename::ParseFileName (const TCHAR* psz, CStringArray& arrFilenames)
 {
+     arrFilenames.RemoveAll();
+
+     if ( strchr (psz, '<') == nullptr && 
+          strchr (psz, '"') == nullptr )
+          return 0;      // No quoted string.
+     
      CString sCopy = psz;
      TCHAR* s = sCopy.GetBuffer(0);
      
-     arrFilenames.RemoveAll();
      s = strtok (s, "\"<");
      while ( s )
      {
-          arrFilenames.Add (s);
           s = strtok (NULL, "\">");
+          if ( s )
+               arrFilenames.Add (s);
      }
      sCopy.ReleaseBuffer();
      return arrFilenames.GetSize();
