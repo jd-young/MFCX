@@ -19,7 +19,7 @@ static char THIS_FILE[] = __FILE__;
 
 using MFCX::CStringUtil;
 
-TEST(CStringUtilTest, TestIsPrintable)
+TEST(StringUtilTest, TestIsPrintable)
 {
      // TODO: I18n?
      for (int i = 0; i < 32; i++)
@@ -40,7 +40,7 @@ TEST(CStringUtilTest, TestIsPrintable)
      }
 }
 
-TEST(CStringUtilTest, TestSplitCString)
+TEST(StringUtilTest, TestSplitCString)
 {
      CStringArray result;
 
@@ -65,7 +65,7 @@ TEST(CStringUtilTest, TestSplitCString)
      EXPECT_STREQ ("example", result.GetAt (4));
 }
 
-TEST(CStringUtilTest, TestSplitStdString)
+TEST(StringUtilTest, TestSplitStdString)
 {
      vector<string> result;
 
@@ -104,7 +104,7 @@ TEST(CStringUtilTest, TestSplitStdString)
 
 
 
-TEST(CStringUtilTest, TestJoin)
+TEST(StringUtilTest, TestJoinCString)
 {
      CStringList lstStrings;
      lstStrings.AddTail ("A");
@@ -118,13 +118,27 @@ TEST(CStringUtilTest, TestJoin)
                    CStringUtil::Join (lstStrings, ","));
 }
 
+TEST(StringUtilTest, TestJoinStdString)
+{
+     vector<string> lstStrings;
+     lstStrings.push_back ("A");
+     lstStrings.push_back ("comma");
+     lstStrings.push_back ("separated");
+     lstStrings.push_back ("text");
+     lstStrings.push_back ("example");
+
+     // Single delimiter
+     EXPECT_STREQ ("A,comma,separated,text,example", 
+                   CStringUtil::Join (lstStrings, ","));
+}
+
 CString GetListStr (const CStringList& lst, int idx)
 {
      POSITION pos = lst.FindIndex (idx);
      return lst.GetAt (pos);
 }
 
-TEST(CStringUtilTest, TestCopyFrom)
+TEST(StringUtilTest, TestCopyFrom)
 {
      CStringList lstOrig;
      lstOrig.AddTail ("A");
@@ -145,7 +159,7 @@ TEST(CStringUtilTest, TestCopyFrom)
 }
 
 
-TEST(CStringUtilTest, TestFormat)
+TEST(StringUtilTest, TestFormat)
 {
      EXPECT_STREQ ("This is an integer: 12345", 
                    CStringUtil::Format ("This is an integer: %d", 12345).c_str());
@@ -153,4 +167,14 @@ TEST(CStringUtilTest, TestFormat)
                    CStringUtil::Format ("This is a float: %f", 1.2345).c_str());
      EXPECT_STREQ ("This is hex: 0x3039", 
                    CStringUtil::Format ("This is hex: 0x%x", 12345).c_str());
+
+     string s (95, 'c');
+     string exp = "This is a long string: " + s;
+     EXPECT_STREQ (exp.c_str(), 
+                   CStringUtil::Format ("This is a long string: %s", s.c_str()).c_str());
+
+     string vs (300, 'c');
+     exp = "This is a long string: " + s;
+     EXPECT_STREQ (exp.c_str(), 
+                   CStringUtil::Format ("This is a long string: %s", vs.c_str()).c_str());
 }

@@ -23,7 +23,7 @@
 #ifndef   __MFXCX_RECENTFILE_H
 #define   __MFXCX_RECENTFILE_H
 
-#include < afxadv.h>  // for CRecentFileList
+#include <afxadv.h>  // for CRecentFileList
 
 /*!  This is an enhanced CRecentFileList which allows you to have the recent 
      files in a separate popup menu.
