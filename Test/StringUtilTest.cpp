@@ -174,7 +174,7 @@ TEST(StringUtilTest, TestFormat)
                    CStringUtil::Format ("This is a long string: %s", s.c_str()).c_str());
 
      string vs (300, 'c');
-     exp = "This is a long string: " + s;
+     exp = "This is a long string: " + vs;
      EXPECT_STREQ (exp.c_str(), 
                    CStringUtil::Format ("This is a long string: %s", vs.c_str()).c_str());
 }
