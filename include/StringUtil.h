@@ -47,7 +47,7 @@ public:
      static CString Join (const CStringList& lstStrs, TCHAR cSep = ',');
 
      /// Join the given string list into a single string.
-     static CString Join (const CStringList& lstStrs, const TCHAR* pszSep = ",");
+     static CString Join (const CStringList& lstStrs, const TCHAR* pszSep);
 
      /// Join the given string list into a single string.
      static CString Join (const vector<string>& lstStrs, const TCHAR* pszSep);
