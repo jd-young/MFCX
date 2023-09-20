@@ -216,8 +216,8 @@ TEST(FilenameTest, TestAbbreviatePath)
      EXPECT_STREQ ("\\\\UNC\\SHARE\\MYAPP\\DEBUGS\\C\\TESWIN.C", TestAbbreviatePath (pszUNCPath, 100, false));
 }
 
-
-bool FileExists (const TCHAR* pszPath)
+// Used by TestGetCmdPathName()
+bool FileExists1 (const TCHAR* pszPath)
 {
      static const TCHAR* pPath1 = "C:\\Path1\\OnPath1.exe";
      static const TCHAR* pPath2 = "C:\\Path2\\OnPath2.cmd";
@@ -237,48 +237,56 @@ bool FileExists (const TCHAR* pszPath)
             strcmp (pszPath, pCurrentDirxxx) == 0;
 }
 
+// Used by TestGetCMdPathName() and TestGetIncludeName() to return various 
+// environment variables.
 CString GetEnvVar (const TCHAR* pszEnv)
 {
-     return "C:\\Path1;C:\\Path2";
+     if ( strcmp (pszEnv, "path") >= 0 )
+          return "C:\\Path1;C:\\Path2";
+
+     if ( strcmp (pszEnv, "include") >= 0 )
+          return "..\\include;C:\\Program Files\\MFC\\include";
+
+     return "";
 }
 
 TEST(FilenameTest, TestGetCmdPathName)
 {
      // No extension
-     EXPECT_STREQ ("", CFilename::GetCmdPathName ("NotOnPath", &FileExists, &GetEnvVar));
-     EXPECT_STREQ ("C:\\Path1\\OnPath1.exe", CFilename::GetCmdPathName ("OnPath1", &FileExists, &GetEnvVar));
-     EXPECT_STREQ ("C:\\Path2\\OnPath2.cmd", CFilename::GetCmdPathName ("OnPath2", &FileExists, &GetEnvVar));
-     EXPECT_STREQ ("CurrentDir.bat", CFilename::GetCmdPathName ("CurrentDir", &FileExists, &GetEnvVar));
+     EXPECT_STREQ ("", CFilename::GetCmdPathName ("NotOnPath", &FileExists1, &GetEnvVar));
+     EXPECT_STREQ ("C:\\Path1\\OnPath1.exe", CFilename::GetCmdPathName ("OnPath1", &FileExists1, &GetEnvVar));
+     EXPECT_STREQ ("C:\\Path2\\OnPath2.cmd", CFilename::GetCmdPathName ("OnPath2", &FileExists1, &GetEnvVar));
+     EXPECT_STREQ ("CurrentDir.bat", CFilename::GetCmdPathName ("CurrentDir", &FileExists1, &GetEnvVar));
 
      // .exe
-     EXPECT_STREQ ("", CFilename::GetCmdPathName ("NotOnPath.exe", &FileExists, &GetEnvVar));
-     EXPECT_STREQ ("C:\\Path1\\OnPath1.exe", CFilename::GetCmdPathName ("OnPath1.exe", &FileExists, &GetEnvVar));
-     EXPECT_STREQ ("", CFilename::GetCmdPathName ("OnPath2.exe", &FileExists, &GetEnvVar));
-     EXPECT_STREQ ("", CFilename::GetCmdPathName ("CurrentDir.exe", &FileExists, &GetEnvVar));
+     EXPECT_STREQ ("", CFilename::GetCmdPathName ("NotOnPath.exe", &FileExists1, &GetEnvVar));
+     EXPECT_STREQ ("C:\\Path1\\OnPath1.exe", CFilename::GetCmdPathName ("OnPath1.exe", &FileExists1, &GetEnvVar));
+     EXPECT_STREQ ("", CFilename::GetCmdPathName ("OnPath2.exe", &FileExists1, &GetEnvVar));
+     EXPECT_STREQ ("", CFilename::GetCmdPathName ("CurrentDir.exe", &FileExists1, &GetEnvVar));
 
      // .com
-     EXPECT_STREQ ("", CFilename::GetCmdPathName ("NotOnPath.com", &FileExists, &GetEnvVar));
-     EXPECT_STREQ ("", CFilename::GetCmdPathName ("OnPath1.com", &FileExists, &GetEnvVar));
-     EXPECT_STREQ ("", CFilename::GetCmdPathName ("OnPath2.com", &FileExists, &GetEnvVar));
-     EXPECT_STREQ ("", CFilename::GetCmdPathName ("CurrentDir.com", &FileExists, &GetEnvVar));
+     EXPECT_STREQ ("", CFilename::GetCmdPathName ("NotOnPath.com", &FileExists1, &GetEnvVar));
+     EXPECT_STREQ ("", CFilename::GetCmdPathName ("OnPath1.com", &FileExists1, &GetEnvVar));
+     EXPECT_STREQ ("", CFilename::GetCmdPathName ("OnPath2.com", &FileExists1, &GetEnvVar));
+     EXPECT_STREQ ("", CFilename::GetCmdPathName ("CurrentDir.com", &FileExists1, &GetEnvVar));
 
      // .cmd
-     EXPECT_STREQ ("", CFilename::GetCmdPathName ("NotOnPath.cmd", &FileExists, &GetEnvVar));
-     EXPECT_STREQ ("", CFilename::GetCmdPathName ("OnPath1.cmd", &FileExists, &GetEnvVar));
-     EXPECT_STREQ ("C:\\Path2\\OnPath2.cmd", CFilename::GetCmdPathName ("OnPath2.cmd", &FileExists, &GetEnvVar));
-     EXPECT_STREQ ("", CFilename::GetCmdPathName ("CurrentDir.cmd", &FileExists, &GetEnvVar));
+     EXPECT_STREQ ("", CFilename::GetCmdPathName ("NotOnPath.cmd", &FileExists1, &GetEnvVar));
+     EXPECT_STREQ ("", CFilename::GetCmdPathName ("OnPath1.cmd", &FileExists1, &GetEnvVar));
+     EXPECT_STREQ ("C:\\Path2\\OnPath2.cmd", CFilename::GetCmdPathName ("OnPath2.cmd", &FileExists1, &GetEnvVar));
+     EXPECT_STREQ ("", CFilename::GetCmdPathName ("CurrentDir.cmd", &FileExists1, &GetEnvVar));
 
      // .bat
-     EXPECT_STREQ ("", CFilename::GetCmdPathName ("NotOnPath.bat", &FileExists, &GetEnvVar));
-     EXPECT_STREQ ("", CFilename::GetCmdPathName ("OnPath1.bat", &FileExists, &GetEnvVar));
-     EXPECT_STREQ ("", CFilename::GetCmdPathName ("OnPath2.bat", &FileExists, &GetEnvVar));
-     EXPECT_STREQ ("CurrentDir.bat", CFilename::GetCmdPathName ("CurrentDir.bat", &FileExists, &GetEnvVar));
+     EXPECT_STREQ ("", CFilename::GetCmdPathName ("NotOnPath.bat", &FileExists1, &GetEnvVar));
+     EXPECT_STREQ ("", CFilename::GetCmdPathName ("OnPath1.bat", &FileExists1, &GetEnvVar));
+     EXPECT_STREQ ("", CFilename::GetCmdPathName ("OnPath2.bat", &FileExists1, &GetEnvVar));
+     EXPECT_STREQ ("CurrentDir.bat", CFilename::GetCmdPathName ("CurrentDir.bat", &FileExists1, &GetEnvVar));
 
      // .xxx
-     EXPECT_STREQ ("", CFilename::GetCmdPathName ("NotOnPath.xxx", &FileExists, &GetEnvVar));
-     EXPECT_STREQ ("", CFilename::GetCmdPathName ("OnPath1.xxx", &FileExists, &GetEnvVar));
-     EXPECT_STREQ ("", CFilename::GetCmdPathName ("OnPath2.xxx", &FileExists, &GetEnvVar));
-     EXPECT_STREQ ("", CFilename::GetCmdPathName ("CurrentDir.xxx", &FileExists, &GetEnvVar));
+     EXPECT_STREQ ("", CFilename::GetCmdPathName ("NotOnPath.xxx", &FileExists1, &GetEnvVar));
+     EXPECT_STREQ ("", CFilename::GetCmdPathName ("OnPath1.xxx", &FileExists1, &GetEnvVar));
+     EXPECT_STREQ ("", CFilename::GetCmdPathName ("OnPath2.xxx", &FileExists1, &GetEnvVar));
+     EXPECT_STREQ ("", CFilename::GetCmdPathName ("CurrentDir.xxx", &FileExists1, &GetEnvVar));
 }
 
 TEST(FilenameTest, TestParseFileName)
@@ -291,4 +299,70 @@ TEST(FilenameTest, TestParseFileName)
      
      EXPECT_EQ (1, CFilename::ParseFileName ("#include <SomeFile.h>", arrFiles));
      EXPECT_STREQ ("SomeFile.h", arrFiles[0]);     
+}
+
+static const TCHAR* HEADER_H = "C:\\Projects\\Libraries\\MyLib\\include\\header.h";
+static const TCHAR* AFX_H = "C:\\Program Files\\MFC\\include\\afx.h";
+static const TCHAR* STRING_C = "C:\\Program Files\\C\\include\\string.h";
+
+// Used by TestGetIncludeName()
+bool FileExists2 (const TCHAR* pszPath)
+{
+//     static const TCHAR* pPath_mylib = "C:\\Projects\\Libraries\\MyLib\\include\\header.h";
+     
+     return strcmp (pszPath, HEADER_H) == 0 ||
+            strcmp (pszPath, AFX_H) == 0 ||
+            strcmp (pszPath, STRING_C) == 0 ||
+            strcmp (pszPath, "..\\include\\lib.h") == 0;
+}
+
+CString FullPath (const TCHAR* pszRel)
+{
+     if ( strcmp (pszRel, "myheader.h") == 0 )
+          return HEADER_H;
+     if ( strcmp (pszRel, "lib.h") == 0 )
+          return "..\\include\\lib.h";
+     return "";
+}
+
+TEST(FilenameTest, TestGetIncludeName)
+{
+     CString sPath;
+     CStringArray arrIncludes;
+     arrIncludes.Add ("../include");
+     arrIncludes.Add ("C:\\Projects\\Libraries\\MyLib\\include");
+     
+     EXPECT_TRUE (CFilename::GetIncludeName ("myheader.h",
+                                             sPath, arrIncludes, 
+                                             &FileExists2, &GetEnvVar, 
+                                             &FullPath));
+     EXPECT_STREQ (HEADER_H, sPath);
+
+     EXPECT_FALSE (CFilename::GetIncludeName ("notthere.h",
+                                              sPath, arrIncludes,
+                                              &FileExists2, &GetEnvVar,
+                                              &FullPath));
+
+     EXPECT_TRUE (CFilename::GetIncludeName ("lib.h",
+                                             sPath, arrIncludes,
+                                             &FileExists2, &GetEnvVar,
+                                             &FullPath));
+//     EXPECT_STREQ ("C:\\Program Files\\C\\include\\lib.h", sPath);
+
+}
+
+static const TCHAR* SZ_FILTERS =  
+          "C++ (*.cpp)|*.cpp|"
+          "Text files (*.txt)|*.txt|"
+     	"HTML files (*.html;*.htm)|*.html;*.htm|"
+     	"All Files (*.*)|*.*||";
+
+TEST(FilenameTest, TestGetFilterIndex)
+{
+     EXPECT_EQ (3, CFilename::GetFilterIndex (SZ_FILTERS, "htm"));
+     EXPECT_EQ (3, CFilename::GetFilterIndex (SZ_FILTERS, "html"));
+     EXPECT_EQ (1, CFilename::GetFilterIndex (SZ_FILTERS, "cpp"));
+     EXPECT_EQ (1, CFilename::GetFilterIndex (SZ_FILTERS, ".cpp"));
+     EXPECT_EQ (-1, CFilename::GetFilterIndex (SZ_FILTERS, "obj"));
+     EXPECT_EQ (-1, CFilename::GetFilterIndex (SZ_FILTERS, ".obj"));
 }
