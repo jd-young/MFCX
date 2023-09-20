@@ -127,7 +127,7 @@ protected:
      /// Gets the path of the given include file.
      static bool GetIncludeName (const TCHAR* pszInc,
                                  CString& sPath,
-                                 const CStringArray& arrIncludePaths,
+                                 const CStringArray& arrIncludes,
                                  bool (*FileExists)(const TCHAR*),
                                  CString (*GetEnvVar)(const TCHAR*),
                                  CString (*FullPath)(const TCHAR*));

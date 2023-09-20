@@ -103,6 +103,21 @@ vector<string> CStringUtil::Split (const string& sText, string sDelim,
 }
  
 
+/*!  Joins the strings in the given list 
+
+\param lstStrs      The string list to join.
+\param cSep         The separator to join the list with.  If omitted, then a 
+                    comma is used.
+\return the string list as a single string, each element separated by the given 
+        separator.
+*/
+/*static*/
+CString CStringUtil::Join (const CStringList& lstStrs, TCHAR cSep /*= ','*/)
+{
+     CString sDelimiter (cSep);
+     return Join (lstStrs, sDelimiter);
+}
+
 
 /*!  Joins the strings in the given list 
 

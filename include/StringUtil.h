@@ -42,6 +42,10 @@ public:
      static vector<string> Split (const string& sText, string sDelim, 
                                   DWORD dwFlags = 0);
 
+     /// Join the given string list into a single string with the given 
+     /// character delimiter.
+     static CString Join (const CStringList& lstStrs, TCHAR cSep = ',');
+
      /// Join the given string list into a single string.
      static CString Join (const CStringList& lstStrs, const TCHAR* pszSep = ",");
 
