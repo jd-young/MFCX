@@ -75,7 +75,7 @@ CString CFilename::GetFolderName() const
 {
      TCHAR szDrive [_MAX_DRIVE];
      TCHAR szDir [_MAX_DIR];
-     _splitpath (pszPathname, szDrive, szDir, NULL, NULL);
+     _splitpath (pszPathname, szDrive, szDir, nullptr, nullptr);
      if ( strlen (szDir) == 0 )
           return "";  // We were passed 'C:' for the pathname. 
           
@@ -297,7 +297,7 @@ void CFilename::ReplaceAll (CString& str, const TCHAR* pszOld, const TCHAR* pszN
  * \param    pszPathName    The path name.
  * \param    pszFilename    The file name part.
  * \param    nMax           The maximum length of pszFilename.
- * \return   The length of the filename.  If the pszFilename paramater is NULL then 
+ * \return   The length of the filename.  If the pszFilename paramater is nullptr then 
  *           no copying is done.
  */
 [[deprecated( "This function can easily cause NPE's if improperly used - Use GetFileName() instead" )]]	
@@ -305,7 +305,7 @@ void CFilename::ReplaceAll (CString& str, const TCHAR* pszOld, const TCHAR* pszN
                                             TCHAR* pszFilename, 
                                             UINT nMax)
 {
-	if ( pszPathName == NULL )
+	if ( pszPathName == nullptr )
 	{
 		*pszFilename = '\0';
 		return 0;
@@ -320,18 +320,23 @@ void CFilename::ReplaceAll (CString& str, const TCHAR* pszOld, const TCHAR* pszN
 	}
 
 	// otherwise copy it into the buffer provided
-	if ( pszFilename != NULL )
+	if ( pszFilename != nullptr )
 		strncpy (pszFilename, pszStart, nMax);
-	return lstrlen(pszStart);
+	return _tcslen (pszStart);
 }
 
-
+/*!  Skips to the given character in the given string. 
+ *
+ * \param psz       The string in which to skip to.
+ * \param ch        The character to skip to.
+ * \return A pointer to the given character in the string.
+ */
 const TCHAR* SkipTo (const TCHAR* psz, TCHAR ch)
 {
 	do
 	{
-		psz = _tcsinc(psz);
-		ASSERT(*psz != '\0');
+		psz = _tcsinc (psz);
+		ASSERT (*psz != '\0');
 	}
 	while (*psz != '\\');
 
@@ -366,8 +371,7 @@ const TCHAR* SkipTo (const TCHAR* psz, TCHAR ch)
 	const TCHAR* pszBase = pszCanon;
 	int cchFullPath = strlen (pszCanon);
 
-
-	int cchFileName = ExtractFileName (pszCanon, NULL, 0);
+	int cchFileName = ExtractFileName (pszCanon, nullptr, 0);
 	const TCHAR* pszFileName = pszBase + (cchFullPath-cchFileName);
 
 	// If nChars is more than enough to hold the full path name, we're done.
@@ -399,13 +403,13 @@ const TCHAR* SkipTo (const TCHAR* psz, TCHAR ch)
 	}
 	
 	// if a UNC get the share name, if a drive get at least one directory
-	ASSERT(*pszCur == '\\');
+	ASSERT (*pszCur == '\\');
 	
 	int cchVolName = pszCur - pszBase;
 	// '\...\' between the starting 'c:\' and the rest is 5 characters.
 	if ( nChars < cchVolName + 5 + cchFileName )
 	{
-		lstrcpy(pszCanon, pszFileName);
+		lstrcpy (pszCanon, pszFileName);
 		return;
 	}
 
@@ -415,16 +419,16 @@ const TCHAR* SkipTo (const TCHAR* psz, TCHAR ch)
 	// Assert that the whole filename doesn't fit -- this should have been
 	// handled earlier.
 
-	ASSERT (cchVolName + (int)lstrlen (pszCur) > nChars);
-	while ( cchVolName + 4 + (int)lstrlen (pszCur) > nChars )
+	ASSERT (cchVolName + (int) _tcslen (pszCur) > nChars);
+	while ( cchVolName + 4 + (int) _tcslen (pszCur) > nChars )
 	{
 	     pszCur = SkipTo (pszCur, '\\');
 	}
 
 	// Form the resultant string and we're done.
-	pszCanon[cchVolName] = '\0';
-	lstrcat(pszCanon, _T("\\..."));
-	lstrcat(pszCanon, pszCur);
+	pszCanon [cchVolName] = '\0';
+	_tcscat (pszCanon, _T("\\..."));
+	_tcscat (pszCanon, pszCur);
 }
 
 /*static*/ bool CFilename::IsInPath (const TCHAR* pszExe)
@@ -438,29 +442,24 @@ const TCHAR* SkipTo (const TCHAR* psz, TCHAR ch)
      return stat (pszPath, &statBuf) != -1;
 }
 
-
+/*!  Gets the environment variable.
+ *
+ * \param pszEnv    The name of the environment variable to get.
+ * \return The value of the environment variable.
+ */
 /*static*/ CString CFilename::GetEnvVar (const TCHAR* pszEnv)
 {
      return ::getenv (pszEnv);
 }
 
 
-/*!  Searches for the given exe in all the usual places, the current working 
-     directory, and then the search path.  If the given file name doesn't have 
-     one of the default filename extensions (.EXE, .COM, .BAT, .CMD) then the 
-     are searched for (in that order).
-
-\param    pszExe    The name of the executable file.
-\return   The full path of the executible that will run.
-*/
-/*static*/ CString CFilename::GetCmdPathName (const TCHAR* pszExe)
-{
-     return GetCmdPathName (pszExe, FileExists, GetEnvVar);
-}
-
 static TCHAR *szDefExt[] = { ".exe", ".com", ".bat", ".cmd" };
 
-/// Checks that the given path has a valid extension.
+/*!  Checks that the given path has a valid extension.
+ *
+ * \param pszPath        The path of the file to check.
+ * \return true if the file has a command extension.
+ */
 bool HasValidCmdExt (const TCHAR* pszPath)
 {
      CString sExt = CFilename::GetFileExt (pszPath);
@@ -473,15 +472,21 @@ bool HasValidCmdExt (const TCHAR* pszPath)
      return false;     // The extension is not one of the required four.
 }
 
-/// Checks that the given file exists in the given directory.
-CString CheckFileExists (const TCHAR* pszDir, const CString& sCmd, bool bHasExt,
+/*!  Checks that the given file exists in the given directory.
+ *
+ * \param pszDir         The directory in which the file should be.
+ * \param sFile          The name of the file.
+ * \return The full path name of the file if it exists, or the empty string if 
+ *         not.
+ */
+CString CheckFileExists (const TCHAR* pszDir, const CString& sFile, bool bHasExt,
                          bool (*FileExists)(const TCHAR*))
 {
      CString sPath = pszDir;
      if ( !sPath.IsEmpty() && sPath [sPath.GetLength() - 1] != '\\' )
           sPath += '\\';
 
-     sPath += sCmd;
+     sPath += sFile;
      if ( bHasExt )
      {
      	if ( FileExists (sPath) )
@@ -497,12 +502,26 @@ CString CheckFileExists (const TCHAR* pszDir, const CString& sCmd, bool bHasExt,
      return "";
 }
 
+/*!  Searches for the given exe in all the usual places, the current working 
+ *   directory, and then the search path.
+ *     
+ *   If the given file name doesn't have one of the default filename extensions
+ *   (.EXE, .COM, .BAT, .CMD) then the are searched for (in that order).
+ *
+ * \param pszExe    The name of the executable file.
+ * \return The full path of the executible that will run.
+*/
+/*static*/ CString CFilename::GetCmdPathName (const TCHAR* pszExe)
+{
+     return GetCmdPathName (pszExe, FileExists, GetEnvVar);
+}
+
+
 /*static*/ 
 CString CFilename::GetCmdPathName (const TCHAR* pszExe,
                                    bool (*FileExists)(const TCHAR*),
                                    CString (*GetEnvVar)(const TCHAR*))
-{
-     
+{     
      // Check if the given command has one of the default extensions...
      CString sCmd = pszExe;
      sCmd.TrimLeft();
@@ -527,7 +546,7 @@ CString CFilename::GetCmdPathName (const TCHAR* pszExe,
           	if ( !sPath.IsEmpty() )
                     return sPath;
           }
-          while ( (s = strtok (NULL, ";")) && *s );
+          while ( (s = strtok (nullptr, ";")) && *s );
      }
      sSearchPath.ReleaseBuffer();
      return "";
@@ -550,8 +569,8 @@ int CFilename::ParseFileName (const TCHAR* psz, CStringArray& arrFilenames)
 {
      arrFilenames.RemoveAll();
 
-     if ( strchr (psz, '<') == nullptr && 
-          strchr (psz, '"') == nullptr )
+     if ( _tcschr (psz, '<') == nullptr && 
+          _tcschr (psz, '"') == nullptr )
           return 0;      // No quoted string.
      
      CString sCopy = psz;
@@ -560,14 +579,13 @@ int CFilename::ParseFileName (const TCHAR* psz, CStringArray& arrFilenames)
      s = strtok (s, "\"<");
      while ( s )
      {
-          s = strtok (NULL, "\">");
+          s = strtok (nullptr, "\">");
           if ( s )
                arrFilenames.Add (s);
      }
      sCopy.ReleaseBuffer();
      return arrFilenames.GetSize();
 }
-
 
 /*!  Attempts to file an include filename from the given name.
 
@@ -576,56 +594,76 @@ int CFilename::ParseFileName (const TCHAR* psz, CStringArray& arrFilenames)
 
 \param    pszName        The filename to search for.
 \param    sPath          The returned full path name.
-\param    sIncludePaths  The additional paths to search.
+\param    arrIncludes  The additional paths to search.
 \return   \b true if the path is found.
 */
 /*static*/ bool CFilename::GetIncludeName (const TCHAR* pszName, 
                            			   CString& sPath, 
-								   const CStringArray& sIncludePaths)
+								   const CStringArray& arrIncludes)
 {
-	TCHAR szCurrentDir [_MAX_PATH];
-	::GetCurrentDirectory (_MAX_PATH, szCurrentDir);
-     bool bFound = false;
+     TCHAR szCurrDir [_MAX_PATH];
+     ::GetCurrentDirectory (_MAX_PATH, szCurrDir);
+     bool bRet = GetIncludeName (pszName, sPath, arrIncludes, FileExists, GetEnvVar, 
+                                 [](const TCHAR* pszRel) -> CString
+                                 {
+                                   CString sFullPath;
+                                   TCHAR* psz = _tfullpath (sFullPath.GetBuffer (_MAX_PATH),
+                                                            pszRel, _MAX_PATH);
+                                   sFullPath.ReleaseBuffer();
+                                   return psz == nullptr ? "" : sFullPath;
+                                 });
+     ::SetCurrentDirectory (szCurrDir);
+     return bRet;
+}
 
-     struct stat statBuf;
-     for (int i = 0; i < sIncludePaths.GetSize(); i++)
+
+/*!  Gets the include path name.
+ *
+ * \param pszInc         A filename to get a path on the INCLUDE environment 
+ *                       variable paths.
+ * \param sPath          The string to receive the path.
+ * \param arrIncludes    An array of paths to search.
+ * \param FileExists     A function that returns true if the file exists.
+ * \param GetEnvVar      A function the gets an environment variable.
+ * \param FullPath       A function that returns the full path of a file.
+ * \return true if the include file was found.
+ */
+/*static*/
+bool CFilename::GetIncludeName (const TCHAR* pszInc,
+                                CString& sPath,
+                                const CStringArray& arrIncludes,
+                                bool (*FileExists)(const TCHAR*),
+                                CString (*GetEnvVar)(const TCHAR*),
+                                CString (*FullPath)(const TCHAR*))
+{
+     for (int i = 0; i < arrIncludes.GetSize(); i++)
      {
-          CString sIncludePath = sIncludePaths [i];
-          ::SetCurrentDirectory (sIncludePath); 
-          
-          TCHAR szFullPath [_MAX_PATH];
-          _tfullpath (szFullPath, pszName, _MAX_PATH);
-     	if ( stat (szFullPath, &statBuf) != -1 )
-     	{
-     	     sPath = szFullPath;
-     	     bFound = true;
-     	     break;
+          CString sIncludePath = arrIncludes [i];
+          CString sFullPath = FullPath (pszInc);
+          if ( FileExists (sFullPath) )
+          {
+               sPath = sFullPath;
+               return true;
           }
      }
      
-     ::SetCurrentDirectory (szCurrentDir);        // Leave things as they were.
-     if ( bFound )
-          return true;
-
-     CString sSearchPath = getenv ("include");
+     CString sSearchPath = GetEnvVar ("include");
      TCHAR* s = sSearchPath.GetBuffer (0);
      for (s = strtok (s, ";"); s; )
      {
           CString sPotential = s;
           if ( sPotential [sPotential.GetLength() - 1] != '\\' )
                sPotential += '\\';
-
-          sPotential += pszName;
-     	if ( stat (sPotential, &statBuf) != -1 )
-     	{
-     	     sPath = sPotential;
-     	     bFound = true;
-     	     break;
-     	}
-     	else s = strtok (NULL, ";");
+          sPotential += pszInc;
+          if ( FileExists (sPotential) )
+          {
+               sPath = sPotential;
+               return true;
+          }
+     	s = strtok (nullptr, ";");
      }
      sSearchPath.ReleaseBuffer();
-     return bFound;
+     return false;
 }
 
 /*!  Finds a match with the given MFC style open file filter.
@@ -643,7 +681,7 @@ int CFilename::ParseFileName (const TCHAR* psz, CStringArray& arrFilenames)
                          ".txt" (leading dot) and "txt" (no dot), and the 
                          function will do the right thing.
 \return   Returns the 1 based index of the given file filter. If there is no 
-          match then 0 is returned.
+          match then -1 is returned.
 
 \attention
           This routine looks decidedly dodgy, however, it seems to work, so
@@ -654,41 +692,45 @@ int CFilename::ParseFileName (const TCHAR* psz, CStringArray& arrFilenames)
      ASSERT ( pszFilters );
      ASSERT ( pszExt );
 
-	if ( pszFilters == NULL || pszExt == NULL )
-		return -1;
+     if ( pszFilters == nullptr || pszExt == nullptr )
+          return -1;
 
      if ( pszExt [0] == '.' )      // Skip any leading '.'
           pszExt++;
      
      int lenExt = strlen (pszExt);
-	const TCHAR* s = pszFilters;
-	for (int	nIndex = 1; s && *s; nIndex++)
-		if ( s = strchr (s, '|') )
-		{
-			s++;
-			for (const TCHAR* p = NULL; s && *s; s++)
-				if ( *s == '.' )
-					p = s+1;
-				else if ( *s == ';' || *s == '|' )
-				{
+     const TCHAR* s = pszFilters;
+     for (int  nIndex = 1; s && *s; nIndex++)
+          if ( s = _tcschr (s, '|') )
+          {
+               s++;
+               for (const TCHAR* p = nullptr; s && *s; s++)
+                    if ( *s == '.' )
+                         p = s+1;
+                    else if ( *s == ';' || *s == '|' )
+                    {
                          int lenTest = s - p;
-					if ( p && lenExt == lenTest && 
+                         if ( p && lenExt == lenTest && 
                               strncmp (pszExt, p, lenExt) == 0 )
-						return nIndex;
+                              return nIndex;
 
-					p = NULL;
-					if ( *s == '|' )
-					{
-						s++;
-						break;
-					}
-				}
-		}
-	return -1;
+                         p = nullptr;
+                         if ( *s == '|' )
+                         {
+                              s++;
+                              break;
+                         }
+                    }
+          }
+     return -1;
 }
 
 
-
+/*! Checks if the command is a console command.
+ *
+ * \param pszCmd         The command to check.
+ * \return true if the command is a console command, false otherwise.
+ */
 /*static*/ bool CFilename::IsConsoleCmd (const TCHAR* pszCmd)
 {
      CString sPath = GetCmdPathName (pszCmd);
@@ -733,7 +775,13 @@ int CFilename::ParseFileName (const TCHAR* psz, CStringArray& arrFilenames)
      return false; 
 }
 
-/*static*/ bool CFilename::GetFileTime (LPCTSTR pszPathName, CTime& time)
+/*!  Gets the timestamp for the given file.
+ *
+ * \param pszPathname    The path to the file.
+ * \param time           The CTime to receive the timestamp of the file.
+ * \return true if the time was successfully received, false otherwise.
+ */
+/*static*/ bool CFilename::GetFileTime (const TCHAR* pszPathName, CTime& time)
 {
 	// Store the modification date/time for the file, so that
 	// we can check for other applications modifying the file.
@@ -747,7 +795,3 @@ int CFilename::ParseFileName (const TCHAR* psz, CStringArray& arrFilenames)
 	time = statBuf.st_mtime;
 	return true;
 }
-
-
-
-
