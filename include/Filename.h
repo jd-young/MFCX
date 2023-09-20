@@ -120,6 +120,14 @@ protected:
      static CString GetCmdPathName (const TCHAR* pszExe,
                                     bool (*FileExists)(const TCHAR*),
                                     CString (*GetEnvVar)(const TCHAR*));
+
+     /// Gets the path of the given include file.
+     static bool GetIncludeName (const TCHAR* pszInc,
+                                 CString& sPath,
+                                 const CStringArray& arrIncludes,
+                                 bool (*FileExists)(const TCHAR*),
+                                 CString (*GetEnvVar)(const TCHAR*),
+                                 CString (*FullPath)(const TCHAR*));
 };
 
 #endif    // __MFCX_FILENAME_H
