@@ -68,6 +68,13 @@ vector<string> CStringUtil::StrTok (TCHAR* str, const TCHAR* pszDelims)
 }
 
 
+/*static*/
+vector<string> CStringUtil::Split (const string &s, TCHAR delim /*= ','*/)
+{
+     string sDelim (1, delim);     // Initialise with exactly one character - 'delim'.
+     return Split (s, sDelim);
+}
+
 /*! Splits the given string into a list of tokens with the given delimiter.
  *
  * \param sText     The text to split.
@@ -119,6 +126,26 @@ CString CStringUtil::Join (const CStringList& lstStrs,
      return sJoined;
 }
 
+
+/*!  Join the given string list into a single string.
+ *
+ */
+/*static*/
+CString CStringUtil::Join (const vector<string>& lstStrs, const TCHAR* pszSep)
+{
+     CString sJoined;
+     vector<string>::const_iterator it = lstStrs.cbegin();
+     vector<string>::const_iterator end = lstStrs.cend();
+     for ( ; it != end; ++it)
+     {
+          if ( !sJoined.IsEmpty() ) sJoined += pszSep;
+          sJoined += (*it).c_str();
+     }
+     return sJoined;
+}
+
+
+
 /*!  Copies from one list to another.
  *
  * Note that the destination list is not cleared, so the entries in the from 
@@ -140,7 +167,7 @@ void CStringUtil::CopyFrom (const CStringList& from, CStringList& to)
  *   Format a string from the given format string.
  *
  * @param fmt       The format string as per printf.
- * @return a string.
+ * @return a formatted string.
  */
 /*static*/
 std::string __stdcall CStringUtil::Format (const TCHAR* fmt, ...)

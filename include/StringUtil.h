@@ -33,13 +33,21 @@ public:
      /// Split the given text into a list of string by the given delimiters.
      static vector<string> StrTok (TCHAR* str, const TCHAR* pszDelims);
      
-     /// Split the given text into a list of strings by the given delimiter.
+     /// Split the given text into a list of strings by the given delimiter 
+     /// character.
+     static vector<string> Split (const string &s, TCHAR delim = ',');
+     
+     /// Split the given text into a list of strings by the given delimiter 
+     /// string.
      static vector<string> Split (const string& sText, string sDelim, 
                                   DWORD dwFlags = 0);
 
      /// Join the given string list into a single string.
      static CString Join (const CStringList& lstStrs, const TCHAR* pszSep = ",");
-     
+
+     /// Join the given string list into a single string.
+     static CString Join (const vector<string>& lstStrs, const TCHAR* pszSep);
+
      /// Copy a CStringList to another.
      static void CopyFrom (const CStringList& from, CStringList& to);
      
