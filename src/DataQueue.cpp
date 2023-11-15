@@ -11,7 +11,7 @@
 #include "../include/DataQueue.h"
 
 
-CDataQueue::CDataQueue ()
+CDataQueue::CDataQueue()
 {
 	CommonConstruct (NULL, 0);
 }
@@ -40,6 +40,12 @@ void CDataQueue::CommonConstruct (HWND hTarget, UINT wmMsg)
 {
      MakeEmpty();
 }
+
+bool CDataQueue::IsEmpty()
+{
+     return m_pHead == NULL;
+}
+
 
 void CDataQueue::MakeEmpty()
 {
@@ -80,6 +86,8 @@ bool CDataQueue::Add (const TCHAR* psz, LPARAM lParam /*= 0*/)
           m_pTail->pNext = pNew;
           m_pTail = pNew;
      }
+     
+     // TODO: Replace with IMessagePoster
      ::PostMessage (m_hTarget, m_wmMsg, (UINT) this, lParam);
      return true;
 }
@@ -103,11 +111,6 @@ CString CDataQueue::Remove()
           delete pFront;
      }
      return sData;
-}
-
-CDataQueue::CNode::CNode()
-{
-     pNext = NULL;
 }
 
 CDataQueue::CNode::CNode (const TCHAR* psz)

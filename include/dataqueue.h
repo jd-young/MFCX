@@ -22,7 +22,6 @@
 class CDataQueue
 {
 public:
-	/// Default queue constructor.
      CDataQueue();
      
      // TODO: Remove this constructor, since it has MFC CWnd.
@@ -51,8 +50,8 @@ public:
      /// Create the queue.
      bool Create (HWND hTo, UINT wmAddMsg);
 */
-     /// Tells wither the queue is empty or not.
-     bool IsEmpty() { return m_pHead == NULL; }
+     /// Tells whether the queue is empty or not.
+     bool IsEmpty();
 
      /// Empties the queue.
      void MakeEmpty();
@@ -63,14 +62,16 @@ public:
      /// Removes data from the front of the queue.
      CString Remove();
 
+#ifndef   _GTEST    // To allow unit testing.
 private:
+#endif
+
 	void CommonConstruct (HWND hTarget, UINT wmMsg);
 
      /// A node in the queue.
      class CNode
      {
      public:
-          CNode();
           CNode (const TCHAR* psz);
           CString sData;                     // <- The data
           CNode* pNext;

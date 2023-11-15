@@ -2,6 +2,7 @@
 
 builds/
 lib/
+sandbox/
 
 *.aps
 *.bsc
@@ -15,6 +16,7 @@ lib/
 .vscode/
 .pred/
 
+test/TestXTree/bin
 
 MFCXTest/Release
 MFCXTest/Debug
