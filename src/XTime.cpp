@@ -46,7 +46,14 @@ CString CXTimeSpan::GetStr()
 
 
 
-// TODO: This is not required as CTime provides GetAsSystemTime() for this.
+/*!  A helper to convert a tm struct into SYSTEMTIME.
+ *
+ *   Although CTime provides GetAsSystemTime() this bypasses the need to create
+ *   a CTime (or CXTime object). 
+ * 
+ * \param pTime          A pointer to a tm struct.
+ * \return the time as a SYSTEMTIME.
+ */
 /*static*/ SYSTEMTIME CXTime::CvtToSystime (const struct tm* pTime)
 {
      SYSTEMTIME sysTime;
@@ -138,10 +145,11 @@ CString CXTime::FormatTime (const struct tm* pTime,
      if ( pTime )
      {
           time_t t = time (NULL);
-          struct tm* now = localtime (&t);
-          return pTime->tm_year == now->tm_year &&
-                 pTime->tm_mon == now->tm_mon &&
-                 pTime->tm_mday == now->tm_mday;
+          struct tm now;
+          if ( localtime_s (&now, &t) == 0 )
+               return pTime->tm_year == now.tm_year &&
+                      pTime->tm_mon == now.tm_mon &&
+                      pTime->tm_mday == now.tm_mday;
      }
      return false;
 }
