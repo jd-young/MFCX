@@ -93,7 +93,7 @@ CHECKDIR  = ../builds/cppcheck
 # - /Zi  - Produce a separate PDB.
 CXX_CMN_FLAGS = -Gd -GS -analyze- -Oy- -W3 -Zc:wchar_t,inline,forScope \
                 -D "WIN32" -D "_WINDOWS" -D "MFCX_LOG_USELOG" \
-                -D "_MBCS" -D "_AFXDLL" -WX- -Zi -fp:precise \
+                -D "_MBCS" -D "_AFXDLL" -D "GTEST" -WX- -Zi -fp:precise \
                 -errorReport:prompt -EHsc -nologo \
                 -Fd"$(INTDIR)/$(PROGRAM).pdb" -Fp"$(INTDIR)/$(PROGRAM).pch" \
                 -diagnostics:classic -c

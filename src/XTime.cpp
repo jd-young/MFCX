@@ -8,6 +8,9 @@
 
 #include "StdAfx.h"
 #include "../include/XTime.h"
+#include "../include/StringUtil.h"
+
+namespace MFCX {
 
 
 #ifdef _DEBUG
@@ -31,19 +34,19 @@ CString CXTimeSpan::GetStr()
 {
      CString str;
      if ( GetDays() )
-          str.Format ("%d days, %2d:%02d:%02d hours", 
+          str.Format ("%d days, %d:%02d:%02d hours", 
                GetDays(), GetHours(), GetMinutes(), GetSeconds());
      else if ( GetTotalHours() )
-          str.Format ("%2d:%02d:%02d hours", GetHours(), GetMinutes(), GetSeconds());
+          str.Format ("%d:%02d:%02d hours", GetHours(), GetMinutes(), GetSeconds());
      else if ( GetTotalMinutes() )
-          str.Format ("%2d:%02d mins", GetMinutes(), GetSeconds());
-     else str.Format ("%2d secs", GetSeconds());
+          str.Format ("%d:%02d mins", GetMinutes(), GetSeconds());
+     else str.Format ("%d secs", GetSeconds());
      return str;
 }
 
 
 
-
+// TODO: This is not required as CTime provides GetAsSystemTime() for this.
 /*static*/ SYSTEMTIME CXTime::CvtToSystime (const struct tm* pTime)
 {
      SYSTEMTIME sysTime;
@@ -59,18 +62,28 @@ CString CXTimeSpan::GetStr()
 }
 
 
-
+/*!  Formats the given date according to the long format user locale.
+ *
+ * \param pTime          The time to format into a string.
+ * \return The date formatted as a string.
+ */
 /*static*/ CString CXTime::FormatLongDate (const struct tm* pTime)
 {
      TCHAR szDate [100];                // Should be big enough for any date.
      SYSTEMTIME sysTime = CvtToSystime (pTime);
-     LCID lcidSystem = ::GetSystemDefaultLCID();
-     //LCID lcidUser = ::GetUserDefaultLCID();
-     ::GetDateFormat (lcidSystem, DATE_LONGDATE, &sysTime, NULL, szDate, sizeof (szDate));
+     //LCID lcidSystem = ::GetSystemDefaultLCID();
+     //::GetDateFormat (lcidSystem, DATE_LONGDATE, &sysTime, NULL, szDate, sizeof (szDate));
+     LCID lcid = ::GetUserDefaultLCID();
+     ::GetDateFormat (lcid, DATE_LONGDATE, &sysTime, NULL, szDate, sizeof (szDate));
      return CString (szDate);
 }
 
 
+/*!  Formats the given date according to the short format user locale.
+ *
+ * \param pTime          The time to format into a string.
+ * \return The date formatted as a string.
+ */
 /*static*/ CString CXTime::FormatShortDate (const struct tm* pTime)
 {
      // Converts the given tm structure into a string given by the format in the
@@ -80,52 +93,42 @@ CString CXTimeSpan::GetStr()
      if ( pTime == NULL || mktime((struct tm*) pTime) <= 0 )     // Invalid time?  Return the empty string.
           return _T("");
 
-#if	0
-     CString sDate;
-     sDate.Format (_T("%d/%d/%d"), pTime->tm_mday, pTime->tm_mon+1, pTime->tm_year+1900);
-     return sDate;
-
-#else
      TCHAR szDate [100];                // Should be big enough for any date.
      SYSTEMTIME sysTime = CvtToSystime (pTime);
-     LCID lcidSystem = ::GetSystemDefaultLCID();
+     //LCID lcidSystem = ::GetSystemDefaultLCID();
      //LCID lcidUser = ::GetUserDefaultLCID();
-     ::GetDateFormat (lcidSystem, DATE_SHORTDATE, &sysTime, NULL, szDate, sizeof (szDate));
+     LCID lcid = ::GetUserDefaultLCID();
+     ::GetDateFormat (lcid, DATE_SHORTDATE, &sysTime, NULL, szDate, sizeof (szDate));
      return CString (szDate);
-#endif
 }
 
 
-/*!	Converts the given tm structure into a string given by the format in the
-	control panel.  Mimics the CRT asctime() but for Windows.  If pTime is NULL 
-	then it returns an empty string.
-*/
-/*static*/ CString CXTime::FormatTime (const struct tm* pTime, DWORD flags /*= includeSecs*/)
+/*!  Converts the given tm structure into a string given by the format in the
+ *   control panel.  
+ *
+ *   Mimics the CRT asctime() but for Windows.
+ *
+ * \param pTime     The time to convert to a string.
+ * \param flags     If includeSecs is set, then the seconds are included.
+ * \return A date time string representing the given time.  If pTime is NULL 
+ *         then it returns an empty string.
+ */
+/*static*/
+CString CXTime::FormatTime (const struct tm* pTime, 
+                            DWORD flags /*= includeSecs*/)
 {
-
      if ( pTime == NULL || mktime((struct tm*) pTime) <= 0 )     // Invalid time?  Return the empty string.
           return _T("");
 
-#if	0
-     CString sTime;
-     if ( flags & FMTTIME_INCLUDESECS )
-          sTime.Format (_T("%d:%02d:%02d"), pTime->tm_hour, pTime->tm_min, pTime->tm_sec);
-     else if ( flags & FMTTIME_EXCLUDECOLONS )	// BJ - To exclude colons in time returned 
-		  sTime.Format (_T("%02d%02d"), pTime->tm_hour, pTime->tm_min);
-	 else 
-		  sTime.Format (_T("%d:%02d"), pTime->tm_hour, pTime->tm_min);
-     return sTime;
-#else
      TCHAR szTime [100];                // Should be big enough for any time.
      SYSTEMTIME sysTime = CvtToSystime (pTime);
-     LCID lcidSystem = ::GetSystemDefaultLCID();
-     //LCID lcidUser = ::GetUserDefaultLCID();
+     //LCID lcidSystem = ::GetSystemDefaultLCID();
+     LCID lcid = ::GetUserDefaultLCID();
      DWORD dwFlags = 0;
      if ( (flags & includeSecs) == 0)
           dwFlags |= TIME_NOSECONDS;
-     ::GetTimeFormat (lcidSystem, dwFlags, &sysTime, NULL, szTime, sizeof (szTime));
+     ::GetTimeFormat (lcid, dwFlags, &sysTime, NULL, szTime, sizeof (szTime));
      return CString (szTime);
-#endif
 }
 
 
@@ -154,7 +157,7 @@ CString CXTimeSpan::GetStr()
 				- FMTIME_INCLUDEDATE
 */
 /*static*/ CString CXTime::FormatDateTime (const struct tm* pTime, 
-								   DWORD flags /*= FMTTIME_INCLUDEDATE | FMTTIME_INCLUDESECS*/)
+								   DWORD flags /*= includeDate | includeSecs*/)
 {
      if ( pTime == NULL || mktime((struct tm*) pTime) <= 0 )     // Invalid time?  Return the empty string.
           return _T("");
@@ -171,8 +174,125 @@ CString CXTimeSpan::GetStr()
      return sTime;
 }
 
-bool CXTime::GetLocalTm(struct tm& ttm) const
+bool CXTime::GetLocalTm (struct tm& ttm) const
 {
 	struct tm * ptm = CTime::GetLocalTm(&ttm);
 	return ptm != NULL;
 }
+
+
+CStopWatch::CStopWatch()
+ :   _start (std::chrono::steady_clock::now()),
+     _end (_start)
+{
+}
+
+void CStopWatch::Start()
+{
+    _start = std::chrono::steady_clock::now();
+}
+
+void CStopWatch::Stop()
+{
+    _end = std::chrono::steady_clock::now();
+    _duration = _end - _start;
+}
+
+LONGLONG CStopWatch::Days() const
+{
+     return _duration / 24h;
+}
+
+LONGLONG CStopWatch::Hours() const
+{
+     return _duration / 1h;
+}
+
+LONGLONG CStopWatch::Minutes() const
+{
+     return _duration / 1min;
+}
+
+LONGLONG CStopWatch::Seconds() const
+{
+     return _duration / 1s;
+}
+
+LONGLONG CStopWatch::MilliSeconds() const
+{
+     return _duration / 1ms;
+}
+
+LONGLONG CStopWatch::MicroSeconds() const
+{
+     return _duration / 1us;
+}
+
+LONGLONG CStopWatch::NanoSeconds() const
+{
+     return _duration / 1ns;
+}
+
+#define MILLIS_PER_SEC     (1000)
+#define MICROS_PER_SEC     (1000 * MILLIS_PER_SEC)
+#define NANOS_PER_SEC      (1000 * MICROS_PER_SEC)
+
+string CStopWatch::HumanReadable() const
+{
+     LONGLONG dur = NanoSeconds();
+     
+     int nanos = dur % NANOS_PER_SEC;  dur /= NANOS_PER_SEC;
+     int secs  = dur % 60;             dur /= 60;
+     int mins  = dur % 60;             dur /= 60;
+     int hours = dur % 24;
+     int days  = dur / 24;
+
+     // TODO: This is English only - locale?     
+     string sTime;
+     const TCHAR* pszSuffix = nullptr;
+     if ( days )
+     {
+          sTime = CStringUtil::Format ("%d days, %d:%02d:%02d", days, hours, mins, secs);
+          pszSuffix = "hours";
+     }
+     else if ( hours )
+     {
+          sTime = CStringUtil::Format ("%d:%02d:%02d", hours, mins, secs);
+          pszSuffix = "hours";
+     }
+     else if ( mins )
+     {
+          sTime = CStringUtil::Format ("%d:%02d", mins, secs);
+          pszSuffix = "mins";
+     }
+     else if ( secs )
+     {
+          sTime = CStringUtil::Format ("%d", secs);
+          pszSuffix = "secs";
+     }
+
+     if ( !sTime.empty() )
+          sTime += CStringUtil::Format (".%d %s", nanos, pszSuffix);
+     else
+     {
+          int ms = nanos / MICROS_PER_SEC;
+          if ( ms )
+          {
+               int us = nanos % (1000 * 1000);
+               sTime = CStringUtil::Format ("%d.%06d msecs", ms, us);
+          }
+          else
+          {
+               int us = nanos / 1000;
+               int ns = nanos % 1000;
+               if ( us )
+                    sTime = CStringUtil::Format ("%d.%03d usecs", us, ns);
+               else sTime = CStringUtil::Format ("%d nsecs", ns);
+          }
+     }
+     return sTime;
+}
+
+
+
+}    // namespace MFCX
