@@ -4,7 +4,7 @@
      \author   John Young
      \date     8 April 2001
 
-     Copyright (c) 2001 Young Associates
+     Copyright (c) 2001 Thistle Software
 */
 
 

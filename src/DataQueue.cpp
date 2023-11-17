@@ -4,7 +4,7 @@
      \author   John Young
      \date     12-Nov-99
      
-     Copyright (c) 1999 Young Associates
+     Copyright (c) 1999 Thistle Software
 */
 
 #include "stdafx.h"

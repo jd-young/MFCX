@@ -6,7 +6,7 @@
 //
 // CJM is Chris Maunder
 // KS is Kirk Stowell (CJLibrary)
-// JY is John Young, Young Associates
+// JY is John Young, Thistle Software
 //
 // Updated 30 May 1998 to allow any number of Colours, and to
 //                     make the appearance closer to Office 97. 
