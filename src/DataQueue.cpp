@@ -9,36 +9,39 @@
 
 #include "stdafx.h"
 #include "../include/DataQueue.h"
+#include "../include/MsgPoster.h"
 
+namespace MFCX {
 
 CDataQueue::CDataQueue()
+ :   CDataQueue ((HWND) NULL, 0)
 {
-	CommonConstruct (NULL, 0);
 }
 
 CDataQueue::CDataQueue (CWnd* pTo, UINT wmMsg)
+ :   CDataQueue (pTo->m_hWnd, wmMsg)
 {
-     CommonConstruct (pTo->m_hWnd, wmMsg);
 }
 
 
 CDataQueue::CDataQueue (HWND hTo, UINT wmMsg)
+ :   CDataQueue (hTo, wmMsg, new CMsgPoster())
 {
-     CommonConstruct (hTo, wmMsg);
 }
 
-void CDataQueue::CommonConstruct (HWND hTarget, UINT wmMsg)
-{
-     m_pHead = NULL;
-     m_pTail = NULL;
-     SetTargetWnd (hTarget, wmMsg);
-}
 
+/*private*/
+CDataQueue::CDataQueue (HWND hTo, UINT wmMsg, IMsgPoster* pPoster)
+ :   m_pHead (nullptr), m_pTail (nullptr), m_hTarget (hTo), m_wmMsg (wmMsg), 
+     _pPoster (pPoster)
+{
+}
 
 
 /*virtual*/ CDataQueue::~CDataQueue()
 {
      MakeEmpty();
+     delete _pPoster;
 }
 
 bool CDataQueue::IsEmpty()
@@ -87,8 +90,7 @@ bool CDataQueue::Add (const TCHAR* psz, LPARAM lParam /*= 0*/)
           m_pTail = pNew;
      }
      
-     // TODO: Replace with IMessagePoster
-     ::PostMessage (m_hTarget, m_wmMsg, (UINT) this, lParam);
+     _pPoster->PostMessage (m_hTarget, m_wmMsg, (UINT) this, lParam);
      return true;
 }
 
@@ -119,3 +121,4 @@ CDataQueue::CNode::CNode (const TCHAR* psz)
      pNext = NULL;
 }
 
+} // namespace MFCX
