@@ -19,6 +19,7 @@ using MFCX::IMsgPoster;
 class CMockMsgPoster : public IMsgPoster
 {
 public:
+     CMockMsgPoster();
      virtual ~CMockMsgPoster() {};
 
      bool PostMessage (HWND hWnd, UINT nMsg, WPARAM wParam = 0, 
@@ -26,9 +27,6 @@ public:
 
 // Mock stuff
      const vector<string>& Messages() const;
-
-//private:
-//     vector<string> _msgs;
 };
 
 #endif    //   MOCKMSGPOSTER_H

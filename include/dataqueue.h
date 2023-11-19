@@ -66,6 +66,9 @@ private:
      /// Constructor that allows us to supply a poster for testing.
      CDataQueue (HWND hTo, UINT wmMsg, IMsgPoster* pPoster);
 
+     bool _Add (const TCHAR* psz, LPARAM lParam = 0);
+     CString _Remove();
+
      /// A node in the queue.
      class CNode
      {

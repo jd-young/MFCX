@@ -46,14 +46,19 @@ CDataQueue::CDataQueue (HWND hTo, UINT wmMsg, IMsgPoster* pPoster)
 
 bool CDataQueue::IsEmpty()
 {
+     CSingleLock singleLock (&m_critSection, TRUE);
+     ASSERT ( singleLock.IsLocked() );
+     
      return m_pHead == NULL;
 }
 
 
 void CDataQueue::MakeEmpty()
 {
-     while ( !IsEmpty() )
-          Remove();
+     CSingleLock singleLock (&m_critSection, TRUE);
+     ASSERT ( singleLock.IsLocked() );
+     while ( m_pHead )
+          _Remove();
 }
 
 void CDataQueue::SetTargetWnd (HWND hTarget, UINT wmMsg)
@@ -75,6 +80,11 @@ bool CDataQueue::Add (const TCHAR* psz, LPARAM lParam /*= 0*/)
      CSingleLock singleLock (&m_critSection, TRUE);
      ASSERT ( singleLock.IsLocked() );
      
+     return _Add (psz, lParam);
+}
+
+bool CDataQueue::_Add (const TCHAR* psz, LPARAM lParam /*= 0*/)
+{
      CNode* pNew = new CNode (psz);
      if ( !pNew )
      	return false;
@@ -103,6 +113,15 @@ CString CDataQueue::Remove()
      CSingleLock singleLock (&m_critSection, TRUE);
      ASSERT ( singleLock.IsLocked() );
 
+     return _Remove();
+}
+
+/*!  Removes data from the front of the queue.
+ *
+ * \return     The data.
+ */
+CString CDataQueue::_Remove()
+{
      CString sData;
      if ( !IsEmpty() )
      {

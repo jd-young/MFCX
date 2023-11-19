@@ -21,6 +21,12 @@ using MFCX::CStringUtil;
 
 static vector<string> msgs;
 
+
+CMockMsgPoster::CMockMsgPoster()
+{
+     msgs.clear();
+}
+
 bool CMockMsgPoster::PostMessage (HWND hWnd, UINT nMsg, WPARAM wParam /*= 0*/, 
                                   LPARAM lParam /*= 0*/) const
 {

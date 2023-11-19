@@ -253,7 +253,7 @@ CONSOLE_CXXFLAGS = -nologo -MDd -W3 -EHsc -GR -Zi -Od -I "$(GTEST_INC)" \
 CONSOLE_LINK_FLAGS= shlwapi.lib kernel32.lib user32.lib gdi32.lib winspool.lib \
                     comdlg32.lib advapi32.lib shell32.lib ole32.lib \
                     oleaut32.lib uuid.lib odbc32.lib odbccp32.lib version.lib \
-                    winmm.lib gtestsd.lib -nologo -subsystem:console \
+                    winmm.lib gtestsd.lib gmocksd.lib -nologo -subsystem:console \
                     -pdb:"$(TESTDIR)/$(TEST_PROGRAM).pdb" -debug \
                     -libpath:"$(GTEST_LIB)" -machine:I386
 
@@ -310,7 +310,13 @@ $(TESTDIR)/$(TEST_PROGRAM).exe : $(TEST_OBJS)
 	@$(LINK) $(CONSOLE_LINK_FLAGS) -out:$@ $(TESTDIR)/StdAfx.obj $(TEST_OBJS)
 
 ifeq "$(tests)" ''
-     tests_filter :=
+     # TestVolume should run within 200 ms but takes way over that when running
+     # coverage.
+     ifeq ($(MAKECMDGOALS), coverage)
+       tests_filter :=  --gtest_filter=-DataQueueTest.TestVolume
+     else
+       tests_filter :=
+     endif
 else
      tests_filter :=  --gtest_filter=$(tests)
 endif
