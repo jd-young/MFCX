@@ -77,6 +77,9 @@ TEST(DataQueueTest, TestEmpty)
      EXPECT_THAT (msgs [1].c_str(), MatchesRegex ("PostMessage \\(0xffffffff, 32768, 0x\\w+, 0x0\\)"));
 }
 
+#define   TEST_VOLUME_MSG_COUNT    40000
+#define   TEST_VOLUME_MAX_MSECS    400
+
 /*!  This test sends 40,000 messages in under 200 mS, however, when coverage is
  *   run, then it is considerably slower and so this test fails.
  */
@@ -90,14 +93,14 @@ TEST(DataQueueTest, TestVolume)
      
      CString sMsg;
      CStopWatch sw;
-     for (int i = 0; i < 40000; i++)
+     for (int i = 0; i < TEST_VOLUME_MSG_COUNT; i++)
      {
           sMsg.Format ("This is message: %d", i);
           queue.Add (sMsg);
      }
      sw.Stop();
      
-     int nMaxMillis = 200;
+     int nMaxMillis = TEST_VOLUME_MAX_MSECS;
      EXPECT_GT (nMaxMillis, sw.MilliSeconds()) << "Should be less than "
                                                << nMaxMillis << "ms but was " 
                                                << sw.HumanReadable();
