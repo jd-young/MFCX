@@ -122,3 +122,19 @@ DWORD CThread::GetExitCode() const
 {
      return _nRetCode;
 }
+
+/*!  Waits for a maximum of 5 seconds for the thread to terminate.
+ *
+ * \return a WAIT_XXX value:
+ *             - WAIT_OBJECT_0 - The thread exited.
+ *             - WAIT_TIMEOUT  - Thread didn't terminate after 5 seconds.
+ *             - WAIT_FAILED   - The function failed.  Use GetLastError() to get
+ *                               extended error information.
+ */
+DWORD CThread::Join()
+{
+     // TODO: Figure out what the timeout should be.
+     return m_pThread
+               ? ::WaitForSingleObject (m_pThread->m_hThread, 5000)
+               : WAIT_OBJECT_0;
+}

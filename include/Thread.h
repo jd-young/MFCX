@@ -41,7 +41,8 @@ public:
      /// The handle of the target window.
      HWND GetTarget() const { return m_hTarget; }
 
-     // TODO: remove this.
+     // TODO: Replace this with a LPARAM 'user data'.  This could be anything 
+     //       from a tool index to an object.
      int GetToolIndex() const { return m_idxTool; }
 
      /// The thread-safe data queue to send a message to.
@@ -68,6 +69,8 @@ public:
      virtual void OnStart();       ///< Called when the thread starts
      virtual void OnFinished();    ///< Called when the thread finishes.
 
+     DWORD Join();
+     
      ///< Gets the return code of the user supplied thread function.
      DWORD GetExitCode() const;
 
@@ -85,7 +88,6 @@ private:
      // TODO: Remove.
      int m_idxTool;                ///< The index of the tool.
 
-//     static UINT _fnThread (VOID* pParam);
      static UINT WrapperThread (VOID* pParam);
      UINT WrapperThread();
 };
