@@ -266,7 +266,8 @@ UNITTEST_DEPS :=   $(UNITTEST_SRC:.cpp=.d)
 TEST_SRC      :=   $(UNITTEST_SRC) Crypt.cpp Directory.cpp DataQueue.cpp \
                     Filename.cpp MsgPoster.cpp \
                     Regex.cpp RegexString.cpp RegKey.cpp StringUtil.cpp \
-                    Thread.cpp Utils.cpp XString.cpp XStringList.cpp XTime.cpp \
+                    SysError.cpp Thread.cpp Utils.cpp XString.cpp \
+                    XStringList.cpp XTime.cpp \
                     regex/pcre.cpp regex/chartables.cpp
 
 # TODO: The test objects look like this: ../builds/test/../test/CryptTest.obj, 
