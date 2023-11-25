@@ -13,9 +13,6 @@ using std::map;
 using std::string;
 using MFCX::CDataQueue;
 
-// TODO: This is not really an MFCX class because of m_idxTool.  That's app
-//       related.  Let's remove it and implement it in derived classes if 
-//       needed.
 /*!  A class that represents a thread.
  *
  *   This class can start up thread in three different ways:
@@ -35,6 +32,8 @@ using MFCX::CDataQueue;
  */
 // TODO: Make this templated to be able to put data other than CString objects
 //       on the data queue.
+// TODO: Split this into separate classes; user-supplied function, create 
+//       process, and stand-alone process.
 class CThread
 {
      CThread (const CThread&) = delete; // No copy construction. 
@@ -58,7 +57,7 @@ public:
 
      // TODO: Replace this with a LPARAM 'user data'.  This could be anything 
      //       from a tool index to an object.
-     int GetToolIndex() const { return m_idxTool; }
+//     int GetToolIndex() const { return m_idxTool; }
 
      /// The thread-safe data queue to send a message to.
      CDataQueue* GetQueue() const { return m_pDataQueue; }
@@ -84,9 +83,8 @@ public:
                   "synchronised.  Use the constructor instead.")]]
      void SetHandle (HWND hwnd, UINT wmMsg);
 
-     // TODO: Remove.
-//     void SetUserData (LPARAM lUserData) { _lUserData = lUserData; }
-     void SetToolIndex (int idx) { m_idxTool = idx; }
+     /// Set user data to be sent to a window in the thread-safe queue.
+     void SetUserData (LPARAM nUserData) { _nUserData = nUserData; }
      
      virtual void OnStart();       ///< Called when the thread starts
      virtual void OnFinished();    ///< Called when the thread finishes.
@@ -106,14 +104,15 @@ private:
      CWinThread* m_pThread;        ///< So that I can switch myself off.
      bool m_bStopThread;           ///< So that others can switch me off.
      UINT _nRetCode;
-     AFX_THREADPROC _fnThread;
-     
-     CString _sCmd;
-     CString _sDir;
-     map<string, string> _mapEnvs;
+     AFX_THREADPROC _fnThread;     ///< A user supplied function to run on a separate thread.
+
+     CString _sCmd;                ///< The command line to run as a separate process.
+     CString _sDir;                ///< The directory to start the thread in.
+     map<string, string> _mapEnvs; ///< The environment variables for the process.
 
      // TODO: Remove.
-     int m_idxTool;                ///< The index of the tool.
+     LPARAM _nUserData;            ///< User supplied data.  This is sent with 
+                                   ///< messages in the data-queue.
 
      static UINT WrapperThread (void* lParam);
      UINT WrapperThread();

@@ -295,12 +295,16 @@ TEST(ThreadTest, TestStartCli)
      CMockMsgPoster* pPoster = new CMockMsgPoster();
      CDataQueue* pQueue = new CDataQueue (HWND_TEST, MSG_ID, pPoster); 
      CTestThread thrd (HWND_TEST, pPoster, pQueue);
+     thrd.SetUserData ((LPARAM) 0x55);
 
-     CString sCWD = CDirectory::GetCurrentDir();
+     map<string, string> mapEnvs;
+     mapEnvs ["CLI_PROCESS"] = "my-process";
      thrd.StartCliProcess ("spawned-process.bat",
                            "100",
-                           "..\\test\\resources");
+                           "..\\test\\resources",
+                           &mapEnvs);
      EXPECT_STREQ ("cmd /c spawned-process.bat 100", thrd._sCmd);
+     EXPECT_STREQ ("my-process", thrd._mapEnvs ["CLI_PROCESS"].c_str());
 
      // Wait for the thread to end.     
      thrd.Join();
@@ -313,8 +317,8 @@ TEST(ThreadTest, TestStartCli)
      {
           const string& msg = msgs [i];
           EXPECT_THAT (msg, 
-                       MatchesRegex ("PostMessage \\(0xffffffff, 32768, 0x\\w+, 0x\\w+\\)"))
-               << "Index " << i << " expected: 'PostMessage (0xffffffff, 32768, 0xXXXXXXX, 0xXX)'\n"
+                       MatchesRegex ("PostMessage \\(0xffffffff, 32768, 0x\\w+, 0x55\\)"))
+               << "Index " << i << " expected: 'PostMessage (0xffffffff, 32768, 0xXXXXXXX, 0x55)'\n"
                << "         but got: '" << msg << "'";
      }
 
@@ -372,8 +376,8 @@ TEST(ThreadTest, TestStopSpawnedProcess)
      {
           const string& msg = msgs [i];
           EXPECT_THAT (msg, 
-                       MatchesRegex ("PostMessage \\(0xffffffff, 32768, 0x\\w+, 0x\\w+\\)"))
-               << "Index " << i << " expected: 'PostMessage (0xffffffff, 32768, 0xXXXXXXX, 0xXX)'\n"
+                       MatchesRegex ("PostMessage \\(0xffffffff, 32768, 0x\\w+, 0x0\\)"))
+               << "Index " << i << " expected: 'PostMessage (0xffffffff, 32768, 0xXXXXXXX, 0x0)'\n"
                << "         but got: '" << msg << "'";
      }
      

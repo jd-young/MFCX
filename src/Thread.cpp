@@ -28,14 +28,14 @@ using MFCX::CSysError;
 CThread::CThread()
  :   m_hTarget (NULL), m_pDataQueue (nullptr),
      m_pThread (nullptr), m_bStopThread (false), _nRetCode (-1), 
-     _fnThread (nullptr), m_idxTool (-1)
+     _fnThread (nullptr), _nUserData (NULL)
 {
 }
 
 CThread::CThread (HWND hwnd, UINT wmMsg)
  :   m_hTarget (hwnd), m_pDataQueue (new CDataQueue (hwnd, wmMsg)),
      m_pThread (nullptr), m_bStopThread (false), _nRetCode (-1), 
-     _fnThread (nullptr), m_idxTool (-1)
+     _fnThread (nullptr), _nUserData (NULL)
 {
 }
 
@@ -341,7 +341,7 @@ UINT CThread::CliProcess()
           else szBuffer [dwNumberOfBytesRead] = 0;  // null terminate
 
           // Send the data to the CDataQueue that was passed in...
-          GetQueue()->Add (szBuffer, GetToolIndex());
+          GetQueue()->Add (szBuffer, _nUserData);
      }
 
      // Wait for the process to finish.
