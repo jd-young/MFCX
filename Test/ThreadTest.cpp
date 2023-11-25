@@ -318,7 +318,7 @@ TEST(ThreadTest, TestStartCli)
 
      EXPECT_STREQ ("Printing 2 messages every 50 msecs for 100 msecs.\r\n",
                    pQueue->Remove());
-     EXPECT_THAT (pQueue->Remove(), MatchesRegex ("^.*\\\\MFCX\\\\test\\\\resources\r\n$"));
+     EXPECT_THAT (pQueue->Remove(), MatchesRegex ("^.*\\\\test\\\\resources\r\n$"));
      
      for (int i = 1; i < nMsgs - 5; i++)
      {
@@ -377,7 +377,7 @@ TEST(ThreadTest, TestStopSpawnedProcess)
      
      EXPECT_STREQ ("Printing 100 messages every 50 msecs for 5000 msecs.\r\n",
                    pQueue->Remove());
-     EXPECT_THAT (pQueue->Remove(), MatchesRegex ("^.*\\\\MFCX\\\\src\r\n$"));
+     EXPECT_THAT (pQueue->Remove(), MatchesRegex ("^.*\\\\src\r\n$"));
      
      for (int i = 1; i < nMsgs - 2 ; i++)
      {
