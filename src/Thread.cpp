@@ -8,6 +8,7 @@
 
 #include "stdafx.h"
 #include "../include/StringUtil.h"
+#include "../include/Filename.h"
 #include "../include/SysError.h"
 #include "../include/Thread.h"
 
@@ -151,9 +152,7 @@ DWORD CThread::Join()
  *   sends a message to the target window which can then read the message from 
  *   the queue.
  *
- * \param pszCmd         The command line of the process to run including 
- *                       arguments.  If the process name has spaces, then it
- *                       should be enclosed with double-quotes.  The .exe 
+ * \param pszCmd         The command line of the process to run.  The .exe 
  *                       extension can be omitted (it is added automatically),
  *                       however if you are running a .com, .cmd or .bat file, 
  *                       then the extension must be supplied.  Also, note that
@@ -161,6 +160,7 @@ DWORD CThread::Join()
  *                       prevent some start-up problems (CreateProcess() doesn't
  *                       seem to be able to start up .bat files if the directory
  *                       is supplied).
+ * \param pszArgs        The process arguments, or nullptr if there are none.
  * \param pszDir         The startup directory for the command.  If this is 
  *                       omitted, then the current drive & directory of this 
  *                       process is used.
@@ -169,11 +169,29 @@ DWORD CThread::Join()
  *                       environment variables.
  * \return true on success, false on failure.
  */
-bool CThread::StartCliProcess (const TCHAR* pszCmd, 
+bool CThread::StartCliProcess (const TCHAR* pszCmd,
+                               const TCHAR* pszArgs /*= nullptr*/,
                                const TCHAR* pszDir /*= nullptr*/,
                                const map<string, string>* pEnvVars /*= nullptr*/)
 {
      _sCmd = pszCmd;
+     if ( _sCmd.Find (' ') != -1 )
+     {
+          // Enclose in double-quotes
+          _sCmd.Insert (0, '"');
+          _sCmd += '"';
+     }
+     
+     CString sExt = CFilename::GetFileExt (pszCmd);
+     if ( sExt == ".bat" )
+          _sCmd = "cmd /c " + _sCmd;
+     
+     if ( pszArgs )
+     {
+          _sCmd += ' ';
+          _sCmd += pszArgs;
+     }
+     
      if ( pszDir )
      {
           _tfullpath (_sDir.GetBuffer (MAX_PATH + 1), pszDir, MAX_PATH);

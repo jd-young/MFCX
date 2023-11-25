@@ -71,6 +71,7 @@ public:
      
      /// Starts the given command.
      virtual bool StartCliProcess (const TCHAR* pszCmd, 
+                                   const TCHAR* pszArgs = nullptr,
                                    const TCHAR* pszDir = nullptr,
                                    const map<string, string>* pEnvVars = nullptr);
 
@@ -95,12 +96,13 @@ public:
      ///< Gets the return code of the user supplied thread function.
      DWORD GetExitCode() const;
 
-protected:
+#ifndef   GTEST
+private:
+#endif
      // TODO: If we don't need SetHandle(), then we can remove this.
      HWND m_hTarget;               ///< The window to send messages to.
      CDataQueue* m_pDataQueue;     ///< The queue to send back the tool output.
 
-private:
      CWinThread* m_pThread;        ///< So that I can switch myself off.
      bool m_bStopThread;           ///< So that others can switch me off.
      UINT _nRetCode;

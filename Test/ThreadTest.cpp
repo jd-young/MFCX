@@ -297,9 +297,10 @@ TEST(ThreadTest, TestStartCli)
      CTestThread thrd (HWND_TEST, pPoster, pQueue);
 
      CString sCWD = CDirectory::GetCurrentDir();
-     // TODO: Move the 'cmd /c' to StartCliProcess
-     thrd.StartCliProcess ("cmd /c spawned-process.bat 100",
+     thrd.StartCliProcess ("spawned-process.bat",
+                           "100",
                            "..\\test\\resources");
+     EXPECT_STREQ ("cmd /c spawned-process.bat 100", thrd._sCmd);
 
      // Wait for the thread to end.     
      thrd.Join();
@@ -350,6 +351,7 @@ TEST(ThreadTest, TestStopSpawnedProcess)
 
      CString sCWD = CDirectory::GetCurrentDir();
      thrd.StartCliProcess ("..\\test\\resources\\spawned-process.bat");
+     EXPECT_STREQ ("cmd /c ..\\test\\resources\\spawned-process.bat", thrd._sCmd);
 
      // Wait for the thread function to post 2 messages.  Reading a vector 
      // doesn't need to be synchronised.
@@ -400,7 +402,8 @@ TEST(ThreadTest, TestStartNonExistent)
      CTestThread thrd (HWND_TEST, pPoster, pQueue);
 
      CString sCWD = CDirectory::GetCurrentDir();
-     thrd.StartCliProcess ("non-existent.exe");
+     thrd.StartCliProcess ("non existent.exe");
+     EXPECT_STREQ ("\"non existent.exe\"", thrd._sCmd);
 
      // Wait for the thread to end.     
      thrd.Join();
