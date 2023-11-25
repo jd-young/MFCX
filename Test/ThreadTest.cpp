@@ -338,4 +338,33 @@ TEST(ThreadTest, TestStopSpawnedProcess)
 
      EXPECT_EQ (0, thrd.GetExitCode());
 }
+
+/// Tests that CThread copes with attempting to start a non-existent program.
+TEST(ThreadTest, TestStartNonExistent)
+{
+     HWND HWND_TEST = (HWND) -1;
+     UINT MSG_ID = WM_APP;
+
+     CMockMsgPoster* pPoster = new CMockMsgPoster();
+     CDataQueue* pQueue = new CDataQueue (HWND_TEST, MSG_ID, pPoster); 
+     CTestThread thrd (HWND_TEST, pPoster, pQueue);
+
+     CString sCWD = CDirectory::GetCurrentDir();
+     thrd.StartCliProcess ("non-existent.exe");
+
+     // Wait for the thread to end.     
+     thrd.Join();
+
+     const vector<string>& msgs = pPoster->Messages();
+     int nMsgs = msgs.size();
+     ASSERT_EQ (1, nMsgs);
+
+     EXPECT_THAT (msgs [0], 
+                  MatchesRegex ("PostMessage \\(0xffffffff, 32768, 0x\\w+, 0x0\\)"));
+
+     EXPECT_STREQ ("Create process failed: returned 0: "
+                   "'The system cannot find the file specified.' (errno=2)\r\n",
+                   pQueue->Remove());
+     EXPECT_STREQ ("", pQueue->Remove());
+}
  

@@ -247,7 +247,7 @@ UINT CThread::CliProcess()
      {
      	DWORD dwError = ::GetLastError();
      	CString sError = CSysError::GetErrorStr (dwError);
-          string sEvent = CStringUtil::Format ("Create process failed: ret=%d, %s (errno=%u)", 
+          string sEvent = CStringUtil::Format ("Create process failed: returned %d: '%s' (errno=%u)\r\n", 
                                                bRet, sError, dwError);
           GetQueue()->Add (sEvent.c_str());
               
