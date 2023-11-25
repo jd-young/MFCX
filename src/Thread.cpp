@@ -27,15 +27,15 @@ using MFCX::CSysError;
 
 CThread::CThread()
  :   m_hTarget (NULL), m_pDataQueue (nullptr),
-     m_pThread (nullptr), m_bStopThread (false), _nRetCode (-1), 
-     _fnThread (nullptr), _nUserData (NULL)
+     m_pThread (nullptr), m_bStopThread (false), _fnThread (nullptr), 
+     _nUserData (NULL)
 {
 }
 
 CThread::CThread (HWND hwnd, UINT wmMsg)
  :   m_hTarget (hwnd), m_pDataQueue (new CDataQueue (hwnd, wmMsg)),
-     m_pThread (nullptr), m_bStopThread (false), _nRetCode (-1), 
-     _fnThread (nullptr), _nUserData (NULL)
+     m_pThread (nullptr), m_bStopThread (false), _fnThread (nullptr), 
+     _nUserData (NULL)
 {
 }
 
@@ -93,9 +93,9 @@ bool CThread::Start (AFX_THREADPROC pFunc)
 UINT CThread::WrapperThread()
 {
      OnStart();
-     _nRetCode = _fnThread (static_cast<void*>(this));
+     UINT nRetCode = _fnThread (static_cast<void*>(this));
      OnFinished();
-     return _nRetCode;
+     return nRetCode;
 }
 
 /*!  Signals the thread to stop.
@@ -127,11 +127,6 @@ void CThread::OnFinished()
      m_pThread = NULL;
 }
 
-DWORD CThread::GetExitCode() const
-{
-     return _nRetCode;
-}
-
 /*!  Waits for a maximum of 5 seconds for the thread to terminate.
  *
  * \return a WAIT_XXX value:
@@ -142,7 +137,6 @@ DWORD CThread::GetExitCode() const
  */
 DWORD CThread::Join()
 {
-     // TODO: Figure out what the timeout should be.
      return m_pThread
                ? ::WaitForSingleObject (m_pThread->m_hThread, INFINITE)
                : WAIT_OBJECT_0;
@@ -314,34 +308,38 @@ UINT CThread::CliProcess()
      BOOL bFinished = FALSE;
      while ( !bFinished )
      {
-          TCHAR   szBuffer [BUFFER_SIZE];
-          DWORD  dwNumberOfBytesRead = 0;
+          TCHAR szBuffer [BUFFER_SIZE];
+          DWORD dwNumberOfBytesRead = 0;
 
           BOOL bTest = ::ReadFile (hPipeOutputRead,      // handle of the read end of our pipe
                                    &szBuffer,            // address of buffer that receives data
                                    BUFFER_SIZE - 1,      // number of bytes to read
                                    &dwNumberOfBytesRead, // address of number of bytes read
                                    nullptr);             // non-overlapped.
-          
-          if ( IsStopSignalled() )
+
+          if ( bTest )
           {
-               // TODO: Figure out what the exit code should be.
-               ::TerminateProcess (pi.hProcess, 1);
-               wsprintf (szBuffer, "Stopped\r\n");
-               bFinished = TRUE;
+               szBuffer [dwNumberOfBytesRead] = 0;  // null terminate
+
+               // Send the data to the CDataQueue that was passed in...
+               GetQueue()->Add (szBuffer, _nUserData);
           }
-          else if ( !bTest )
+          else
           {
                int nError = ::GetLastError();
                if ( nError == ERROR_BROKEN_PIPE )
                     wsprintf (szBuffer, "Finished\r\n");
                else wsprintf (szBuffer, "Error #%d reading pipe.\r\n", nError);
+               GetQueue()->Add (szBuffer, _nUserData);
                bFinished = TRUE;
           }
-          else szBuffer [dwNumberOfBytesRead] = 0;  // null terminate
 
-          // Send the data to the CDataQueue that was passed in...
-          GetQueue()->Add (szBuffer, _nUserData);
+          if ( IsStopSignalled() )
+          {
+               ::TerminateProcess (pi.hProcess, 1);
+               GetQueue()->Add ("Stopped\r\n", _nUserData);
+               bFinished = TRUE;
+          }
      }
 
      // Wait for the process to finish.

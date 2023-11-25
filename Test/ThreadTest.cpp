@@ -183,8 +183,6 @@ TEST(ThreadTest, TestThread_UsingDeprecated)
      EXPECT_STREQ ("Message number: 19", pQueue->Remove());
      EXPECT_STREQ ("Message number: 20", pQueue->Remove());
      EXPECT_STREQ ("TestFunction finished", pQueue->Remove());
-
-     EXPECT_EQ (0, thrd.GetExitCode());
 }
 
 TEST(ThreadTest, TestThread)
@@ -235,8 +233,6 @@ TEST(ThreadTest, TestThread)
      EXPECT_STREQ ("Message number: 19", pQueue->Remove());
      EXPECT_STREQ ("Message number: 20", pQueue->Remove());
      EXPECT_STREQ ("TestFunction finished", pQueue->Remove());
-
-     EXPECT_EQ (0, thrd.GetExitCode());
 }
 
 /// Tests that when Stop() is called, that the thread function (which cooperates
@@ -282,8 +278,6 @@ TEST(ThreadTest, TestStopCooperatingThread)
                        MatchesRegex ("Message number: \\d+")) 
                        << "Mismatch message " << i;
      EXPECT_STREQ ("TestFunction stopped", pQueue->Remove());
-
-     EXPECT_EQ (1, thrd.GetExitCode());
 }
 
 /// Tests that CThread starts CLI and can capture its output.
@@ -391,8 +385,6 @@ TEST(ThreadTest, TestStopSpawnedProcess)
           EXPECT_STREQ (exp.c_str(), pQueue->Remove());
      }
      EXPECT_STREQ ("Stopped\r\n", pQueue->Remove());
-
-     EXPECT_EQ (0, thrd.GetExitCode());
 }
 
 /// Tests that CThread copes with attempting to start a non-existent program.

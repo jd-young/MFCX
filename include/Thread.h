@@ -55,10 +55,6 @@ public:
      /// The handle of the target window.
      HWND GetTarget() const { return m_hTarget; }
 
-     // TODO: Replace this with a LPARAM 'user data'.  This could be anything 
-     //       from a tool index to an object.
-//     int GetToolIndex() const { return m_idxTool; }
-
      /// The thread-safe data queue to send a message to.
      CDataQueue* GetQueue() const { return m_pDataQueue; }
      
@@ -89,11 +85,9 @@ public:
      virtual void OnStart();       ///< Called when the thread starts
      virtual void OnFinished();    ///< Called when the thread finishes.
 
+     ///< Wait for the thread to terminate.
      DWORD Join();
      
-     ///< Gets the return code of the user supplied thread function.
-     DWORD GetExitCode() const;
-
 #ifndef   GTEST
 private:
 #endif
@@ -103,16 +97,14 @@ private:
 
      CWinThread* m_pThread;        ///< So that I can switch myself off.
      bool m_bStopThread;           ///< So that others can switch me off.
-     UINT _nRetCode;
      AFX_THREADPROC _fnThread;     ///< A user supplied function to run on a separate thread.
 
      CString _sCmd;                ///< The command line to run as a separate process.
      CString _sDir;                ///< The directory to start the thread in.
      map<string, string> _mapEnvs; ///< The environment variables for the process.
 
-     // TODO: Remove.
      LPARAM _nUserData;            ///< User supplied data.  This is sent with 
-                                   ///< messages in the data-queue.
+                                   ///< messages to windows by the data-queue.
 
      static UINT WrapperThread (void* lParam);
      UINT WrapperThread();
