@@ -7,8 +7,9 @@
 */
 
 #include "stdafx.h"
-#include "../include/StringUtil.h"
+#include "../include/EnvVars.h"
 #include "../include/Filename.h"
+#include "../include/StringUtil.h"
 #include "../include/SysError.h"
 #include "../include/Thread.h"
 
@@ -19,6 +20,7 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
+using MFCX::CEnvVars;
 using MFCX::CStringUtil;
 using MFCX::CSysError;
 
@@ -198,6 +200,10 @@ bool CThread::StartCliProcess (const TCHAR* pszCmd,
           _sDir.ReleaseBuffer();
      }
      else _sDir = "";
+     
+     if ( pEnvVars )
+          _mapEnvs = *pEnvVars;
+     
      return Start (CliProcess);
 }
 
@@ -266,7 +272,8 @@ UINT CThread::CliProcess()
           indx += 2 )
           sCmd.Insert (indx, '\\');
 
-//     std::unique_ptr<TCHAR> envBlock (GetProcEnvBlock (_mapEnv));
+     CEnvVars envVars (_mapEnvs);
+     std::unique_ptr<TCHAR> envBlock (envVars.GetProcEnvBlock());
 	
      CString sSpawn = _sCmd;
      const TCHAR* pDir = _sDir.IsEmpty() 
@@ -274,12 +281,12 @@ UINT CThread::CliProcess()
                          : static_cast<const TCHAR*>(_sDir);
 
      BOOL bRet = ::CreateProcess (nullptr,			// Application name
-                                  sSpawn.GetBuffer (0),  // Command line
-                                  nullptr, nullptr,      // Process / thread attributes
-                                  TRUE,                  // Inherit handle
-                                  IDLE_PRIORITY_CLASS,   // Creation flags
-                                  NULL,   // envBlock.get(),   // Environment
-                                  pDir,                 // Current dir 
+                                  sSpawn.GetBuffer (0),// Command line
+                                  nullptr, nullptr,    // Process / thread attributes
+                                  TRUE,                // Inherit handle
+                                  IDLE_PRIORITY_CLASS, // Creation flags
+                                  envBlock.get(),      // Environment
+                                  pDir,                // Current dir 
                                   &si, &pi);		     // Startup info / process info
 
      if ( !bRet )
