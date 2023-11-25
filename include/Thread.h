@@ -18,6 +18,13 @@ using MFCX::CDataQueue;
 //       needed.
 /*!  A class that represents a thread.
  *
+ *   This class can start up thread in three different ways:
+ *     - Start up a thread that runs a user supplied function.
+ *     - Start up a separate command-line process and send its output to a 
+ *       specified window.
+ *     - Start up a separate command-line or GUI process as a standalone 
+ *       process.
+ *
  *   Derive a class from this, provide a static function that takes a void* 
  *   pointer and returns a UINT (AFX_THREADPROC) to Start().  This will spawn
  *   a new thread and call the function.  THe void* will be a pointer to the 
@@ -30,9 +37,13 @@ using MFCX::CDataQueue;
 //       on the data queue.
 class CThread
 {
+     CThread (const CThread&) = delete; // No copy construction. 
+     CThread& operator= (const CThread&) = delete;
+
 public:
      [[deprecated("Use the other constructor instead")]] 
      CThread();
+
 
      /// Constructs a thread object that sets the Window handle and the message
      /// number to send in a PostMessage() call.
@@ -56,7 +67,7 @@ public:
      bool IsStopSignalled() const { return m_bStopThread; }
 
      /// Starts the thread and passes control to the given function.
-     virtual bool Start (AFX_THREADPROC pfn);
+     virtual bool Start (AFX_THREADPROC pFunc);
      
      /// Starts the given command.
      virtual bool StartCliProcess (const TCHAR* pszCmd, 
@@ -102,7 +113,7 @@ private:
      // TODO: Remove.
      int m_idxTool;                ///< The index of the tool.
 
-     static UINT WrapperThread (void* pParam);
+     static UINT WrapperThread (void* lParam);
      UINT WrapperThread();
      
      static UINT CliProcess (void* lParam);

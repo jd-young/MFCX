@@ -9,14 +9,20 @@
 
 setlocal enabledelayedexpansion
 
-rem Set the duration in milliseconds
-set "duration=5000"      rem 5000 milliseconds = 5 seconds
+if "%1"=="" (
+    set "duration=5000"    rem 5 seconds
+) else (
+    set "duration=%1"
+)
 set "delay=50"           rem 50 milliseconds per iteration
 
 rem Calculate the number of iterations
 set /a "iterations=%duration% / %delay%"
 
 echo Printing %iterations% messages every %delay% msecs for %duration% msecs.
+:: print out current directory
+cd
+
 
 set /a "centisecs=%delay% / 10"
 rem Loop through each iteration

@@ -54,15 +54,15 @@ void CThread::SetHandle (HWND hwnd, UINT wmMsg)
 
 /*!  Starts a worker thread and calls the given function.
  *
- * \param fnThread       The function to call on the newly started thread.
+ * \param pFunc          The function to call on the newly started thread.
  * \return true if the thread was started.
  */
-bool CThread::Start (AFX_THREADPROC fnThread)
+bool CThread::Start (AFX_THREADPROC pFunc)
 {
-     if ( fnThread )
+     if ( pFunc )
      {
-          _fnThread = fnThread;
-          m_pThread = AfxBeginThread (WrapperThread, (LPVOID) this); 
+          _fnThread = pFunc;
+          m_pThread = AfxBeginThread (WrapperThread, static_cast<void*>(this)); 
      }
      return m_pThread != NULL;
 }
@@ -90,7 +90,7 @@ bool CThread::Start (AFX_THREADPROC fnThread)
 UINT CThread::WrapperThread()
 {
      OnStart();
-     _nRetCode = _fnThread ((void*) this);
+     _nRetCode = _fnThread (static_cast<void*>(this));
      OnFinished();
      return _nRetCode;
 }
@@ -141,12 +141,33 @@ DWORD CThread::Join()
 {
      // TODO: Figure out what the timeout should be.
      return m_pThread
-               ? ::WaitForSingleObject (m_pThread->m_hThread, 5000)
+               ? ::WaitForSingleObject (m_pThread->m_hThread, INFINITE)
                : WAIT_OBJECT_0;
 }
 
-/*!  Starts the given CLI command on a separate thread, and sends its output to 
+/*!  Starts the given CLI command on a separate thread.
  *
+ *   Its output is captured in the m_pDataQueue thread-safe data queue which 
+ *   sends a message to the target window which can then read the message from 
+ *   the queue.
+ *
+ * \param pszCmd         The command line of the process to run including 
+ *                       arguments.  If the process name has spaces, then it
+ *                       should be enclosed with double-quotes.  The .exe 
+ *                       extension can be omitted (it is added automatically),
+ *                       however if you are running a .com, .cmd or .bat file, 
+ *                       then the extension must be supplied.  Also, note that
+ *                       .bat files are automatically prepended with 'cmd /c' to
+ *                       prevent some start-up problems (CreateProcess() doesn't
+ *                       seem to be able to start up .bat files if the directory
+ *                       is supplied).
+ * \param pszDir         The startup directory for the command.  If this is 
+ *                       omitted, then the current drive & directory of this 
+ *                       process is used.
+ * \param pEnvVars       A map of additional environment variables for the new 
+ *                       process.  These are added to this process's existing
+ *                       environment variables.
+ * \return true on success, false on failure.
  */
 bool CThread::StartCliProcess (const TCHAR* pszCmd, 
                                const TCHAR* pszDir /*= nullptr*/,
@@ -162,9 +183,9 @@ bool CThread::StartCliProcess (const TCHAR* pszCmd,
      return Start (CliProcess);
 }
 
-UINT CThread::CliProcess (void* pParam)
+UINT CThread::CliProcess (void* lParam)
 {
-     CThread* pThread = static_cast<CThread*>(pParam);
+     CThread* pThread = static_cast<CThread*>(lParam);
      ASSERT ( pThread );       // Pass me something I can work with!
 	
      if ( pThread == NULL )
@@ -299,7 +320,7 @@ UINT CThread::CliProcess()
      }
 
      // Wait for the process to finish.
-     ::WaitForSingleObject (pi.hProcess, 5000);
+     ::WaitForSingleObject (pi.hProcess, INFINITE);
 
      // Close all remaining handles
      ::CloseHandle (pi.hProcess);

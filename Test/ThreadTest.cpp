@@ -286,6 +286,56 @@ TEST(ThreadTest, TestStopCooperatingThread)
      EXPECT_EQ (1, thrd.GetExitCode());
 }
 
+/// Tests that CThread starts CLI and can capture its output.
+TEST(ThreadTest, TestStartCli)
+{
+     HWND HWND_TEST = (HWND) -1;
+     UINT MSG_ID = WM_APP;
+
+     CMockMsgPoster* pPoster = new CMockMsgPoster();
+     CDataQueue* pQueue = new CDataQueue (HWND_TEST, MSG_ID, pPoster); 
+     CTestThread thrd (HWND_TEST, pPoster, pQueue);
+
+     CString sCWD = CDirectory::GetCurrentDir();
+     // TODO: Move the 'cmd /c' to StartCliProcess
+     thrd.StartCliProcess ("cmd /c spawned-process.bat 100",
+                           "..\\test\\resources");
+
+     // Wait for the thread to end.     
+     thrd.Join();
+
+     const vector<string>& msgs = pPoster->Messages();
+     int nMsgs = msgs.size();
+     EXPECT_EQ (8, nMsgs);
+
+     for (int i = 0; i < nMsgs; i++)
+     {
+          const string& msg = msgs [i];
+          EXPECT_THAT (msg, 
+                       MatchesRegex ("PostMessage \\(0xffffffff, 32768, 0x\\w+, 0x\\w+\\)"))
+               << "Index " << i << " expected: 'PostMessage (0xffffffff, 32768, 0xXXXXXXX, 0xXX)'\n"
+               << "         but got: '" << msg << "'";
+     }
+
+     EXPECT_STREQ ("Printing 2 messages every 50 msecs for 100 msecs.\r\n",
+                   pQueue->Remove());
+     EXPECT_THAT (pQueue->Remove(), MatchesRegex ("^.*\\\\MFCX\\\\test\\\\resources\r\n$"));
+     
+     for (int i = 1; i < nMsgs - 5; i++)
+     {
+          string exp = CStringUtil::Format ("Message %d\r\n", i);
+          EXPECT_STREQ (exp.c_str(), pQueue->Remove());
+     }
+
+     EXPECT_STREQ ("Script complete\r\n", pQueue->Remove());
+     EXPECT_THAT ((const TCHAR*) pQueue->Remove(), StartsWith ("Start time: "));
+     EXPECT_THAT ((const TCHAR*) pQueue->Remove(), StartsWith ("End time: "));
+
+     EXPECT_STREQ ("Finished\r\n", pQueue->Remove());
+     EXPECT_STREQ ("", pQueue->Remove());
+}
+
+
 
 /// Tests that when Stop() is called, that the thread function (a separate 
 /// process) stops early.
@@ -303,7 +353,7 @@ TEST(ThreadTest, TestStopSpawnedProcess)
 
      // Wait for the thread function to post 2 messages.  Reading a vector 
      // doesn't need to be synchronised.
-     while ( pPoster->Messages().size() < 2 )
+     while ( pPoster->Messages().size() < 3 )
           std::this_thread::sleep_for (std::chrono::milliseconds (10));
 
      // We now have at least one posted message from the thread function.
@@ -316,7 +366,7 @@ TEST(ThreadTest, TestStopSpawnedProcess)
      int nMsgs = msgs.size();
      ASSERT_GT (22, nMsgs);        // We stopped early so less than 22 messages.
 
-      for (int i = 0; i < nMsgs; i++)
+     for (int i = 0; i < nMsgs; i++)
      {
           const string& msg = msgs [i];
           EXPECT_THAT (msg, 
@@ -327,13 +377,13 @@ TEST(ThreadTest, TestStopSpawnedProcess)
      
      EXPECT_STREQ ("Printing 100 messages every 50 msecs for 5000 msecs.\r\n",
                    pQueue->Remove());
+     EXPECT_THAT (pQueue->Remove(), MatchesRegex ("^.*\\\\MFCX\\\\src\r\n$"));
      
-     for (int i = 1; i < nMsgs - 1; i++)
+     for (int i = 1; i < nMsgs - 2 ; i++)
      {
           string exp = CStringUtil::Format ("Message %d\r\n", i);
           EXPECT_STREQ (exp.c_str(), pQueue->Remove());
      }
-     
      EXPECT_STREQ ("Stopped\r\n", pQueue->Remove());
 
      EXPECT_EQ (0, thrd.GetExitCode());
