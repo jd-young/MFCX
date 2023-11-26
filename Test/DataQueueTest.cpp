@@ -78,9 +78,9 @@ TEST(DataQueueTest, TestEmpty)
 }
 
 #define   TEST_VOLUME_MSG_COUNT    40000
-#define   TEST_VOLUME_MAX_MSECS    400
+#define   TEST_VOLUME_MAX_MSECS    450
 
-/*!  This test sends 40,000 messages in under 200 mS, however, when coverage is
+/*!  This test sends 40,000 messages in under 400 mS, however, when coverage is
  *   run, then it is considerably slower and so this test fails.
  */
 TEST(DataQueueTest, TestVolume)
