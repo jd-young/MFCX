@@ -111,6 +111,10 @@ private:
      
      static UINT CliProcess (void* lParam);
      UINT CliProcess();
+
+     bool CreatePipe (HANDLE* pReadPipe, HANDLE* pWritePipe, const TCHAR* pszDesc);
+     HANDLE CreateProcess (HANDLE hPipeInputRead, HANDLE hPipeOutputWrite);
+     BOOL ReadPipe (HANDLE hPipeOutputRead, CString& sBuf);
 };
 
 

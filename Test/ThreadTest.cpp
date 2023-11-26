@@ -411,7 +411,7 @@ TEST(ThreadTest, TestStartNonExistent)
      EXPECT_THAT (msgs [0], 
                   MatchesRegex ("PostMessage \\(0xffffffff, 32768, 0x\\w+, 0x0\\)"));
 
-     EXPECT_STREQ ("Create process failed: returned 0: "
+     EXPECT_STREQ ("Create process failed: "
                    "'The system cannot find the file specified.' (errno=2)\r\n",
                    pQueue->Remove());
      EXPECT_STREQ ("", pQueue->Remove());

@@ -211,53 +211,36 @@ UINT CThread::CliProcess (void* lParam)
 	return pThread->CliProcess();
 }
 
-
-// The size of the buffer used to take from the tools' output and sent to the 
-// output window.  This should be bigger than an output line from the tool for
-// efficiency.
-#define   BUFFER_SIZE    512
-
-UINT CThread::CliProcess()
+bool CThread::CreatePipe (HANDLE* pReadPipe, HANDLE* pWritePipe, const TCHAR* pszDesc)
 {
      SECURITY_ATTRIBUTES sa = { 0 };
-     STARTUPINFO         si = { 0 };
-     PROCESS_INFORMATION pi = { 0 };
-     HANDLE hPipeOutputRead  = NULL;
-     HANDLE hPipeOutputWrite = NULL;
-     HANDLE hPipeInputRead   = NULL;
-     HANDLE hPipeInputWrite  = NULL;
 
      sa.nLength = sizeof sa;
      sa.bInheritHandle = TRUE;
      sa.lpSecurityDescriptor = NULL;
 
-     CTime tmStart = CTime::GetCurrentTime();
-
-     // Create pipe for standard output redirection.
-     if ( !CreatePipe (&hPipeOutputRead, &hPipeOutputWrite, &sa, 0) )
+     if ( !::CreatePipe (pReadPipe, pWritePipe, &sa, 0) )
      {
-          GetQueue()->Add ("Couldn't create the output pipe");
+          CString sMsg;
+          sMsg.Format ("Couldn't create the %s pipe", pszDesc);
+          GetQueue()->Add (sMsg);
           Stop();
-          return 1;
+          return false;
      }
+     return true;
+}
 
-     // Create pipe for standard input redirection.
-     if ( !CreatePipe (&hPipeInputRead, &hPipeInputWrite, &sa, 0) )
-     {
-          GetQueue()->Add ("Couldn't create the input pipe");
-          Stop();
-          return 1;
-     }
-
-     // Make child process use hPipeOutputWrite as standard out,
-     // and make sure it does not show on screen.
-     si.cb = sizeof(si);
-     si.dwFlags     = STARTF_USESHOWWINDOW | STARTF_USESTDHANDLES;
-     si.wShowWindow = SW_HIDE;
-     si.hStdInput   = hPipeInputRead;
-     si.hStdOutput  = hPipeOutputWrite;
-     si.hStdError   = hPipeOutputWrite;
-
+/*!  Creates a process and attaches the given pipes to it to capture its output.
+ *
+ *   If this function fails to spawn a new process, it reports the error in an 
+ *   error message to the data-queue.
+ *
+ * \param hPipeInputRead      The input read pipe.
+ * \param hPipeOutputWrite    The output write pipe.
+ * \return the handle of the new process or NULL if unsuccessful.
+ */
+HANDLE CThread::CreateProcess (HANDLE hPipeInputRead, HANDLE hPipeOutputWrite)
+{
      // Need to escape all the string delimitters before passing them to the 
      // spawned process.
      CString sCmd = _sCmd;
@@ -268,38 +251,101 @@ UINT CThread::CliProcess()
 
      CEnvVars envVars (_mapEnvs);
      std::unique_ptr<TCHAR> envBlock (envVars.GetProcEnvBlock());
-	
+
      CString sSpawn = _sCmd;
      const TCHAR* pDir = _sDir.IsEmpty() 
                          ? nullptr 
                          : static_cast<const TCHAR*>(_sDir);
 
-     BOOL bRet = ::CreateProcess (nullptr,			// Application name
-                                  sSpawn.GetBuffer (0),// Command line
-                                  nullptr, nullptr,    // Process / thread attributes
-                                  TRUE,                // Inherit handle
-                                  IDLE_PRIORITY_CLASS, // Creation flags
-                                  envBlock.get(),      // Environment
-                                  pDir,                // Current dir 
-                                  &si, &pi);		     // Startup info / process info
+     // Make child process use hPipeOutputWrite as standard out,
+     // and make sure it does not show on screen.
+     STARTUPINFO si = { 0 };
+     si.cb = sizeof(si);
+     si.dwFlags     = STARTF_USESHOWWINDOW | STARTF_USESTDHANDLES;
+     si.wShowWindow = SW_HIDE;
+     si.hStdInput   = hPipeInputRead;
+     si.hStdOutput  = hPipeOutputWrite;
+     si.hStdError   = hPipeOutputWrite;
 
-     if ( !bRet )
+     PROCESS_INFORMATION pi = { 0 };
+
+     BOOL bCreated = ::CreateProcess (nullptr,              // Application name
+                                      sSpawn.GetBuffer (0), // Command line
+                                      nullptr, nullptr,     // Process / thread attributes
+                                      TRUE,                 // Inherit handle
+                                      IDLE_PRIORITY_CLASS,  // Creation flags
+                                      envBlock.get(),       // Environment
+                                      pDir,                 // Current dir 
+                                      &si, &pi);            // Startup info / process info
+     if ( !bCreated )
      {
+          
      	DWORD dwError = ::GetLastError();
      	CString sError = CSysError::GetErrorStr (dwError);
-          string sEvent = CStringUtil::Format ("Create process failed: returned %d: '%s' (errno=%u)\r\n", 
-                                               bRet, sError, dwError);
+          string sEvent = CStringUtil::Format ("Create process failed: '%s' (errno=%u)\r\n", 
+                                               sError, dwError);
           GetQueue()->Add (sEvent.c_str());
-              
-          CloseHandle (hPipeOutputWrite);
-          CloseHandle (hPipeInputRead);
-          return 1;
      }
 
      // Now that handles have been inherited, close it to be safe.
      // You don't want to read or write to them accidentally.
      CloseHandle (hPipeOutputWrite);
      CloseHandle (hPipeInputRead);
+     return bCreated ? pi.hProcess : NULL;
+}
+
+// The size of the buffer used to take from the tools' output and sent to the 
+// output window.  This should be bigger than an output line from the tool for
+// efficiency.
+#define   BUFFER_SIZE    512
+
+/*!  Reads a string from the given pipe into the given buffer.
+ *
+ *   This blocks until a string is available, or the attached process 
+ *   terminates.
+ *
+ * \param hPipe          The handle of the pipe to read from.
+ * \param sBuf           The buffer to receive the string.
+ * \return TRUE if successful in which case sBuf contains the string read, false
+ *         if the pipe was closed in which case sBuf contains 'Finished' if the
+ *         process terminated, or an error message.
+ */
+BOOL CThread::ReadPipe (HANDLE hPipe, CString& sBuf)
+{
+     DWORD nBytesRead = 0;
+
+     BOOL bGood = ::ReadFile (hPipe,                   // handle of the read end of our pipe
+                              sBuf.GetBuffer (BUFFER_SIZE - 1),  // buffer to receive data
+                              BUFFER_SIZE - 1,         // max bytes to read
+                              &nBytesRead,             // number of bytes read
+                              nullptr);                // non-overlapped.
+     sBuf.ReleaseBuffer (nBytesRead);
+     
+     if ( !bGood )
+     {
+          int nError = ::GetLastError();
+          if ( nError == ERROR_BROKEN_PIPE )
+               sBuf = "Finished\r\n";
+          else sBuf.Format ("Error %s (#%d) reading pipe.\r\n", 
+                            CSysError::GetErrorStr (nError), nError);
+     }
+     return bGood;
+}
+
+
+UINT CThread::CliProcess()
+{
+     HANDLE hPipeOutputRead  = NULL;
+     HANDLE hPipeOutputWrite = NULL;
+     HANDLE hPipeInputRead   = NULL;
+     HANDLE hPipeInputWrite  = NULL;
+
+     // Create pipe for standard output redirection.
+     if ( !CreatePipe (&hPipeOutputRead, &hPipeOutputWrite, "output") ) return 1;
+     if ( !CreatePipe (&hPipeInputRead, &hPipeInputWrite, "input") ) return 1;
+
+     HANDLE hProcess = CreateProcess (hPipeInputRead, hPipeOutputWrite);
+     if ( hProcess == NULL ) return 1;
 
      // Now test to capture DOS application output by reading
      // hPipeOutputRead.  Could also write to DOS application
@@ -308,45 +354,23 @@ UINT CThread::CliProcess()
      BOOL bFinished = FALSE;
      while ( !bFinished )
      {
-          TCHAR szBuffer [BUFFER_SIZE];
-          DWORD dwNumberOfBytesRead = 0;
-
-          BOOL bTest = ::ReadFile (hPipeOutputRead,      // handle of the read end of our pipe
-                                   &szBuffer,            // address of buffer that receives data
-                                   BUFFER_SIZE - 1,      // number of bytes to read
-                                   &dwNumberOfBytesRead, // address of number of bytes read
-                                   nullptr);             // non-overlapped.
-
-          if ( bTest )
+          CString sBuf;
+          bFinished = !ReadPipe (hPipeOutputRead, sBuf);
+          GetQueue()->Add (sBuf, _nUserData);
+          
+          if ( !bFinished && IsStopSignalled() )
           {
-               szBuffer [dwNumberOfBytesRead] = 0;  // null terminate
-
-               // Send the data to the CDataQueue that was passed in...
-               GetQueue()->Add (szBuffer, _nUserData);
-          }
-          else
-          {
-               int nError = ::GetLastError();
-               if ( nError == ERROR_BROKEN_PIPE )
-                    wsprintf (szBuffer, "Finished\r\n");
-               else wsprintf (szBuffer, "Error #%d reading pipe.\r\n", nError);
-               GetQueue()->Add (szBuffer, _nUserData);
-               bFinished = TRUE;
-          }
-
-          if ( IsStopSignalled() )
-          {
-               ::TerminateProcess (pi.hProcess, 1);
+               ::TerminateProcess (hProcess, 1);
                GetQueue()->Add ("Stopped\r\n", _nUserData);
                bFinished = TRUE;
           }
      }
-
+                         
      // Wait for the process to finish.
-     ::WaitForSingleObject (pi.hProcess, INFINITE);
+     ::WaitForSingleObject (hProcess, INFINITE);
 
      // Close all remaining handles
-     ::CloseHandle (pi.hProcess);
+     ::CloseHandle (hProcess);
      ::CloseHandle (hPipeOutputRead);
      ::CloseHandle (hPipeInputWrite);
 
