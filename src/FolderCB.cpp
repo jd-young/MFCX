@@ -2,7 +2,7 @@
 //   FolderCB.cpp        Folders drop-list combo box.
 //
 //   Modified by John Young, May 2000
-//   Young Associates
+//   Thistle Software
 //
 //   Based on code that was found on www.codeguru.com, and was 
 //   (c) 1999 Brigham W. Thorp

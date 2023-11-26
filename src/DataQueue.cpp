@@ -4,47 +4,61 @@
      \author   John Young
      \date     12-Nov-99
      
-     Copyright (c) 1999 Young Associates
+     Copyright (c) 1999 Thistle Software
 */
 
 #include "stdafx.h"
 #include "../include/DataQueue.h"
+#include "../include/MsgPoster.h"
 
+namespace MFCX {
 
-CDataQueue::CDataQueue ()
+CDataQueue::CDataQueue()
+ :   CDataQueue ((HWND) NULL, 0)
 {
-	CommonConstruct (NULL, 0);
 }
 
 CDataQueue::CDataQueue (CWnd* pTo, UINT wmMsg)
+ :   CDataQueue (pTo->m_hWnd, wmMsg)
 {
-     CommonConstruct (pTo->m_hWnd, wmMsg);
 }
 
 
 CDataQueue::CDataQueue (HWND hTo, UINT wmMsg)
+ :   CDataQueue (hTo, wmMsg, new CMsgPoster())
 {
-     CommonConstruct (hTo, wmMsg);
 }
 
-void CDataQueue::CommonConstruct (HWND hTarget, UINT wmMsg)
-{
-     m_pHead = NULL;
-     m_pTail = NULL;
-     SetTargetWnd (hTarget, wmMsg);
-}
 
+/*private*/
+CDataQueue::CDataQueue (HWND hTo, UINT wmMsg, IMsgPoster* pPoster)
+ :   m_pHead (nullptr), m_pTail (nullptr), m_hTarget (hTo), m_wmMsg (wmMsg), 
+     _pPoster (pPoster)
+{
+}
 
 
 /*virtual*/ CDataQueue::~CDataQueue()
 {
      MakeEmpty();
+     delete _pPoster;
 }
+
+bool CDataQueue::IsEmpty()
+{
+     CSingleLock singleLock (&m_critSection, TRUE);
+     ASSERT ( singleLock.IsLocked() );
+     
+     return m_pHead == NULL;
+}
+
 
 void CDataQueue::MakeEmpty()
 {
-     while ( !IsEmpty() )
-          Remove();
+     CSingleLock singleLock (&m_critSection, TRUE);
+     ASSERT ( singleLock.IsLocked() );
+     while ( m_pHead )
+          _Remove();
 }
 
 void CDataQueue::SetTargetWnd (HWND hTarget, UINT wmMsg)
@@ -66,6 +80,11 @@ bool CDataQueue::Add (const TCHAR* psz, LPARAM lParam /*= 0*/)
      CSingleLock singleLock (&m_critSection, TRUE);
      ASSERT ( singleLock.IsLocked() );
      
+     return _Add (psz, lParam);
+}
+
+bool CDataQueue::_Add (const TCHAR* psz, LPARAM lParam /*= 0*/)
+{
      CNode* pNew = new CNode (psz);
      if ( !pNew )
      	return false;
@@ -80,7 +99,8 @@ bool CDataQueue::Add (const TCHAR* psz, LPARAM lParam /*= 0*/)
           m_pTail->pNext = pNew;
           m_pTail = pNew;
      }
-     ::PostMessage (m_hTarget, m_wmMsg, (UINT) this, lParam);
+     
+     _pPoster->PostMessage (m_hTarget, m_wmMsg, (UINT) this, lParam);
      return true;
 }
 
@@ -93,6 +113,15 @@ CString CDataQueue::Remove()
      CSingleLock singleLock (&m_critSection, TRUE);
      ASSERT ( singleLock.IsLocked() );
 
+     return _Remove();
+}
+
+/*!  Removes data from the front of the queue.
+ *
+ * \return     The data.
+ */
+CString CDataQueue::_Remove()
+{
      CString sData;
      if ( !IsEmpty() )
      {
@@ -105,14 +134,9 @@ CString CDataQueue::Remove()
      return sData;
 }
 
-CDataQueue::CNode::CNode()
-{
-     pNext = NULL;
-}
-
 CDataQueue::CNode::CNode (const TCHAR* psz)
+ :   sData (psz), pNext (nullptr)
 {
-     sData = psz;
-     pNext = NULL;
 }
 
+} // namespace MFCX

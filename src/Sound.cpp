@@ -4,7 +4,7 @@
      \author   John Young
      \date     26-Mar-1998
 
-     Copyright (c) 1998 Young Associates
+     Copyright (c) 1998 Thistle Software
      All rights reserved
 
      PlayWaveSound (UINT nID);

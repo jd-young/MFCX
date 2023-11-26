@@ -2,7 +2,7 @@
 //   DragMultiTree.cpp     Drag 'n' Drop Multi-select Tree Control
 //
 //	Written by John Young, 25-Sep-99
-//	Copyright (c) 1999 Young Associates
+//	Copyright (c) 1999 Thistle Software
 //
 
 #include "stdafx.h"

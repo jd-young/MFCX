@@ -11,10 +11,10 @@
             "request": "launch",
             "program": "${workspaceFolder}/builds/test/MFCXTest.exe",
             "args": ["--gtest_output=xml:${workspaceFolder}/builds/test/results/MFCXTest-results.xml",
-                     "--gtest_filter=StringUtilTest*",
+                     "--gtest_filter=ThreadTest*",
                      "--gtest_catch_exceptions=0"],
             "stopAtEntry": false,
-            "cwd": "${workspaceFolder}/test",
+            "cwd": "${workspaceFolder}/src",
             "environment": [ { "name" : " _DEBUG_VIEW", "value": "1" } ],
             "console": "internalConsole",
             "sourceFileMap": 

@@ -2,7 +2,7 @@
 //   GradStatic.cpp      Gradient CStatic 
 //
 //   Written by John Young, 4-Jun-2000
-//   Copyright (c) 2000 Young Associates.
+//   Copyright (c) 2000 Thistle Software
 //
 //
 

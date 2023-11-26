@@ -4,7 +4,7 @@
      \author   John Young
      \date     circa 1999
      
-     Copyright (c) 1999 Young Associates
+     Copyright (c) 1999 Thistle Software
 
 TODO: Split this into getargs() and CFontUtils.
 */

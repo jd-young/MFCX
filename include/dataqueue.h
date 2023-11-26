@@ -5,11 +5,13 @@
 #ifndef   __MFCX_DATAQUEUE_H
 #define   __MFCX_DATAQUEUE_H
 
-#include	<afxmt.h>
+namespace MFCX {
 
+class IMsgPoster;
 
-/// A thread-safe data queue.
-/*!  This class allows thread-safe queuing, in other words, one thread can be 
+/*!  A thread-safe data queue.
+     
+     This class allows thread-safe queuing, in other words, one thread can be 
      adding stuff to the tail and another thread can be removing stuff from the 
      front of the queue at the "same" time.
 
@@ -21,38 +23,32 @@
 */
 class CDataQueue
 {
+     CDataQueue (const CDataQueue&) = delete;
+
 public:
-	/// Default queue constructor.
      CDataQueue();
      
      // TODO: Remove this constructor, since it has MFC CWnd.
      /// Constructor.  Will notify the given window with the given message
      /// when something is added.
      [[deprecated]]  // Use CDataQueue(HWND, UINT) instead.
-     CDataQueue (CWnd* pTo, UINT wmAddMsg);
+     CDataQueue (CWnd* pTo, UINT wmMsg);
 
      /// Constructor.  Will notify the given window with the given message
      /// when something is added.
-     CDataQueue (HWND hTo, UINT wmAddMsg);
+     CDataQueue (HWND hTo, UINT wmMsg);
 
 	/// Cleans up the queue.
      virtual ~CDataQueue();
 
 	/// Sets the target window for update messages.
-	void SetTargetWnd (HWND hLogWnd, UINT wmMsg);
+	void SetTargetWnd (HWND hTarget, UINT wmMsg);
 
 	/// Returns the target window handle.
 	HWND GetTarget() const { return m_hTarget; }
 
-/*
-     /// Create the queue.
-     bool Create (CWnd* pTo, UINT wmAddMsg);
-
-     /// Create the queue.
-     bool Create (HWND hTo, UINT wmAddMsg);
-*/
-     /// Tells wither the queue is empty or not.
-     bool IsEmpty() { return m_pHead == NULL; }
+     /// Tells whether the queue is empty or not.
+     bool IsEmpty();
 
      /// Empties the queue.
      void MakeEmpty();
@@ -63,15 +59,21 @@ public:
      /// Removes data from the front of the queue.
      CString Remove();
 
+#ifndef   GTEST    // To allow unit testing.
 private:
-	void CommonConstruct (HWND hTarget, UINT wmMsg);
+#endif
+
+     /// Constructor that allows us to supply a poster for testing.
+     CDataQueue (HWND hTo, UINT wmMsg, IMsgPoster* pPoster);
+
+     bool _Add (const TCHAR* psz, LPARAM lParam = 0);
+     CString _Remove();
 
      /// A node in the queue.
      class CNode
      {
      public:
-          CNode();
-          CNode (const TCHAR* psz);
+          explicit CNode (const TCHAR* psz);
           CString sData;                     // <- The data
           CNode* pNext;
      };
@@ -81,8 +83,11 @@ private:
      HWND m_hTarget;               ///< Where to send messages when data is added.
      UINT m_wmMsg;                 ///< What message to send when data is added.
 
-     CCriticalSection m_critSection;    ///< This ensures thread-safety.
+     IMsgPoster* _pPoster;         ///< The Windows message poster.
+
+     CCriticalSection m_critSection;    ///< Guards the queue to ensure thread-safety.
 };
 
+} // namespace MFCX
 
 #endif    // __MFCX_DATAQUEUE_H

@@ -2,7 +2,7 @@
 //   XStringList.cpp     Sortable string list
 //
 //   Written by John Young, 19-Dec-99
-//   Copyright (c) Young Associates
+//   Copyright (c) Thistle Software
 //
 //
 

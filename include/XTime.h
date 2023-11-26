@@ -5,7 +5,14 @@
 #ifndef   __MFXC_XTIME_H
 #define   __MFXC_XTIME_H
 
+#include <chrono>
+#include <string>
 #include <atltime.h>
+
+using std::string;
+using namespace std::literals;
+
+namespace MFCX {
 
 
 /// An extended CTimeSpan class
@@ -32,7 +39,7 @@ public:
 			includeDiffDate = 4 
 		};
 
-	CXTime() : CTime () {};
+	CXTime() : CTime() {};
 	CXTime (const CTime& timeSrc) : CTime (timeSrc) {}
 	CXTime (time_t time) : CTime (time) {}
 	CXTime (int nYear, int nMonth, int nDay, 
@@ -56,6 +63,38 @@ public:
 	static SYSTEMTIME CvtToSystime (const struct tm* pTime);
 };
 
+/*! Helps with ascertaining and displaying durations from a start point.
+ *
+ */
+class CStopWatch
+{
+public:
+     CStopWatch();
+     
+     void Start();
+     void Stop();
+
+     LONGLONG Days() const;
+     LONGLONG Hours() const;
+     LONGLONG Minutes() const;
+     LONGLONG Seconds() const;
+     LONGLONG MilliSeconds() const;
+     LONGLONG MicroSeconds() const;
+     LONGLONG NanoSeconds() const;
+     string HumanReadable() const;
+
+#ifdef    GTEST
+     CStopWatch (const CStopWatch&) = delete;
+     CStopWatch (LONGLONG msecs)
+       : _duration (msecs) {} 
+#endif
 
 
+private:
+     std::chrono::time_point<std::chrono::steady_clock> _start;
+     std::chrono::time_point<std::chrono::steady_clock> _end;
+     std::chrono::duration<__int64, std::nano> _duration;
+};
+
+}    // namespace MFCX
 #endif    // __MFXC_XTIME_H

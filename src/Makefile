@@ -93,7 +93,7 @@ CHECKDIR  = ../builds/cppcheck
 # - /Zi  - Produce a separate PDB.
 CXX_CMN_FLAGS = -Gd -GS -analyze- -Oy- -W3 -Zc:wchar_t,inline,forScope \
                 -D "WIN32" -D "_WINDOWS" -D "MFCX_LOG_USELOG" \
-                -D "_MBCS" -D "_AFXDLL" -WX- -Zi -fp:precise \
+                -D "_MBCS" -D "_AFXDLL" -D "GTEST" -WX- -Zi -fp:precise \
                 -errorReport:prompt -EHsc -nologo \
                 -Fd"$(INTDIR)/$(PROGRAM).pdb" -Fp"$(INTDIR)/$(PROGRAM).pch" \
                 -diagnostics:classic -c
@@ -253,7 +253,7 @@ CONSOLE_CXXFLAGS = -nologo -MDd -W3 -EHsc -GR -Zi -Od -I "$(GTEST_INC)" \
 CONSOLE_LINK_FLAGS= shlwapi.lib kernel32.lib user32.lib gdi32.lib winspool.lib \
                     comdlg32.lib advapi32.lib shell32.lib ole32.lib \
                     oleaut32.lib uuid.lib odbc32.lib odbccp32.lib version.lib \
-                    winmm.lib gtestsd.lib -nologo -subsystem:console \
+                    winmm.lib gtestsd.lib gmocksd.lib -nologo -subsystem:console \
                     -pdb:"$(TESTDIR)/$(TEST_PROGRAM).pdb" -debug \
                     -libpath:"$(GTEST_LIB)" -machine:I386
 
@@ -264,9 +264,10 @@ UNITTEST_SRC  :=   $(wildcard ../test/*.cpp) $(foreach dir,$(TEST_SRC_DIRS),$(wi
 UNITTEST_DEPS :=   $(UNITTEST_SRC:.cpp=.d)
 
 TEST_SRC      :=   $(UNITTEST_SRC) Crypt.cpp Directory.cpp DataQueue.cpp \
-                    Filename.cpp \
+                    EnvVars.cpp Filename.cpp MsgPoster.cpp \
                     Regex.cpp RegexString.cpp RegKey.cpp StringUtil.cpp \
-                    Utils.cpp XString.cpp XStringList.cpp XTime.cpp \
+                    SysError.cpp Thread.cpp Utils.cpp XString.cpp \
+                    XStringList.cpp XTime.cpp \
                     regex/pcre.cpp regex/chartables.cpp
 
 # TODO: The test objects look like this: ../builds/test/../test/CryptTest.obj, 
@@ -310,7 +311,13 @@ $(TESTDIR)/$(TEST_PROGRAM).exe : $(TEST_OBJS)
 	@$(LINK) $(CONSOLE_LINK_FLAGS) -out:$@ $(TESTDIR)/StdAfx.obj $(TEST_OBJS)
 
 ifeq "$(tests)" ''
-     tests_filter :=
+     # TestVolume should run within 200 ms but takes way over that when running
+     # coverage.
+     ifeq ($(MAKECMDGOALS), coverage)
+       tests_filter :=  --gtest_filter=-DataQueueTest.TestVolume
+     else
+       tests_filter :=
+     endif
 else
      tests_filter :=  --gtest_filter=$(tests)
 endif

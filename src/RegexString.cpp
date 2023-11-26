@@ -3,7 +3,7 @@
      \author   John Young
      \date     10 February 2001
 
-     Copyright (c) 2001 Young Associates
+     Copyright (c) 2001 Thistle Software
 */
 
 #include "stdafx.h"
