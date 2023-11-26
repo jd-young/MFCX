@@ -135,9 +135,8 @@ CString CDataQueue::_Remove()
 }
 
 CDataQueue::CNode::CNode (const TCHAR* psz)
+ :   sData (psz), pNext (nullptr)
 {
-     sData = psz;
-     pNext = NULL;
 }
 
 } // namespace MFCX

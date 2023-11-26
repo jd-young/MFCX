@@ -32,17 +32,17 @@ public:
      /// Constructor.  Will notify the given window with the given message
      /// when something is added.
      [[deprecated]]  // Use CDataQueue(HWND, UINT) instead.
-     CDataQueue (CWnd* pTo, UINT wmAddMsg);
+     CDataQueue (CWnd* pTo, UINT wmMsg);
 
      /// Constructor.  Will notify the given window with the given message
      /// when something is added.
-     CDataQueue (HWND hTo, UINT wmAddMsg);
+     CDataQueue (HWND hTo, UINT wmMsg);
 
 	/// Cleans up the queue.
      virtual ~CDataQueue();
 
 	/// Sets the target window for update messages.
-	void SetTargetWnd (HWND hLogWnd, UINT wmMsg);
+	void SetTargetWnd (HWND hTarget, UINT wmMsg);
 
 	/// Returns the target window handle.
 	HWND GetTarget() const { return m_hTarget; }
@@ -73,7 +73,7 @@ private:
      class CNode
      {
      public:
-          CNode (const TCHAR* psz);
+          explicit CNode (const TCHAR* psz);
           CString sData;                     // <- The data
           CNode* pNext;
      };
@@ -85,7 +85,7 @@ private:
 
      IMsgPoster* _pPoster;         ///< The Windows message poster.
 
-     CCriticalSection m_critSection;    ///< This ensures thread-safety.
+     CCriticalSection m_critSection;    ///< Guards the queue to ensure thread-safety.
 };
 
 } // namespace MFCX
