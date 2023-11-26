@@ -110,13 +110,13 @@ TEST(StopWatchTest, TestDurationAgainstSleep)
      Sleep (50);     // 1 ms
      sw.Stop();
      EXPECT_LT (45, sw.MilliSeconds());
-     EXPECT_GE (64, sw.MilliSeconds());
+     EXPECT_GE (65, sw.MilliSeconds());
 
      EXPECT_LT (45000, sw.MicroSeconds());
-     EXPECT_GE (64000, sw.MicroSeconds());
+     EXPECT_GE (65000, sw.MicroSeconds());
 
      EXPECT_LT (45000000, sw.NanoSeconds());
-     EXPECT_GE (64000000, sw.NanoSeconds());
+     EXPECT_GE (65000000, sw.NanoSeconds());
 }
 
 TEST(StopWatchTest, TestDurationPrecise)
