@@ -19,6 +19,13 @@ static char THIS_FILE[] = __FILE__;
 
 namespace MFCX {
 
+/*static*/ void CSysError::GetLastError (DWORD& dwError, CString& sError)
+{
+     dwError = ::GetLastError();
+     sError = GetErrorStr (dwError);
+}
+
+
 /*static*/ CString CSysError::GetErrorStr (DWORD dwError)
 {
 	TCHAR* pMsgBuf;

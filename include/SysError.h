@@ -11,6 +11,7 @@ class CSysError
 public:
 	CSysError();
 	
+	static void GetLastError (DWORD& dwError, CString& sError);
 	static CString GetErrorStr (DWORD dwError);
 };
 
