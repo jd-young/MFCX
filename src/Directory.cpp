@@ -19,6 +19,14 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
+/*static*/ CString CDirectory::GetCurrentDir()
+{
+	char szDir [_MAX_PATH];
+     ::GetCurrentDirectory (sizeof szDir - 1, szDir);
+     return szDir;
+}
+
+
 /*!  Called to set the working directory to that of the given file name.
 
 \param    pszPath   The path of a file, or the sub-directory to change to.
@@ -55,12 +63,42 @@ bool CDirectory::SetCurrentDir (const TCHAR* pszPath)
 	return true;	// Already exists
 }
 
-/*static*/ CString CDirectory::GetCurrentDir()
+/*!  Deletes the given directory recursively.
+ *
+ * \param pszDir         The path to the directory to delete.
+ * \param bRecycleBin    true if the directory (and any contained files) are 
+ *                       sent to the recycle bin.
+ * \return true if successful, false, otherwise.
+ */
+bool DeleteDir (const TCHAR* pszDir, bool bRecycleBin = false)
 {
-	char szDir [_MAX_PATH];
-     ::GetCurrentDirectory (sizeof szDir - 1, szDir);
-     return szDir;
+     CString sDir = CFilename::IsRelativePath (pszDir)
+                         ? CFilename::GetFullPath (CDirectory::GetCurrentDir(), pszDir)
+                         : pszDir;
+
+     int len = sDir.GetLength();
+     TCHAR* pszzDir = sDir.GetBuffer (len + 1);
+     pszzDir [len + 1] = '\0';    // must be double null-terminated.
+     
+     SHFILEOPSTRUCT fileop;
+     fileop.hwnd   = NULL;         // no status display
+     fileop.wFunc  = FO_DELETE;    // delete operation
+     fileop.pFrom  = pszzDir;      // source file name as double null terminated string
+     fileop.pTo    = NULL;         // no destination needed
+     fileop.fFlags = FOF_NOCONFIRMATION | FOF_SILENT;  // do not prompt the user
+     if ( bRecycleBin )
+          fileop.fFlags |= FOF_ALLOWUNDO;
+     
+     fileop.fAnyOperationsAborted = FALSE;
+     fileop.hNameMappings         = NULL;
+     fileop.lpszProgressTitle     = NULL;
+     
+     int ret = SHFileOperation (&fileop);
+     
+     return ret == 0;
 }
+
+
 
 /*! 	Adds a trailing slash if there is none, except if the sDir parameter is 
 	empty.
