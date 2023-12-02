@@ -20,6 +20,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
+using namespace MFCX;
+
 /*static*/ CString CDirectory::GetCurrentDir()
 {
 	char szDir [_MAX_PATH];
@@ -71,7 +73,7 @@ bool CDirectory::SetCurrentDir (const TCHAR* pszPath)
  *                       sent to the recycle bin.
  * \return true if successful, false, otherwise.
  */
-bool DeleteDir (const TCHAR* pszDir, bool bRecycleBin = false)
+bool CDirectory::DeleteDir (const TCHAR* pszDir, bool bRecycleBin /*= false*/)
 {
      CString sDir = CFilename::IsRelativePath (pszDir)
                          ? CFilename::GetFullPath (CDirectory::GetCurrentDir(), pszDir)

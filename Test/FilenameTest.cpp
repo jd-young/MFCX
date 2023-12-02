@@ -16,6 +16,7 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
+using MFCX::CFilename;
 
 TEST(FilenameTest, TestGetFileName)
 {

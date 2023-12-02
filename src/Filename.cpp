@@ -19,6 +19,7 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
+using namespace MFCX;
 
 CFilename::CFilename (const TCHAR* pszPath)
  :   m_sPath (pszPath)
