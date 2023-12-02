@@ -59,6 +59,7 @@
 #include "DragMultiTree.h"	// Tree control that allows drag'n'drop
 #include "Dragger.h"		// Dragging functionality
 #include "DriveCB.h"		// A drive combo-box chooser
+#include "EnvVars.h"          // Environment variables
 #include "Filename.h"		// Filename manipulation
 #include "FolderCB.h"		// A folder combo-box chooser
 #include "GradStatic.h"		// A gradient static control
@@ -67,6 +68,7 @@
 #include "ImageButton.h"      // A button with a picture on it.
 #include "Logger.h"			// A debug logger
 #include "MenuButton.h"		// A button with a menu
+#include "MsgPoster.h"        // A generic message poster
 #include "MultiTree.h"		// Multi-select tree
 #include "PersistColourDlg.h"	// Colour selector that remembers previous selections
 #include "PersistListCtrl.h"	// A persistent CXListCtrl
@@ -77,18 +79,19 @@
 #include "Sound.h"			// Sound manipulation
 #include "Splasher.h"		// A splasher screen
 #include "StringUtil.h"		// A string utility
+#include "SysError.h"         // System error helpers
+#include "SysImageList.h"	// A sytem image list
 #include "TArray.h"			// Any array template
+#include "Thread.h"			// Thread manipulation
 #include "TList.h"			// A list template
 #include "TMap.h"			// A map template
-#include "Thread.h"			// Thread manipulation
-#include "SysImageList.h"	// A sytem image list
 #include "Utils.h"			// General utilities
 #include "VerInfo.h"		// Version information
 #include "XListBox.h"		// An extended list box
 #include "XRecentFile.h"		// An extended recent files class
 #include "XString.h"         	// Extended string
 #include "XStringList.h"		// Extended string list that can be sorted
-#include "XTreeCtrl.h"        // Extended tree control 
 #include "XTime.h"			// Time processing
+#include "XTreeCtrl.h"        // Extended tree control 
 
 #endif // __MFCX_H
