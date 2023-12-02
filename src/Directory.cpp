@@ -11,6 +11,7 @@
 #include <direct.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include "../include/Filename.h"
 #include "../include/Directory.h"
 
 #ifdef _DEBUG
@@ -58,7 +59,7 @@ bool CDirectory::SetCurrentDir (const TCHAR* pszPath)
 	if ( _stat (pszPath, &stat) != 0 )
 	{
 		// Doesn't exist... create it.
-		return mkdir (pszPath) == 0;
+		return _mkdir (pszPath) == 0;
 	}
 	return true;	// Already exists
 }
