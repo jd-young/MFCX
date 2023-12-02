@@ -4,8 +4,8 @@
 
 /* Copyright (c) 1998 University of Cambridge */
 
-#ifndef _PCRE_H
-#define _PCRE_H
+#ifndef __MFCX_PCRE_H
+#define __MFCX_PCRE_H
 
 /* Have to include stdlib.h in order to ensure that size_t is defined;
 it is needed here for malloc. */
@@ -66,4 +66,5 @@ extern const char *pcre_version(void);
 }  /* extern "C" */
 #endif
 
-#endif /* End of pcre.h */
+#endif // __MFCX_PCRE_H
+/* End of pcre.h */

@@ -2,8 +2,8 @@
 //   MsgPoster.h    A Windows message poster.
 //
 
-#ifndef   MSGPOSTER_H
-#define   MSGPOSTER_H
+#ifndef   __MFCX_MSGPOSTER_H
+#define   __MFCX_MSGPOSTER_H
 
 namespace MFCX {
 /*!
@@ -35,4 +35,4 @@ public:
 
 
 } // namespace MFCX
-#endif    //   MSGPOSTER_H
+#endif    //   __MFCX_MSGPOSTER_H

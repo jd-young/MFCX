@@ -3,8 +3,8 @@
 //
 //
 
-#ifndef _MFCX_STRINGLIST_H
-#define _MFCX_STRINGLIST_H
+#ifndef __MFCX_STRINGLIST_H
+#define __MFCX_STRINGLIST_H
 
 
 class CXStringList : public CStringList
@@ -20,4 +20,4 @@ public:
           { CopyFrom (from);  return *this; }
 };
 
-#endif    // _MFCX_STRINGLIST_H
+#endif    // __MFCX_STRINGLIST_H

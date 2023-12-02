@@ -1,7 +1,7 @@
 // StringUtil.h : A string utilities class
 
-#ifndef   STRINGUTIL_H
-#define   STRINGUTIL_H
+#ifndef   __MFCX_STRINGUTIL_H
+#define   __MFCX_STRINGUTIL_H
 
 #include <string>
 #include <vector>
@@ -61,4 +61,4 @@ public:
 
 }    // namespace MFCX
 
-#endif   STRINGUTIL_H
+#endif   __MFCX_STRINGUTIL_H
