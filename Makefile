@@ -124,8 +124,9 @@ cleanall: ## Cleans all generated files and directories for Debug and Release bu
 lib: ## Builds the MFCX.lib file.
 	@cd src && $(MAKE) build
 
-package: lib
-	@"$(7Z)" a -tzip builds/mfcx.zip lib/* include/*
+package: lib doc
+	@"$(7Z)" a -tzip builds/mfcx.zip lib/* include/* 
+	@cd builds/doc && "$(7Z)" a -tzip ../mfcx.zip html/*
 
 doc:   ## Creates the documentation (including doxygen).
 	@cd doc && $(MAKE) doc

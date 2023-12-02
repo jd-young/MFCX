@@ -36,17 +36,19 @@ endif
 #VERSION   = $(shell $(VER_CMD))
 #YEAR      = $(shell $(YEAR_CMD))
 
-LOG       =    $(PROGRAM)-dox.log
-ERR       =    $(PROGRAM)-dox.err
-
 # TODO: Add MFCX.chm file.  GENERATE_HTMLHELP = YES
+BUILDS_DIR   =    ../../builds/doc
 ifeq ($(FORMAT), mini)
   DOXYFILE   =    $(PROGRAM)-mini.dox
-  HTML_DIR   =    html-mini
+  HTML_DIR   =    $(BUILDS_DIR)/html-mini
 else
   DOXYFILE   =    $(PROGRAM).dox
-  HTML_DIR   =    html
+  HTML_DIR   =    $(BUILDS_DIR)/html
 endif
+
+LOG       =    $(BUILDS_DIR)/$(PROGRAM)-dox.log
+ERR       =    $(BUILDS_DIR)/$(PROGRAM)-dox.err
+
 
 #$(DOXYFILE) : ../../src/Version.h
 SRC_DIR   =    ../../src
@@ -67,10 +69,7 @@ doxygen : $(HTML_DIR)/index.html
 	@$(DOX) $(DOXYFILE) > $(LOG) 2> $(ERR)
 
 clean:
-	@rm -rf html
-	@rm -rf html-mini
-	@rm -rf man
-	@rm -rf xml
+	@rm -rf $(BUILDS_DIR)
 	@rm -f $(LOG)
 	@rm -f $(ERR)
 
