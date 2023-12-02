@@ -19,10 +19,7 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-
-using MFCX::CEnvVars;
-using MFCX::CStringUtil;
-using MFCX::CSysError;
+using namespace MFCX;
 
 
 CThread::CThread()

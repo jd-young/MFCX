@@ -5,6 +5,8 @@
 #ifndef   __MFCX_DIRECTORY_H
 #define   __MFCX_DIRECTORY_H
 
+namespace MFCX {
+
 /*!  A directory class helper.
  */
 class CDirectory
@@ -20,10 +22,12 @@ public:
 	static bool CreateDir (const TCHAR* pszPath);
 
      /// Deletes the given directory (if present) recursively.
-     static bool DeleteDir (const TCHAR* pszPath);
+     static bool DeleteDir (const TCHAR* pszPath, bool bRecycleBin = false);
      
      /// Add a trailing slash if necessary.
      static void AddTrailingSlash (CString& sDir);
 };
+
+}    // namespace MFCX
 
 #endif    // __MFCX_DIRECTORY_H

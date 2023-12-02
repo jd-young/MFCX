@@ -7,6 +7,8 @@
 #ifndef   __MFCX__FILENAME_H
 #define   __MFCX__FILENAME_H
 
+namespace MFCX {
+
 /*!  A filename utility
 
  */
@@ -132,5 +134,7 @@ protected:
                                  CString (*GetEnvVar)(const TCHAR*),
                                  CString (*FullPath)(const TCHAR*));
 };
+
+}    // namespace MFCX
 
 #endif    // __MFCX_FILENAME_H

@@ -17,6 +17,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
+using MFCX::CDirectory;
+
 void TestSetCurrDir (const TCHAR* pszTest, const TCHAR* pszExpDir, bool bExpResult)
 {
      SCOPED_TRACE("TestSetCurrDir");
