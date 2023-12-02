@@ -15,7 +15,7 @@
 #define   VER_MAJOR      3
 #define   VER_MINOR      3
 #define   VER_REVISION   0
-#define   VER_BUILD      17
-#define   VER_STRING     "3, 3, 0, 17\0"
-#define   VER_BUILDDATE  "26 November 2023\0"
-#define   VER_BUILDINFO  "jyoun@GANDALF 13:31 26-Nov-2023\0"
+#define   VER_BUILD      18
+#define   VER_STRING     "3, 3, 0, 18\0"
+#define   VER_BUILDDATE  " 2 December 2023\0"
+#define   VER_BUILDINFO  "jyoun@GANDALF 17:39  2-Dec-2023\0"
