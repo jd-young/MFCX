@@ -1,8 +1,8 @@
 // SysError.h
 
 
-#ifndef	_SYSERROR_H
-#define	_SYSERROR_H
+#ifndef	__MFCX_SYSERROR_H
+#define	__MFCX_SYSERROR_H
 
 namespace MFCX {
 
@@ -17,4 +17,4 @@ public:
 
 }    // namespace MFCX
 
-#endif	// _SYSERROR_H
+#endif	// __MFCX_SYSERROR_H

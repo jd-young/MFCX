@@ -50,7 +50,7 @@ public:
      virtual ~CThread();
 
      /// Returns true if the thread has been started.
-     bool IsActive() const { return m_pThread != NULL; }
+     virtual bool IsActive() const { return m_pThread != NULL; }
      
      /// The handle of the target window.
      HWND GetTarget() const { return m_hTarget; }
@@ -89,7 +89,7 @@ public:
      DWORD Join();
      
 #ifndef   GTEST
-private:
+protected:
 #endif
      // TODO: If we don't need SetHandle(), then we can remove this.
      HWND m_hTarget;               ///< The window to send messages to.
@@ -106,6 +106,7 @@ private:
      LPARAM _nUserData;            ///< User supplied data.  This is sent with 
                                    ///< messages to windows by the data-queue.
 
+private:
      static UINT WrapperThread (void* lParam);
      UINT WrapperThread();
      

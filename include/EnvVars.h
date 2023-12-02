@@ -2,8 +2,8 @@
 //   ToolsMgr.h
 //
 
-#ifndef   ENVVARS_H
-#define   ENVVARS_H
+#ifndef   __MFCX_ENVVARS_H
+#define   __MFCX_ENVVARS_H
 
 #include <map>
 #include <string>
@@ -60,4 +60,4 @@ protected:
 
 }    // namespace MFCX
 
-#endif    //   ENVVARS_H
+#endif    //   __MFCX_ENVVARS_H
