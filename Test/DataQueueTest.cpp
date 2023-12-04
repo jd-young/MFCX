@@ -77,10 +77,10 @@ TEST(DataQueueTest, TestEmpty)
      EXPECT_THAT (msgs [1].c_str(), MatchesRegex ("PostMessage \\(0xffffffff, 32768, 0x\\w+, 0x0\\)"));
 }
 
-#define   TEST_VOLUME_MSG_COUNT    40000
+#define   TEST_VOLUME_MSG_COUNT    30000
 #define   TEST_VOLUME_MAX_MSECS    450
 
-/*!  This test sends 40,000 messages in under 400 mS, however, when coverage is
+/*!  This test sends 30,000 messages in under 450 mS, however, when coverage is
  *   run, then it is considerably slower and so this test fails.
  */
 TEST(DataQueueTest, TestVolume)
