@@ -153,6 +153,9 @@ TEST(ThreadTest, TestThread_UsingDeprecated)
  
      // Wait for the thread to end.     
      thrd.Join();
+
+     EXPECT_TRUE (thrd._bStarted);
+     EXPECT_TRUE (thrd._bFinished);
     
      const vector<string>& msgs = thrd._pMsgPoster->Messages();
      ASSERT_EQ (22, msgs.size());
@@ -203,6 +206,9 @@ TEST(ThreadTest, TestThread)
      
      // Wait for the thread to end.     
      thrd.Join();
+
+     EXPECT_TRUE (thrd._bStarted);
+     EXPECT_TRUE (thrd._bFinished);
 
      const vector<string>& msgs = pPoster->Messages();
      ASSERT_EQ (22, msgs.size());
@@ -264,6 +270,9 @@ TEST(ThreadTest, TestStopCooperatingThread)
      // Wait for the thread to end.     
      thrd.Join();
 
+     EXPECT_TRUE (thrd._bStarted);
+     EXPECT_TRUE (thrd._bFinished);
+
      const vector<string>& msgs = pPoster->Messages();
      int nMsgs = msgs.size();
      ASSERT_GT (22, nMsgs);        // We stopped early so less than 22 messages.
@@ -307,6 +316,9 @@ TEST(ThreadTest, TestStartCli)
 
      // Wait for the thread to end.     
      thrd.Join();
+
+     EXPECT_TRUE (thrd._bStarted);
+     EXPECT_TRUE (thrd._bFinished);
 
      const vector<string>& msgs = pPoster->Messages();
      int nMsgs = msgs.size();
@@ -367,6 +379,9 @@ TEST(ThreadTest, TestStopSpawnedProcess)
      // Wait for the thread to end.     
      thrd.Join();
 
+     EXPECT_TRUE (thrd._bStarted);
+     EXPECT_TRUE (thrd._bFinished);
+
      const vector<string>& msgs = pPoster->Messages();
      int nMsgs = msgs.size();
      ASSERT_GT (22, nMsgs);        // We stopped early so less than 22 messages.
@@ -408,6 +423,9 @@ TEST(ThreadTest, TestStartNonExistent)
 
      // Wait for the thread to end.     
      thrd.Join();
+
+     EXPECT_TRUE (thrd._bStarted);
+     EXPECT_TRUE (thrd._bFinished);
 
      const vector<string>& msgs = pPoster->Messages();
      int nMsgs = msgs.size();
