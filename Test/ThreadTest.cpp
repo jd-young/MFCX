@@ -41,7 +41,7 @@ public:
 
      /// Override to replace the message poster to our one.
      void SetHandle (HWND hwnd, UINT wmMsg);
-//
+
      void OnStart();
      void OnFinished();
 
@@ -57,6 +57,10 @@ public:
 
      UINT CooperatingFunction();
      static UINT CooperatingFunction (void* lParam);
+
+// Access to protected stuff
+     CString GetCmd() const { return _sCmd; }
+     const map<string, string>& GetEnvs() const { return _mapEnvs; }
 };
 
 CTestThread::CTestThread()
@@ -149,6 +153,9 @@ TEST(ThreadTest, TestThread_UsingDeprecated)
  
      // Wait for the thread to end.     
      thrd.Join();
+
+     EXPECT_TRUE (thrd._bStarted);
+     EXPECT_TRUE (thrd._bFinished);
     
      const vector<string>& msgs = thrd._pMsgPoster->Messages();
      ASSERT_EQ (22, msgs.size());
@@ -199,6 +206,9 @@ TEST(ThreadTest, TestThread)
      
      // Wait for the thread to end.     
      thrd.Join();
+
+     EXPECT_TRUE (thrd._bStarted);
+     EXPECT_TRUE (thrd._bFinished);
 
      const vector<string>& msgs = pPoster->Messages();
      ASSERT_EQ (22, msgs.size());
@@ -260,6 +270,9 @@ TEST(ThreadTest, TestStopCooperatingThread)
      // Wait for the thread to end.     
      thrd.Join();
 
+     EXPECT_TRUE (thrd._bStarted);
+     EXPECT_TRUE (thrd._bFinished);
+
      const vector<string>& msgs = pPoster->Messages();
      int nMsgs = msgs.size();
      ASSERT_GT (22, nMsgs);        // We stopped early so less than 22 messages.
@@ -298,11 +311,14 @@ TEST(ThreadTest, TestStartCli)
                            "100",
                            "..\\test\\resources",
                            &mapEnvs);
-     EXPECT_STREQ ("cmd /c spawned-process.bat 100", thrd._sCmd);
-     EXPECT_STREQ ("my-process", thrd._mapEnvs ["CLI_PROCESS"].c_str());
+     EXPECT_STREQ ("cmd /c spawned-process.bat 100", thrd.GetCmd());
+     EXPECT_STREQ ("my-process", thrd.GetEnvs().find ("CLI_PROCESS")->second.c_str());
 
      // Wait for the thread to end.     
      thrd.Join();
+
+     EXPECT_TRUE (thrd._bStarted);
+     EXPECT_TRUE (thrd._bFinished);
 
      const vector<string>& msgs = pPoster->Messages();
      int nMsgs = msgs.size();
@@ -350,7 +366,7 @@ TEST(ThreadTest, TestStopSpawnedProcess)
 
      CString sCWD = CDirectory::GetCurrentDir();
      thrd.StartCliProcess ("..\\test\\resources\\spawned-process.bat");
-     EXPECT_STREQ ("cmd /c ..\\test\\resources\\spawned-process.bat", thrd._sCmd);
+     EXPECT_STREQ ("cmd /c ..\\test\\resources\\spawned-process.bat", thrd.GetCmd());
 
      // Wait for the thread function to post 2 messages.  Reading a vector 
      // doesn't need to be synchronised.
@@ -362,6 +378,9 @@ TEST(ThreadTest, TestStopSpawnedProcess)
 
      // Wait for the thread to end.     
      thrd.Join();
+
+     EXPECT_TRUE (thrd._bStarted);
+     EXPECT_TRUE (thrd._bFinished);
 
      const vector<string>& msgs = pPoster->Messages();
      int nMsgs = msgs.size();
@@ -400,10 +419,13 @@ TEST(ThreadTest, TestStartNonExistent)
 
      CString sCWD = CDirectory::GetCurrentDir();
      thrd.StartCliProcess ("non existent.exe");
-     EXPECT_STREQ ("\"non existent.exe\"", thrd._sCmd);
+     EXPECT_STREQ ("\"non existent.exe\"", thrd.GetCmd());
 
      // Wait for the thread to end.     
      thrd.Join();
+
+     EXPECT_TRUE (thrd._bStarted);
+     EXPECT_TRUE (thrd._bFinished);
 
      const vector<string>& msgs = pPoster->Messages();
      int nMsgs = msgs.size();

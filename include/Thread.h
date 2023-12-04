@@ -40,9 +40,7 @@ class CThread
      CThread& operator= (const CThread&) = delete;
 
 public:
-     [[deprecated("Use the other constructor instead")]] 
      CThread();
-
 
      /// Constructs a thread object that sets the Window handle and the message
      /// number to send in a PostMessage() call.
@@ -79,6 +77,8 @@ public:
                   "synchronised.  Use the constructor instead.")]]
      void SetHandle (HWND hwnd, UINT wmMsg);
 
+     LPARAM GetUserData() const { return _nUserData; }
+
      /// Set user data to be sent to a window in the thread-safe queue.
      void SetUserData (LPARAM nUserData) { _nUserData = nUserData; }
      
@@ -88,16 +88,11 @@ public:
      ///< Wait for the thread to terminate.
      DWORD Join();
      
-#ifndef   GTEST
 protected:
-#endif
      // TODO: If we don't need SetHandle(), then we can remove this.
      HWND m_hTarget;               ///< The window to send messages to.
-     CDataQueue* m_pDataQueue;     ///< The queue to send back the tool output.
-
      CWinThread* m_pThread;        ///< So that I can switch myself off.
-     bool m_bStopThread;           ///< So that others can switch me off.
-     AFX_THREADPROC _fnThread;     ///< A user supplied function to run on a separate thread.
+     CDataQueue* m_pDataQueue;     ///< The queue to send back the tool output.
 
      CString _sCmd;                ///< The command line to run as a separate process.
      CString _sDir;                ///< The directory to start the thread in.
@@ -107,6 +102,9 @@ protected:
                                    ///< messages to windows by the data-queue.
 
 private:
+     bool m_bStopThread;           ///< So that others can switch me off.
+     AFX_THREADPROC _fnThread;     ///< A user supplied function to run on a separate thread.
+
      static UINT WrapperThread (void* lParam);
      UINT WrapperThread();
      
