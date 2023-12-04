@@ -41,7 +41,7 @@ public:
 
      /// Override to replace the message poster to our one.
      void SetHandle (HWND hwnd, UINT wmMsg);
-//
+
      void OnStart();
      void OnFinished();
 
@@ -57,6 +57,10 @@ public:
 
      UINT CooperatingFunction();
      static UINT CooperatingFunction (void* lParam);
+
+// Access to protected stuff
+     CString GetCmd() const { return _sCmd; }
+     const map<string, string>& GetEnvs() const { return _mapEnvs; }
 };
 
 CTestThread::CTestThread()
@@ -298,8 +302,8 @@ TEST(ThreadTest, TestStartCli)
                            "100",
                            "..\\test\\resources",
                            &mapEnvs);
-     EXPECT_STREQ ("cmd /c spawned-process.bat 100", thrd._sCmd);
-     EXPECT_STREQ ("my-process", thrd._mapEnvs ["CLI_PROCESS"].c_str());
+     EXPECT_STREQ ("cmd /c spawned-process.bat 100", thrd.GetCmd());
+     EXPECT_STREQ ("my-process", thrd.GetEnvs().find ("CLI_PROCESS")->second.c_str());
 
      // Wait for the thread to end.     
      thrd.Join();
@@ -350,7 +354,7 @@ TEST(ThreadTest, TestStopSpawnedProcess)
 
      CString sCWD = CDirectory::GetCurrentDir();
      thrd.StartCliProcess ("..\\test\\resources\\spawned-process.bat");
-     EXPECT_STREQ ("cmd /c ..\\test\\resources\\spawned-process.bat", thrd._sCmd);
+     EXPECT_STREQ ("cmd /c ..\\test\\resources\\spawned-process.bat", thrd.GetCmd());
 
      // Wait for the thread function to post 2 messages.  Reading a vector 
      // doesn't need to be synchronised.
@@ -400,7 +404,7 @@ TEST(ThreadTest, TestStartNonExistent)
 
      CString sCWD = CDirectory::GetCurrentDir();
      thrd.StartCliProcess ("non existent.exe");
-     EXPECT_STREQ ("\"non existent.exe\"", thrd._sCmd);
+     EXPECT_STREQ ("\"non existent.exe\"", thrd.GetCmd());
 
      // Wait for the thread to end.     
      thrd.Join();
